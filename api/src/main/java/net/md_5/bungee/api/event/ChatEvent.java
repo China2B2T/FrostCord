@@ -40,6 +40,10 @@ public class ChatEvent extends TargetedEvent implements Cancellable
      */
     public boolean isCommand()
     {
+        if ( message.length() <= 7 )
+        {
+            return false;
+        }
         return message.length() > 0 && message.substring( 0, 7 ) == "/proxy::";
     }
 

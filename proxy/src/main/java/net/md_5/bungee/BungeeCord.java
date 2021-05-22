@@ -45,9 +45,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.activation.CommandInfo;
-
 import jline.console.ConsoleReader;
 import lombok.Getter;
 import lombok.Setter;

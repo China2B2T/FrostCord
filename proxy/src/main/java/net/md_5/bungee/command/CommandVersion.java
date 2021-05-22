@@ -10,7 +10,7 @@ public class CommandVersion extends Command
 
     public CommandVersion()
     {
-        super( "bungee" );
+        super( "version" );
     }
 
     @Override
