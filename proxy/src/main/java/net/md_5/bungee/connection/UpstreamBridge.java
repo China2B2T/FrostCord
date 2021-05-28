@@ -84,7 +84,7 @@ public class UpstreamBridge extends PacketHandler
             {
                 player.unsafe().sendPacket( packet );
             }
-            con.getServer().disconnect( "Quitting" );
+            con.getServer().disconnect( "Disconnected from the proxy" );
         }
     }
 
@@ -151,7 +151,7 @@ public class UpstreamBridge extends PacketHandler
         if ( !bungee.getPluginManager().callEvent( chatEvent ).isCancelled() )
         {
             chat.setMessage( chatEvent.getMessage() );
-            if ( !chatEvent.isCommand() || !bungee.getPluginManager().dispatchCommand( con, chat.getMessage().substring( 1 ) ) )
+            if ( !chatEvent.isCommand() || !bungee.getPluginManager().dispatchCommand( con, chat.getMessage().substring( 8 ) ) )
             {
                 con.getServer().unsafe().sendPacket( chat );
             }
@@ -164,12 +164,12 @@ public class UpstreamBridge extends PacketHandler
     {
         List<String> suggestions = new ArrayList<>();
 
-        if ( tabComplete.getCursor().startsWith( "/" ) )
+        if ( tabComplete.getCursor().startsWith( "/proxy::" ) )
         {
-            bungee.getPluginManager().dispatchCommand( con, tabComplete.getCursor().substring( 1 ), suggestions );
+            bungee.getPluginManager().dispatchCommand( con, tabComplete.getCursor().substring( 8 ), suggestions );
         }
 
-        TabCompleteEvent tabCompleteEvent = new TabCompleteEvent( con, con.getServer(), tabComplete.getCursor(), suggestions );
+        TabCompleteEvent tabCompleteEvent = new TabCompleteEvent( con, con.getServer(), '/' + tabComplete.getCursor().substring( 8 ), suggestions );
         bungee.getPluginManager().callEvent( tabCompleteEvent );
 
         if ( tabCompleteEvent.isCancelled() )

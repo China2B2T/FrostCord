@@ -40,11 +40,7 @@ public class ChatEvent extends TargetedEvent implements Cancellable
      */
     public boolean isCommand()
     {
-        if ( message.length() <= 7 )
-        {
-            return false;
-        }
-        return message.length() > 0 && message.substring( 0, 7 ) == "/proxy::";
+        return message.length() >= 0 && message.charAt( 0 ) == '/';
     }
 
     /**
@@ -62,7 +58,7 @@ public class ChatEvent extends TargetedEvent implements Cancellable
         }
 
         int index = message.indexOf( " " );
-        String commandName = ( index == -1 ) ? message.substring( 6 ) : message.substring( 6, index );
+        String commandName = ( index == -1 ) ? message.substring( 8 ) : message.substring( 8, index );
         CommandSender sender = ( getSender() instanceof CommandSender ) ? (CommandSender) getSender() : null;
 
         return ProxyServer.getInstance().getPluginManager().isExecutableCommand( commandName, sender );
