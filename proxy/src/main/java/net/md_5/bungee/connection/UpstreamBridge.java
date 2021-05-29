@@ -159,10 +159,7 @@ public class UpstreamBridge extends PacketHandler
 
             if ( !chatEvent.isCommand() || ( chat.getMessage().length() >= 8 ? !bungee.getPluginManager().dispatchCommand( con, chat.getMessage().substring( 8 ) ) : true ) )
             {
-                if ( !bungee.getPluginManager().dispatchCommand( con, chat.getMessage().substring( 8 ) ) )
-                {
-                    con.getServer().unsafe().sendPacket( chat );
-                }
+                con.getServer().unsafe().sendPacket( chat );
             }
         }
         throw CancelSendSignal.INSTANCE;
