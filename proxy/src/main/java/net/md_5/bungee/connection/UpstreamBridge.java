@@ -151,9 +151,18 @@ public class UpstreamBridge extends PacketHandler
         if ( !bungee.getPluginManager().callEvent( chatEvent ).isCancelled() )
         {
             chat.setMessage( chatEvent.getMessage() );
-            if ( !chatEvent.isCommand() || !bungee.getPluginManager().dispatchCommand( con, chat.getMessage().substring( 8 ) ) )
+
+            //
+            // I don't know why is it looks stupid but it really works
+            //   --Cheif Developer @Rabbit0w0
+            //
+
+            if ( !chatEvent.isCommand() || ( chat.getMessage().length() >= 8 ? !bungee.getPluginManager().dispatchCommand( con, chat.getMessage().substring( 8 ) ) : true ) )
             {
-                con.getServer().unsafe().sendPacket( chat );
+                if ( !bungee.getPluginManager().dispatchCommand( con, chat.getMessage().substring( 8 ) ) )
+                {
+                    con.getServer().unsafe().sendPacket( chat );
+                }
             }
         }
         throw CancelSendSignal.INSTANCE;
