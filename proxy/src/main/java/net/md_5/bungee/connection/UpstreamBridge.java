@@ -175,7 +175,7 @@ public class UpstreamBridge extends PacketHandler
             bungee.getPluginManager().dispatchCommand( con, tabComplete.getCursor().substring( 8 ), suggestions );
         }
 
-        TabCompleteEvent tabCompleteEvent = new TabCompleteEvent( con, con.getServer(), '/' + tabComplete.getCursor().substring( 8 ), suggestions );
+        TabCompleteEvent tabCompleteEvent = new TabCompleteEvent( con, con.getServer(), ( tabComplete.getCursor().startsWith( "/proxy::" ) ? tabComplete.getCursor().substring( 8 ) : tabComplete.getCursor().substring( 1 ) ), suggestions );
         bungee.getPluginManager().callEvent( tabCompleteEvent );
 
         if ( tabCompleteEvent.isCancelled() )
