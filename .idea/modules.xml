@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/api/bungeecord-api.iml" filepath="$PROJECT_DIR$/api/bungeecord-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bootstrap/bungeecord-bootstrap.iml" filepath="$PROJECT_DIR$/bootstrap/bungeecord-bootstrap.iml" />
+      <module fileurl="file://$PROJECT_DIR$/chat/bungeecord-chat.iml" filepath="$PROJECT_DIR$/chat/bungeecord-chat.iml" />
+      <module fileurl="file://$PROJECT_DIR$/config/bungeecord-config.iml" filepath="$PROJECT_DIR$/config/bungeecord-config.iml" />
+      <module fileurl="file://$PROJECT_DIR$/event/bungeecord-event.iml" filepath="$PROJECT_DIR$/event/bungeecord-event.iml" />
+      <module fileurl="file://$PROJECT_DIR$/log/bungeecord-log.iml" filepath="$PROJECT_DIR$/log/bungeecord-log.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module/bungeecord-module.iml" filepath="$PROJECT_DIR$/module/bungeecord-module.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module/cmd-alert/bungeecord-module-cmd-alert.iml" filepath="$PROJECT_DIR$/module/cmd-alert/bungeecord-module-cmd-alert.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module/cmd-find/bungeecord-module-cmd-find.iml" filepath="$PROJECT_DIR$/module/cmd-find/bungeecord-module-cmd-find.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module/cmd-list/bungeecord-module-cmd-list.iml" filepath="$PROJECT_DIR$/module/cmd-list/bungeecord-module-cmd-list.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module/cmd-send/bungeecord-module-cmd-send.iml" filepath="$PROJECT_DIR$/module/cmd-send/bungeecord-module-cmd-send.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module/cmd-server/bungeecord-module-cmd-server.iml" filepath="$PROJECT_DIR$/module/cmd-server/bungeecord-module-cmd-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module/reconnect-yaml/bungeecord-module-reconnect-yaml.iml" filepath="$PROJECT_DIR$/module/reconnect-yaml/bungeecord-module-reconnect-yaml.iml" />
+      <module fileurl="file://$PROJECT_DIR$/native/bungeecord-native.iml" filepath="$PROJECT_DIR$/native/bungeecord-native.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bungeecord-parent.iml" filepath="$PROJECT_DIR$/bungeecord-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/protocol/bungeecord-protocol.iml" filepath="$PROJECT_DIR$/protocol/bungeecord-protocol.iml" />
+      <module fileurl="file://$PROJECT_DIR$/proxy/bungeecord-proxy.iml" filepath="$PROJECT_DIR$/proxy/bungeecord-proxy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/query/bungeecord-query.iml" filepath="$PROJECT_DIR$/query/bungeecord-query.iml" />
+      <module fileurl="file://$PROJECT_DIR$/slf4j/bungeecord-slf4j.iml" filepath="$PROJECT_DIR$/slf4j/bungeecord-slf4j.iml" />
+    </modules>
+  </component>
+</project>

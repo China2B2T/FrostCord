@@ -73,11 +73,11 @@ import net.md_5.bungee.chat.ScoreComponentSerializer;
 import net.md_5.bungee.chat.SelectorComponentSerializer;
 import net.md_5.bungee.chat.TextComponentSerializer;
 import net.md_5.bungee.chat.TranslatableComponentSerializer;
+import net.md_5.bungee.command.CommandBungee;
 import net.md_5.bungee.command.CommandEnd;
 import net.md_5.bungee.command.CommandIP;
 import net.md_5.bungee.command.CommandPerms;
 import net.md_5.bungee.command.CommandReload;
-import net.md_5.bungee.command.CommandVersion;
 import net.md_5.bungee.command.ConsoleCommandCompleter;
 import net.md_5.bungee.command.ConsoleCommandSender;
 import net.md_5.bungee.compress.CompressFactory;
@@ -95,6 +95,7 @@ import net.md_5.bungee.query.RemoteQuery;
 import net.md_5.bungee.scheduler.BungeeScheduler;
 import net.md_5.bungee.util.CaseInsensitiveMap;
 import org.fusesource.jansi.AnsiConsole;
+import org.slf4j.impl.JDK14LoggerFactory;
 
 /**
  * Main BungeeCord proxy class.
@@ -215,6 +216,7 @@ public class BungeeCord extends ProxyServer
         consoleReader.addCompleter( new ConsoleCommandCompleter( this ) );
 
         logger = new BungeeLogger( "BungeeCord", "proxy.log", consoleReader );
+        JDK14LoggerFactory.LOGGER = logger;
         System.setErr( new PrintStream( new LoggingOutputStream( logger, Level.SEVERE ), true ) );
         System.setOut( new PrintStream( new LoggingOutputStream( logger, Level.INFO ), true ) );
 
@@ -222,7 +224,7 @@ public class BungeeCord extends ProxyServer
         getPluginManager().registerCommand( null, new CommandReload() );
         getPluginManager().registerCommand( null, new CommandEnd() );
         getPluginManager().registerCommand( null, new CommandIP() );
-        getPluginManager().registerCommand( null, new CommandVersion() );
+        getPluginManager().registerCommand( null, new CommandBungee() );
         getPluginManager().registerCommand( null, new CommandPerms() );
 
         if ( !Boolean.getBoolean( "net.md_5.bungee.native.disable" ) )
@@ -343,6 +345,9 @@ public class BungeeCord extends ProxyServer
                     }
                 }
             };
+
+            int bufferSize = 8192; // FlameCord
+
             new ServerBootstrap()
                     .channel( PipelineUtils.getServerChannel( info.getSocketAddress() ) )
                     .option( ChannelOption.SO_REUSEADDR, true ) // TODO: Move this elsewhere!
@@ -350,6 +355,8 @@ public class BungeeCord extends ProxyServer
                     .childHandler( PipelineUtils.SERVER_CHILD )
                     .group( eventLoops )
                     .localAddress( info.getSocketAddress() )
+                    .childOption(ChannelOption.SO_RCVBUF, bufferSize) // FlameCord
+                    .childOption(ChannelOption.SO_SNDBUF, bufferSize) // FlameCord
                     .bind().addListener( listener );
 
             if ( info.isQueryEnabled() )
@@ -488,6 +495,7 @@ public class BungeeCord extends ProxyServer
         {
         }
 
+        getLogger().info( "Thank you and goodbye" );
         // Need to close loggers after last message!
         for ( Handler handler : getLogger().getHandlers() )
         {

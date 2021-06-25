@@ -188,6 +188,13 @@ public class InitialHandler extends PacketHandler implements PendingConnection
                 }
 
                 ServerPing legacy = result.getResponse();
+
+                // FlameCord - Close and return if legacy == null
+                if (legacy == null) {
+                    ch.close();
+                    return;
+                }
+
                 String kickMessage;
 
                 if ( v1_5 )
@@ -253,6 +260,15 @@ public class InitialHandler extends PacketHandler implements PendingConnection
                     @Override
                     public void done(ProxyPingEvent pingResult, Throwable error)
                     {
+                        // FlameCord - Close if response is null
+                        // FlameCord - Return if connection is closed
+                        if (pingResult.getResponse() == null) {
+                            ch.close();
+                            return;
+                        } else if (ch.isClosed()) {
+                            return;
+                        }
+
                         Gson gson = BungeeCord.getInstance().gson;
                         unsafe.sendPacket( new StatusResponse( gson.toJson( pingResult.getResponse() ) ) );
                         if ( bungee.getConnectionThrottle() != null )
@@ -280,9 +296,10 @@ public class InitialHandler extends PacketHandler implements PendingConnection
     @Override
     public void handle(PingPacket ping) throws Exception
     {
-        Preconditions.checkState( thisState == State.PING, "Not expecting PING" );
         unsafe.sendPacket( ping );
-        disconnect( "" );
+
+        // FlameCord - Close instead of disconnect
+        ch.close();
     }
 
     @Override
@@ -354,7 +371,7 @@ public class InitialHandler extends PacketHandler implements PendingConnection
         Preconditions.checkState( thisState == State.USERNAME, "Not expecting USERNAME" );
         this.loginRequest = loginRequest;
 
-        if ( getName().contains( "." ) )
+        if ( getName().contains( " " ) )
         {
             disconnect( bungee.getTranslation( "name_invalid" ) );
             return;
@@ -583,7 +600,8 @@ public class InitialHandler extends PacketHandler implements PendingConnection
     {
         if ( canSendKickMessage() )
         {
-            ch.delayedClose( new Kick( ComponentSerializer.toString( reason ) ) );
+            // FlameCord - Changed delayedClose to close
+            ch.close( new Kick( ComponentSerializer.toString( reason ) ) );
         } else
         {
             ch.close();
@@ -653,20 +671,7 @@ public class InitialHandler extends PacketHandler implements PendingConnection
     @Override
     public String toString()
     {
-        StringBuilder sb = new StringBuilder();
-        sb.append( '[' );
-
-        String currentName = getName();
-        if ( currentName != null )
-        {
-            sb.append( currentName );
-            sb.append( ',' );
-        }
-
-        sb.append( getSocketAddress() );
-        sb.append( "] <-> InitialHandler" );
-
-        return sb.toString();
+        return "[" + getSocketAddress() + ( getName() != null ? "|" + getName() : "" ) + "] <-> InitialHandler";
     }
 
     @Override

@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import net.md_5.bungee.protocol.AbstractPacketHandler;
 import net.md_5.bungee.protocol.DefinedPacket;
+import net.md_5.bungee.protocol.ProtocolConstants;
 
 @Data
 @NoArgsConstructor
@@ -24,7 +25,7 @@ public class Handshake extends DefinedPacket
     public void read(ByteBuf buf)
     {
         protocolVersion = readVarInt( buf );
-        host = readString( buf );
+        host = readString( buf, 255 );
         port = buf.readUnsignedShort();
         requestedProtocol = readVarInt( buf );
     }

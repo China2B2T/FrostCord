@@ -67,7 +67,9 @@ public abstract class EntityMap
             case ProtocolConstants.MINECRAFT_1_16_2:
             case ProtocolConstants.MINECRAFT_1_16_3:
             case ProtocolConstants.MINECRAFT_1_16_4:
-                return EntityMap_1_16_2.INSTANCE;
+                return EntityMap_1_16_2.INSTANCE_1_16_2;
+            case ProtocolConstants.MINECRAFT_1_17:
+                return EntityMap_1_16_2.INSTANCE_1_17;
         }
         throw new RuntimeException( "Version " + version + " has no entity map" );
     }
@@ -321,6 +323,12 @@ public abstract class EntityMap
         int readerIndex = packet.readerIndex();
         int packetId = DefinedPacket.readVarInt( packet );
         int packetIdLength = packet.readerIndex() - readerIndex;
+
+        if (packetId < 0 || packetId > ints.length || packetId > varints.length) { // Invalid packet id
+            // Ignore these invalid packets for compatibility reasons
+            packet.readerIndex( readerIndex );
+            return;
+        }
 
         if ( ints[packetId] )
         {

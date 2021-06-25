@@ -2,6 +2,7 @@ package net.md_5.bungee.http;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
 import io.netty.handler.codec.http.HttpClientCodec;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.SslHandler;
@@ -23,6 +24,11 @@ public class HttpInitializer extends ChannelInitializer<Channel>
     @Override
     protected void initChannel(Channel ch) throws Exception
     {
+        int bufferSize = 8192; // FlameCord
+            
+        ch.config().setOption( ChannelOption.SO_RCVBUF, bufferSize ); // FlameCord
+        ch.config().setOption( ChannelOption.SO_SNDBUF, bufferSize ); // FlameCord
+        
         ch.pipeline().addLast( "timeout", new ReadTimeoutHandler( HttpClient.TIMEOUT, TimeUnit.MILLISECONDS ) );
         if ( ssl )
         {

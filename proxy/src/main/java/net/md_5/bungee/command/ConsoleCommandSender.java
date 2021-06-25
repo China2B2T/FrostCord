@@ -61,13 +61,13 @@ public final class ConsoleCommandSender implements CommandSender
     @Override
     public void addGroups(String... groups)
     {
-        throw new UnsupportedOperationException( "Console has no groups" );
+        throw new UnsupportedOperationException( "Console may not have groups" );
     }
 
     @Override
     public void removeGroups(String... groups)
     {
-        throw new UnsupportedOperationException( "Console has no groups" );
+        throw new UnsupportedOperationException( "Console may not have groups" );
     }
 
     @Override

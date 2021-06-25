@@ -98,12 +98,14 @@ public class HandlerBoss extends ChannelInboundHandlerAdapter
             return;
         }
 
-        if ( handler != null )
+        PacketWrapper packet = (PacketWrapper) msg;
+
+
+        try
         {
-            PacketWrapper packet = (PacketWrapper) msg;
-            boolean sendPacket = handler.shouldHandle( packet );
-            try
+            if ( handler != null )
             {
+                boolean sendPacket = handler.shouldHandle( packet );
                 if ( sendPacket && packet.packet != null )
                 {
                     try
@@ -118,10 +120,10 @@ public class HandlerBoss extends ChannelInboundHandlerAdapter
                 {
                     handler.handle( packet );
                 }
-            } finally
-            {
-                packet.trySingleRelease();
             }
+        } finally
+        {
+            packet.trySingleRelease();
         }
     }
 

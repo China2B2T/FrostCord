@@ -1,7 +1,9 @@
 package net.md_5.bungee;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Multimap;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -72,6 +74,7 @@ public final class UserConnection implements ProxiedPlayer
     @NonNull
     private final ProxyServer bungee;
     @NonNull
+    @Getter
     private final ChannelWrapper ch;
     @Getter
     @NonNull
@@ -123,6 +126,10 @@ public final class UserConnection implements ProxiedPlayer
     private final Scoreboard serverSentScoreboard = new Scoreboard();
     @Getter
     private final Collection<UUID> sentBossBars = new HashSet<>();
+    // Waterfall start
+    @Getter
+    private final Multimap<Integer, Integer> potions = HashMultimap.create();
+    // Waterfall end
     /*========================================================================*/
     @Getter
     private String displayName;
@@ -148,7 +155,10 @@ public final class UserConnection implements ProxiedPlayer
 
     public void init()
     {
-        this.entityRewrite = EntityMap.getEntityMap( getPendingConnection().getVersion() );
+        if ( getPendingConnection().getVersion() < ProtocolConstants.MINECRAFT_1_16_2 || !bungee.getConfig().isIpForward() )
+        {
+            this.entityRewrite = EntityMap.getEntityMap( getPendingConnection().getVersion() );
+        }
 
         this.displayName = name;
 
@@ -475,7 +485,7 @@ public final class UserConnection implements ProxiedPlayer
         // transform score components
         message = ChatComponentTransformer.getInstance().transform( this, true, message );
 
-        if ( position == ChatMessageType.ACTION_BAR )
+        if ( position == ChatMessageType.ACTION_BAR && getPendingConnection().getVersion() < ProtocolConstants.MINECRAFT_1_17 )
         {
             // Versions older than 1.11 cannot send the Action bar with the new JSON formattings
             // Fix by converting to a legacy message, see https://bugs.mojang.com/browse/MC-119145

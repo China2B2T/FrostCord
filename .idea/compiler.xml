@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="bungeecord-log" />
+        <module name="bungeecord-module-cmd-find" />
+        <module name="bungeecord-module-cmd-list" />
+        <module name="bungeecord-module-cmd-alert" />
+        <module name="bungeecord-bootstrap" />
+        <module name="bungeecord-config" />
+        <module name="bungeecord-module-reconnect-yaml" />
+        <module name="bungeecord-protocol" />
+        <module name="bungeecord-slf4j" />
+        <module name="bungeecord-proxy" />
+        <module name="bungeecord-query" />
+        <module name="bungeecord-api" />
+        <module name="bungeecord-native" />
+        <module name="bungeecord-module-cmd-send" />
+        <module name="bungeecord-chat" />
+        <module name="bungeecord-module-cmd-server" />
+        <module name="bungeecord-event" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="bungeecord-api" target="1.8" />
+      <module name="bungeecord-bootstrap" target="1.6" />
+      <module name="bungeecord-chat" target="1.8" />
+      <module name="bungeecord-config" target="1.8" />
+      <module name="bungeecord-event" target="1.8" />
+      <module name="bungeecord-log" target="1.8" />
+      <module name="bungeecord-module" target="1.8" />
+      <module name="bungeecord-module-cmd-alert" target="1.8" />
+      <module name="bungeecord-module-cmd-find" target="1.8" />
+      <module name="bungeecord-module-cmd-list" target="1.8" />
+      <module name="bungeecord-module-cmd-send" target="1.8" />
+      <module name="bungeecord-module-cmd-server" target="1.8" />
+      <module name="bungeecord-module-reconnect-yaml" target="1.8" />
+      <module name="bungeecord-native" target="1.8" />
+      <module name="bungeecord-parent" target="1.8" />
+      <module name="bungeecord-protocol" target="1.8" />
+      <module name="bungeecord-proxy" target="1.8" />
+      <module name="bungeecord-query" target="1.8" />
+      <module name="bungeecord-slf4j" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

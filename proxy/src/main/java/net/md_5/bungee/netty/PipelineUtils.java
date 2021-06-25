@@ -169,6 +169,12 @@ public class PipelineUtils
             {
                 // IP_TOS is not supported (Windows XP / Windows Server 2003)
             }
+
+            int bufferSize = 8192; // FlameCord
+
+            ch.config().setOption( ChannelOption.SO_RCVBUF, bufferSize ); // FlameCord
+            ch.config().setOption( ChannelOption.SO_SNDBUF, bufferSize ); // FlameCord
+            ch.config().setOption( ChannelOption.TCP_NODELAY, true );
             ch.config().setAllocator( PooledByteBufAllocator.DEFAULT );
             ch.config().setWriteBufferWaterMark( MARK );
 

@@ -84,7 +84,7 @@ public class UpstreamBridge extends PacketHandler
             {
                 player.unsafe().sendPacket( packet );
             }
-            con.getServer().disconnect( "Disconnected from the proxy" );
+            con.getServer().disconnect( "Quitting" );
         }
     }
 
@@ -144,20 +144,17 @@ public class UpstreamBridge extends PacketHandler
     @Override
     public void handle(Chat chat) throws Exception
     {
-        int maxLength = ( con.getPendingConnection().getVersion() >= ProtocolConstants.MINECRAFT_1_11 ) ? 256 : 100;
-        Preconditions.checkArgument( chat.getMessage().length() <= maxLength, "Chat message too long" ); // Mojang limit, check on updates
+        for ( int index = 0, length = chat.getMessage().length(); index < length; index++ )
+        {
+            char c = chat.getMessage().charAt( index );
+            Preconditions.checkArgument( c != '\u00A7' && c >= ' ' && c != 127, "illegal characters in chat" ); // Section symbol, control sequences, and delete
+        }
 
         ChatEvent chatEvent = new ChatEvent( con, con.getServer(), chat.getMessage() );
         if ( !bungee.getPluginManager().callEvent( chatEvent ).isCancelled() )
         {
             chat.setMessage( chatEvent.getMessage() );
-
-            //
-            // I don't know why is it looks stupid but it really works
-            //   --Cheif Developer @Rabbit0w0
-            //
-
-            if ( !chatEvent.isCommand() || ( chat.getMessage().length() >= 8 ? !bungee.getPluginManager().dispatchCommand( con, chat.getMessage().substring( 8 ) ) : true ) )
+            if ( !chatEvent.isCommand() || !bungee.getPluginManager().dispatchCommand( con, chat.getMessage().substring( 1 ) ) )
             {
                 con.getServer().unsafe().sendPacket( chat );
             }
@@ -170,12 +167,12 @@ public class UpstreamBridge extends PacketHandler
     {
         List<String> suggestions = new ArrayList<>();
 
-        if ( tabComplete.getCursor().startsWith( "/proxy::" ) )
+        if ( tabComplete.getCursor().startsWith( "/" ) )
         {
-            bungee.getPluginManager().dispatchCommand( con, tabComplete.getCursor().substring( 8 ), suggestions );
+            bungee.getPluginManager().dispatchCommand( con, tabComplete.getCursor().substring( 1 ), suggestions );
         }
 
-        TabCompleteEvent tabCompleteEvent = new TabCompleteEvent( con, con.getServer(), ( tabComplete.getCursor().startsWith( "/proxy::" ) ? tabComplete.getCursor().substring( 8 ) : tabComplete.getCursor().substring( 1 ) ), suggestions );
+        TabCompleteEvent tabCompleteEvent = new TabCompleteEvent( con, con.getServer(), tabComplete.getCursor(), suggestions );
         bungee.getPluginManager().callEvent( tabCompleteEvent );
 
         if ( tabCompleteEvent.isCancelled() )

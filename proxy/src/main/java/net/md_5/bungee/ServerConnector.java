@@ -31,7 +31,9 @@ import net.md_5.bungee.forge.ForgeUtils;
 import net.md_5.bungee.netty.ChannelWrapper;
 import net.md_5.bungee.netty.HandlerBoss;
 import net.md_5.bungee.netty.PacketHandler;
+import net.md_5.bungee.netty.PipelineUtils;
 import net.md_5.bungee.protocol.DefinedPacket;
+import net.md_5.bungee.protocol.MinecraftDecoder;
 import net.md_5.bungee.protocol.PacketWrapper;
 import net.md_5.bungee.protocol.Protocol;
 import net.md_5.bungee.protocol.ProtocolConstants;
@@ -51,6 +53,7 @@ import net.md_5.bungee.protocol.packet.ScoreboardObjective;
 import net.md_5.bungee.protocol.packet.ScoreboardScore;
 import net.md_5.bungee.protocol.packet.SetCompression;
 import net.md_5.bungee.protocol.packet.ViewDistance;
+import net.md_5.bungee.util.AddressUtil;
 import net.md_5.bungee.util.BufUtil;
 import net.md_5.bungee.util.QuietException;
 
@@ -102,7 +105,7 @@ public class ServerConnector extends PacketHandler
 
         if ( BungeeCord.getInstance().config.isIpForward() && user.getSocketAddress() instanceof InetSocketAddress )
         {
-            String newHost = copiedHandshake.getHost() + "\00" + user.getAddress().getHostString() + "\00" + user.getUUID();
+            String newHost = copiedHandshake.getHost() + "\00" + AddressUtil.sanitizeAddress( user.getAddress() ) + "\00" + user.getUUID();
 
             LoginResult profile = user.getPendingConnection().getLoginProfile();
             if ( profile != null && profile.getProperties() != null && profile.getProperties().length > 0 )
@@ -180,6 +183,12 @@ public class ServerConnector extends PacketHandler
 
         ServerConnection server = new ServerConnection( ch, target );
         ServerConnectedEvent event = new ServerConnectedEvent( user, server );
+
+        if (server.isForgeServer() && user.isForgeUser()) {
+            ((MinecraftDecoder) server.getCh().getHandle().pipeline().get(PipelineUtils.PACKET_DECODER)).setSupportsForge(true);
+            ((MinecraftDecoder) user.getCh().getHandle().pipeline().get(PipelineUtils.PACKET_DECODER)).setSupportsForge(true);
+        }
+
         bungee.getPluginManager().callEvent( event );
 
         ch.write( BungeeCord.getInstance().registerChannels( user.getPendingConnection().getVersion() ) );
@@ -334,7 +343,7 @@ public class ServerConnector extends PacketHandler
     public void handle(Kick kick) throws Exception
     {
         ServerInfo def = user.updateAndGetNextServer( target );
-        ServerKickEvent event = new ServerKickEvent( user, target, ComponentSerializer.parse( kick.getMessage() ), def, ServerKickEvent.State.CONNECTING );
+        ServerKickEvent event = new ServerKickEvent( user, target, ComponentSerializer.parse( kick.getMessage() ), def, ServerKickEvent.State.CONNECTING, ServerKickEvent.Cause.SERVER );  // Waterfall
         if ( event.getKickReason().toLowerCase( Locale.ROOT ).contains( "outdated" ) && def != null )
         {
             // Pre cancel the event if we are going to try another server
