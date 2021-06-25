@@ -44,9 +44,9 @@ public class MinecraftDecoder extends MessageToMessageDecoder<ByteBuf>
             final int capacity = in.capacity();
 
             if (readableBytes > 2097152) {
-                throw new FastDecoderException("Error decoding packet with too many readableBytes: " + readableBytes);
+                throw new IllegalStateException("Error decoding packet with too many readableBytes: " + readableBytes);
             } else if (capacity > 2097152) {
-                throw new FastDecoderException("Error decoding packet with too big capacity: " + capacity);
+                throw new IllegalStateException("Error decoding packet with too big capacity: " + capacity);
             }
         }
 
@@ -65,14 +65,11 @@ public class MinecraftDecoder extends MessageToMessageDecoder<ByteBuf>
             DefinedPacket packet = prot.createPacket( packetId, protocolVersion, supportsForge );
             if ( packet != null )
             {
-                packetTypeInfo = packet.getClass();
                 doLengthSanityChecks(in, packet, prot.getDirection(), packetId); // Waterfall: Additional DoS mitigations
                 packet.read( in, prot.getDirection(), protocolVersion );
 
                 if ( in.isReadable() )
                 {
-                    throw PACKET_NOT_READ_TO_END;
-                    // Waterfall end
                     throw new BadPacketException( "Did not read all bytes from packet " + packet.getClass() + " " + packetId + " Protocol " + protocol + " Direction " + prot.getDirection() );
                 }
             } else
@@ -97,9 +94,6 @@ public class MinecraftDecoder extends MessageToMessageDecoder<ByteBuf>
                     + "information, launch Waterfall with -Dwaterfall.packet-decode-logging=true");
     private static final CorruptedFrameException PACKET_LENGTH_UNDERSIZED =
             new CorruptedFrameException("A packet could not be decoded because it was smaller than allowed. For more "
-                    + "information, launch Waterfall with -Dwaterfall.packet-decode-logging=true");
-    private static final BadPacketException PACKET_NOT_READ_TO_END =
-            new BadPacketException("Couldn't read all bytes from a packet. For more "
                     + "information, launch Waterfall with -Dwaterfall.packet-decode-logging=true");
 
 

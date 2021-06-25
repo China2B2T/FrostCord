@@ -293,7 +293,7 @@ public class DownstreamBridge extends PacketHandler
 
                 brand = ByteBufAllocator.DEFAULT.heapBuffer();
                 DefinedPacket.writeString( bungee.getName() + " <- " + serverBrand, brand ); // Waterfall
-                pluginMessage.setData( brand );
+                pluginMessage.setData( DefinedPacket.toArray( brand ) );
             } finally {
                 brand.release();
             }
