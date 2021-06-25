@@ -285,7 +285,7 @@ public class DownstreamBridge extends PacketHandler
             Preconditions.checkState( !serverBrand.contains( bungee.getName() ), "Cannot connect proxy to itself!" );
 
             brand = ByteBufAllocator.DEFAULT.heapBuffer();
-            DefinedPacket.writeString( bungee.getName() + " (" + bungee.getVersion() + ")" + " <- " + serverBrand, brand );
+            DefinedPacket.writeString( bungee.getName() + " <- " + serverBrand, brand );
             pluginMessage.setData( DefinedPacket.toArray( brand ) );
             brand.release();
             // changes in the packet are ignored so we need to send it manually
