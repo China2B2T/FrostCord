@@ -41,6 +41,7 @@ public abstract class DefinedPacket
         int len = readVarInt( buf );
         if ( len > maxLen * 4 )
         {
+            throw STRING_TOO_MANY_BYTES_EXCEPTION; // Waterfall start: Additional DoS mitigations
             throw new OverflowPacketException( String.format( "Cannot receive string longer than %d (got %d bytes)", maxLen * 4, len ) );
         }
 
@@ -50,6 +51,7 @@ public abstract class DefinedPacket
         String s = new String( b, Charsets.UTF_8 );
         if ( s.length() > maxLen )
         {
+            throw STRING_TOO_LONG_EXCEPTION; // Waterfall start: Additional DoS mitigations
             throw new OverflowPacketException( String.format( "Cannot receive string longer than %d (got %d characters)", maxLen, s.length() ) );
         }
 
@@ -262,4 +264,21 @@ public abstract class DefinedPacket
 
     @Override
     public abstract String toString();
+
+    // Waterfall start: Additional DoS mitigations, courtesy of Velocity
+    private static final OverflowPacketException STRING_TOO_LONG_EXCEPTION
+            = new OverflowPacketException("A string was longer than allowed. For more "
+            + "information, launch Waterfall with -Dwaterfall.packet-decode-logging=true");
+    private static final OverflowPacketException STRING_TOO_MANY_BYTES_EXCEPTION
+            = new OverflowPacketException("A string had more data than allowed. For more "
+            + "information, launch Waterfall with -Dwaterfall.packet-decode-logging=true");
+
+    public int expectedMaxLength(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
+        return -1;
+    }
+
+    public int expectedMinLength(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
+        return 0;
+    }
+    // Waterfall end
 }

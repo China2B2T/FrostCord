@@ -38,4 +38,16 @@ public class EncryptionResponse extends DefinedPacket
     {
         handler.handle( this );
     }
+
+    // Waterfall start: Additional DoS mitigations, courtesy of Velocity
+    public int expectedMaxLength(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
+        // It turns out these come out to the same length, whether we're talking >=1.8 or not.
+        // The length prefix always winds up being 2 bytes.
+        return 260;
+    }
+
+    public int expectedMinLength(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
+        return expectedMaxLength(buf, direction, protocolVersion);
+    }
+    // Waterfall end
 }

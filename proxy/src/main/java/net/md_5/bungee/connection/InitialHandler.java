@@ -433,6 +433,8 @@ public class InitialHandler extends PacketHandler implements PendingConnection
     {
         Preconditions.checkState( thisState == State.ENCRYPT, "Not expecting ENCRYPT" );
 
+        // FlameCord - Finish here to avoid multiple incoming packets
+        thisState = State.FINISHED;
         SecretKey sharedKey = EncryptionUtil.getSecret( encryptResponse, request );
         BungeeCipher decrypt = EncryptionUtil.getCipher( false, sharedKey );
         ch.addBefore( PipelineUtils.FRAME_DECODER, PipelineUtils.DECRYPT_HANDLER, new CipherDecoder( decrypt ) );
@@ -484,6 +486,9 @@ public class InitialHandler extends PacketHandler implements PendingConnection
 
     private void finish()
     {
+        // FlameCord - Finish here to avoid multiple incoming packets
+        thisState = State.FINISHED;
+
         if ( isOnlineMode() )
         {
             // Check for multiple connections
@@ -565,8 +570,6 @@ public class InitialHandler extends PacketHandler implements PendingConnection
                             }
 
                             userCon.connect( server, null, true, ServerConnectEvent.Reason.JOIN_PROXY );
-
-                            thisState = State.FINISHED;
                         }
                     }
                 } );

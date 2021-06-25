@@ -135,11 +135,15 @@ public abstract class EntityMap
         if ( readId == oldId || readId == newId )
         {
             ByteBuf data = packet.copy();
-            packet.readerIndex( offset );
-            packet.writerIndex( offset );
-            DefinedPacket.writeVarInt( readId == oldId ? newId : oldId, packet );
-            packet.writeBytes( data );
-            data.release();
+            
+            try {
+                packet.readerIndex( offset );
+                packet.writerIndex( offset );
+                DefinedPacket.writeVarInt( readId == oldId ? newId : oldId, packet );
+                packet.writeBytes( data );
+            } finally {
+                data.release();
+            }
         }
     }
 

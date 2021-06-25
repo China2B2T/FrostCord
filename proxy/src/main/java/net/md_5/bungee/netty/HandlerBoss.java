@@ -78,6 +78,11 @@ public class HandlerBoss extends ChannelInboundHandlerAdapter
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception
     {
+        // FlameCord - Return if channel isn't active
+        if (!ctx.channel().isActive()) {
+            return;
+        }
+
         if ( msg instanceof HAProxyMessage )
         {
             HAProxyMessage proxy = (HAProxyMessage) msg;
