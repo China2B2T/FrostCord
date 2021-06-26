@@ -75,10 +75,6 @@ public class ChannelWrapper {
             }
         }
     }
--
-    Deprecate and "disable"
-    delayedClose because
-    it doesn't have a reason to exist
 
     @Deprecated
     public void delayedClose(final Kick kick) {

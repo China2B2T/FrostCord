@@ -39,19 +39,17 @@ public class Varint21FrameDecoder extends ByteToMessageDecoder {
                 int length = DefinedPacket.readVarInt(Unpooled.wrappedBuffer(buf));
                 if (false && length == 0) // Waterfall - ignore
                 {
-                    -vanilla 1.7 client sometimes sends empty packets.
+                    // vanilla 1.7 client sometimes sends empty packets.
                     long currentTime = System.currentTimeMillis();
                     long lastEmptyPacket = this.lastEmptyPacket.getAndSet(currentTime);
 
                     if (currentTime - lastEmptyPacket < 50L) {
                         throw new CorruptedFrameException("Too many empty packets");
                     }
-                    // Travertine end
                 }
 
                 if (in.readableBytes() < length) {
                     in.resetReaderIndex();
-                    return;
                 } else {
                     if (in.hasMemoryAddress()) {
                         out.add(in.slice(in.readerIndex(), length).retain());
@@ -67,8 +65,8 @@ public class Varint21FrameDecoder extends ByteToMessageDecoder {
                         in.readBytes(dst);
                         out.add(dst);
                     }
-                    return;
                 }
+                return;
             }
         }
 
