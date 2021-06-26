@@ -1,5 +1,6 @@
 package net.md_5.bungee.protocol.packet;
 
+import net.md_5.bungee.protocol.MultiVersionPacketV17;
 import io.netty.buffer.ByteBuf;
 import java.util.Locale;
 import lombok.AllArgsConstructor;
@@ -7,14 +8,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import net.md_5.bungee.protocol.AbstractPacketHandler;
-import net.md_5.bungee.protocol.DefinedPacket;
 import net.md_5.bungee.protocol.ProtocolConstants;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class ScoreboardObjective extends DefinedPacket
+public class ScoreboardObjective extends MultiVersionPacketV17
 {
 
     private String name;
@@ -24,6 +24,16 @@ public class ScoreboardObjective extends DefinedPacket
      * 0 to create, 1 to remove, 2 to update display text.
      */
     private byte action;
+
+    // Travertine start
+    @Override
+    public void v17Read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion)
+    {
+        name = readString( buf );
+        value = readString( buf );
+        action = buf.readByte();
+    }
+    // Travertine end
 
     @Override
     public void read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion)
@@ -42,6 +52,16 @@ public class ScoreboardObjective extends DefinedPacket
             }
         }
     }
+
+    // Travertine start
+    @Override
+    public void v17Write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion)
+    {
+        writeString( name, buf );
+        writeString( value, buf );
+        buf.writeByte( action );
+    }
+    // Travertine end
 
     @Override
     public void write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion)

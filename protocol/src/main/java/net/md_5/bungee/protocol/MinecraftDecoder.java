@@ -66,7 +66,7 @@ public class MinecraftDecoder extends MessageToMessageDecoder<ByteBuf>
             if ( packet != null )
             {
                 doLengthSanityChecks(in, packet, prot.getDirection(), packetId); // Waterfall: Additional DoS mitigations
-                packet.read( in, prot.getDirection(), protocolVersion );
+                packet.read0( in, prot.getDirection(), protocolVersion );
 
                 if ( in.isReadable() )
                 {

@@ -10,9 +10,24 @@ import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
 import java.util.UUID;
 import net.md_5.bungee.api.ServerPing;
+import net.md_5.bungee.protocol.ProtocolConstants;
 
 public class PlayerInfoSerializer implements JsonSerializer<ServerPing.PlayerInfo>, JsonDeserializer<ServerPing.PlayerInfo>
 {
+
+    // Travertine start
+    private final int protocol;
+
+    public PlayerInfoSerializer()
+    {
+        this.protocol = ProtocolConstants.MINECRAFT_1_7_6;
+    }
+
+    public PlayerInfoSerializer(int protocol)
+    {
+        this.protocol = protocol;
+    }
+    // Travertine end
 
     @Override
     public ServerPing.PlayerInfo deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
@@ -20,7 +35,7 @@ public class PlayerInfoSerializer implements JsonSerializer<ServerPing.PlayerInf
         JsonObject js = json.getAsJsonObject();
         ServerPing.PlayerInfo info = new ServerPing.PlayerInfo( js.get( "name" ).getAsString(), (UUID) null );
         String id = js.get( "id" ).getAsString();
-        if ( !id.contains( "-" ) )
+        if ( ProtocolConstants.isBeforeOrEq( protocol, ProtocolConstants.MINECRAFT_1_7_2 ) || !id.contains( "-" ) ) // Travertine
         {
             info.setId( id );
         } else
@@ -35,7 +50,15 @@ public class PlayerInfoSerializer implements JsonSerializer<ServerPing.PlayerInf
     {
         JsonObject out = new JsonObject();
         out.addProperty( "name", src.getName() );
-        out.addProperty( "id", src.getUniqueId().toString() );
+        // Travertine start
+        if ( ProtocolConstants.isBeforeOrEq( protocol, ProtocolConstants.MINECRAFT_1_7_2 ) )
+        {
+            out.addProperty( "id", src.getId() );
+        } else
+        {
+            out.addProperty( "id", src.getUniqueId().toString() );
+        }
+        // Travertine end
         return out;
     }
 }

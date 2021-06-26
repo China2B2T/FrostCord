@@ -82,7 +82,12 @@ public class UpstreamBridge extends PacketHandler
             } );
             for ( ProxiedPlayer player : con.getServer().getInfo().getPlayers() )
             {
-                player.unsafe().sendPacket( packet );
+                // Travertine start
+                if ( ProtocolConstants.isAfterOrEq( player.getPendingConnection().getVersion(), ProtocolConstants.MINECRAFT_1_8 ) )
+                {
+                    player.unsafe().sendPacket( packet );
+                }
+                // Travertine end
             }
             con.getServer().disconnect( "Quitting" );
         }

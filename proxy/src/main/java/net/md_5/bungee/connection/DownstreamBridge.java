@@ -19,6 +19,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.unix.DomainSocketAddress;
 import java.io.DataInput;
 import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets; // Waterfall
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -170,7 +171,7 @@ public class DownstreamBridge extends PacketHandler
         switch ( objective.getAction() )
         {
             case 0:
-                serverScoreboard.addObjective( new Objective( objective.getName(), objective.getValue(), objective.getType().toString() ) );
+                serverScoreboard.addObjective( new Objective( objective.getName(), objective.getValue(), objective.getType() != null ? objective.getType().toString() : null) ); // Travertine - 1.7 protocol support
                 break;
             case 1:
                 serverScoreboard.removeObjective( objective.getName() );
@@ -180,7 +181,7 @@ public class DownstreamBridge extends PacketHandler
                 if ( oldObjective != null )
                 {
                     oldObjective.setValue( objective.getValue() );
-                    oldObjective.setType( objective.getType().toString() );
+                    oldObjective.setType( objective.getType() != null ? objective.getType().toString() : null ); // Travertine - 1.7 protocol support
                 }
                 break;
             default:
@@ -280,22 +281,23 @@ public class DownstreamBridge extends PacketHandler
         {
             ByteBuf brand = Unpooled.wrappedBuffer( pluginMessage.getData() );
 
-            try {
-                String serverBrand;
-
-                try {
-                    serverBrand = DefinedPacket.readString( brand );
-                } finally {
+            if ( ProtocolConstants.isAfterOrEq( con.getPendingConnection().getVersion(), ProtocolConstants.MINECRAFT_1_8 ) )
+            {
+                try
+                {
+                    String serverBrand = DefinedPacket.readString(brand);
                     brand.release();
+                    brand = ByteBufAllocator.DEFAULT.heapBuffer();
+                    DefinedPacket.writeString(bungee.getName() + " <- " + serverBrand, brand ); // Waterfall
+                    pluginMessage.setData(DefinedPacket.toArray(brand));
+                    brand.release();
+                } catch (Exception ProtocolHacksSuck)
+                {
+                    return;
                 }
-
-                Preconditions.checkState( !serverBrand.contains( bungee.getName() ), "Cannot connect proxy to itself!" );
-
-                brand = ByteBufAllocator.DEFAULT.heapBuffer();
-                DefinedPacket.writeString( bungee.getName() + " <- " + serverBrand, brand ); // Waterfall
-                pluginMessage.setData( DefinedPacket.toArray( brand ) );
-            } finally {
-                brand.release();
+            } else {
+                String serverBrand = new String(pluginMessage.getData(), StandardCharsets.UTF_8);
+                pluginMessage.setData((bungee.getName() + " <- " + serverBrand).getBytes(StandardCharsets.UTF_8)); // Travertine
             }
             // changes in the packet are ignored so we need to send it manually
             con.unsafe().sendPacket( pluginMessage );

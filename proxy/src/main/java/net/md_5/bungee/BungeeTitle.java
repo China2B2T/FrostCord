@@ -183,6 +183,7 @@ public class BungeeTitle implements Title
     @Override
     public Title send(ProxiedPlayer player)
     {
+        if ( ProtocolConstants.isBeforeOrEq( player.getPendingConnection().getVersion(), ProtocolConstants.MINECRAFT_1_7_6 ) ) return this;
         sendPacket( player, clear );
         sendPacket( player, reset );
         sendPacket( player, times );

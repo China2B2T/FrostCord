@@ -3,6 +3,7 @@ package net.md_5.bungee.protocol.packet;
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
+import net.md_5.bungee.protocol.MultiVersionPacketV17;
 import io.netty.buffer.ByteBuf;
 import java.io.ByteArrayInputStream;
 import java.io.DataInput;
@@ -13,14 +14,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import net.md_5.bungee.protocol.AbstractPacketHandler;
-import net.md_5.bungee.protocol.DefinedPacket;
 import net.md_5.bungee.protocol.ProtocolConstants;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class PluginMessage extends DefinedPacket
+public class PluginMessage extends MultiVersionPacketV17
 {
 
     public static final Function<String, String> MODERNISE = new Function<String, String>()
@@ -65,6 +65,15 @@ public class PluginMessage extends DefinedPacket
      */
     private boolean allowExtendedPacket = false;
 
+    // Travertine start
+    @Override
+    public void v17Read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion)
+    {
+        tag = readString( buf );
+        data = v17readArray( buf );
+    }
+    // Travertine end
+
     @Override
     public void read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion)
     {
@@ -74,6 +83,15 @@ public class PluginMessage extends DefinedPacket
         data = new byte[ buf.readableBytes() ];
         buf.readBytes( data );
     }
+
+    // Travertine start
+    @Override
+    public void v17Write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion)
+    {
+        writeString( tag, buf );
+        v17writeArray( data, buf, allowExtendedPacket );
+    }
+    // Travertine end
 
     @Override
     public void write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion)

@@ -1,18 +1,18 @@
 package net.md_5.bungee.protocol.packet;
 
+import net.md_5.bungee.protocol.MultiVersionPacketV17;
 import io.netty.buffer.ByteBuf;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import net.md_5.bungee.protocol.AbstractPacketHandler;
-import net.md_5.bungee.protocol.DefinedPacket;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class EntityRemoveEffect extends DefinedPacket {
+public class EntityRemoveEffect extends MultiVersionPacketV17 {
 
     private int entityId;
     private int effectId;
@@ -24,13 +24,25 @@ public class EntityRemoveEffect extends DefinedPacket {
     }
 
     @Override
+    protected void v17Read(ByteBuf buf) {
+        this.entityId = buf.readInt();
+        this.effectId = buf.readUnsignedByte();
+    }
+
+    @Override
     public void write(ByteBuf buf) {
-        writeVarInt(this.entityId, buf);
+        writeVarInt(entityId, buf);
         buf.writeByte(effectId);
     }
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
         handler.handle(this);
+    }
+
+    @Override
+    protected void v17Write(ByteBuf buf) {
+        buf.writeInt(entityId);
+        buf.writeByte(effectId);
     }
 }

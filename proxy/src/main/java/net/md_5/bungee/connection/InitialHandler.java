@@ -3,6 +3,8 @@ package net.md_5.bungee.connection;
 import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import java.math.BigInteger;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -269,12 +271,28 @@ public class InitialHandler extends PacketHandler implements PendingConnection
                             return;
                         }
 
-                        Gson gson = BungeeCord.getInstance().gson;
-                        unsafe.sendPacket( new StatusResponse( gson.toJson( pingResult.getResponse() ) ) );
+                        Gson gson = handshake.getProtocolVersion() == ProtocolConstants.MINECRAFT_1_7_2 ? BungeeCord.getInstance().gsonLegacy : BungeeCord.getInstance().gson; // Travertine
                         if ( bungee.getConnectionThrottle() != null )
                         {
                             bungee.getConnectionThrottle().unthrottle( getSocketAddress() );
                         }
+                        // Travertine start
+                        if ( ProtocolConstants.isBeforeOrEq( handshake.getProtocolVersion() , ProtocolConstants.MINECRAFT_1_8 ) )
+                        {
+                            // Minecraft < 1.9 doesn't send string server descriptions as chat components. Older 1.7
+                            // clients even crash when encountering a chat component instead of a string. To be on the
+                            // safe side, always send legacy descriptions for < 1.9 clients.
+                            JsonElement element = gson.toJsonTree(pingResult.getResponse());
+                            Preconditions.checkArgument(element.isJsonObject(), "Response is not a JSON object");
+                            JsonObject object = element.getAsJsonObject();
+                            object.addProperty("description", pingResult.getResponse().getDescription());
+
+                            unsafe.sendPacket(new StatusResponse(gson.toJson(element)));
+                        } else
+                        {
+                            unsafe.sendPacket( new StatusResponse( gson.toJson( pingResult.getResponse() ) ) );
+                        }
+                        // Travertine end
                     }
                 };
 

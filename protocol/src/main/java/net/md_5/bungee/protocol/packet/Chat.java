@@ -1,18 +1,18 @@
 package net.md_5.bungee.protocol.packet;
 
+import net.md_5.bungee.protocol.MultiVersionPacketV17;
 import io.netty.buffer.ByteBuf;
 import java.util.UUID;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import net.md_5.bungee.protocol.AbstractPacketHandler;
-import net.md_5.bungee.protocol.DefinedPacket;
 import net.md_5.bungee.protocol.ProtocolConstants;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Chat extends DefinedPacket
+public class Chat extends MultiVersionPacketV17
 {
 
     private static final UUID EMPTY_UUID = new UUID( 0L, 0L );
@@ -36,6 +36,13 @@ public class Chat extends DefinedPacket
         this.position = position;
         this.sender = sender == null ? EMPTY_UUID : sender;
     }
+    // Travertine start
+    @Override
+    public void v17Read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion)
+    {
+        message = readString( buf );
+    }
+    // Travertine end
 
     @Override
     public void read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion)
@@ -50,6 +57,14 @@ public class Chat extends DefinedPacket
             }
         }
     }
+
+    // Travertine start
+    @Override
+    public void v17Write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion)
+    {
+        writeString( message, buf );
+    }
+    // Travertine end
 
     @Override
     public void write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion)

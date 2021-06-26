@@ -1,19 +1,20 @@
 package net.md_5.bungee.protocol.packet;
 
+import net.md_5.bungee.protocol.MultiVersionPacketV17;
+import net.md_5.bungee.protocol.DefinedPacket;
 import io.netty.buffer.ByteBuf;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import net.md_5.bungee.protocol.AbstractPacketHandler;
-import net.md_5.bungee.protocol.DefinedPacket;
 import net.md_5.bungee.protocol.ProtocolConstants;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class ClientSettings extends DefinedPacket
+public class ClientSettings extends MultiVersionPacketV17
 {
 
     private String locale;
@@ -24,6 +25,19 @@ public class ClientSettings extends DefinedPacket
     private byte skinParts;
     private int mainHand;
     private boolean disableTextFiltering;
+
+    // Travertine start
+    @Override
+    public void v17Read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion)
+    {
+        locale = readString( buf );
+        viewDistance = buf.readByte();
+        chatFlags = buf.readUnsignedByte();
+        chatColours = buf.readBoolean();
+        skinParts = buf.readByte();
+        difficulty = buf.readByte();
+    }
+    // Travertine end
 
     @Override
     public void read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion)
@@ -66,6 +80,19 @@ public class ClientSettings extends DefinedPacket
             buf.writeBoolean( disableTextFiltering );
         }
     }
+
+    // Travertine start
+    @Override
+    public void v17Write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion)
+    {
+        writeString( locale, buf );
+        buf.writeByte( viewDistance );
+        buf.writeByte( chatFlags );
+        buf.writeBoolean( chatColours );
+        buf.writeByte( skinParts );
+        buf.writeByte( difficulty );
+    }
+    // Travertine end
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception

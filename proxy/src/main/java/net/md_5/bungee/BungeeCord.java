@@ -169,6 +169,14 @@ public class BungeeCord extends ProxyServer
             .registerTypeAdapter( SelectorComponent.class, new SelectorComponentSerializer() )
             .registerTypeAdapter( ServerPing.PlayerInfo.class, new PlayerInfoSerializer() )
             .registerTypeAdapter( Favicon.class, Favicon.getFaviconTypeAdapter() ).create();
+    // Travertine start
+    public final Gson gsonLegacy = new GsonBuilder()
+            .registerTypeAdapter( BaseComponent.class, new ComponentSerializer() )
+            .registerTypeAdapter( TextComponent.class, new TextComponentSerializer() )
+            .registerTypeAdapter( TranslatableComponent.class, new TranslatableComponentSerializer() )
+            .registerTypeAdapter( ServerPing.PlayerInfo.class, new PlayerInfoSerializer( ProtocolConstants.MINECRAFT_1_7_2 ) )
+            .registerTypeAdapter( Favicon.class, Favicon.getFaviconTypeAdapter() ).create();
+    // Travertine end
     @Getter
     private ConnectionThrottle connectionThrottle;
     private final ModuleManager moduleManager = new ModuleManager();
@@ -260,6 +268,8 @@ public class BungeeCord extends ProxyServer
         {
             ResourceLeakDetector.setLevel( ResourceLeakDetector.Level.DISABLED ); // Eats performance
         }
+
+        getLogger().info("Loading FrostCord version " + getVersion() + " by Rabb1t0w0...");
 
         eventLoops = PipelineUtils.newEventLoopGroup( 0, new ThreadFactoryBuilder().setNameFormat( "Netty IO Thread #%1$d" ).build() );
 
@@ -495,7 +505,6 @@ public class BungeeCord extends ProxyServer
         {
         }
 
-        getLogger().info( "Thank you and goodbye" );
         // Need to close loggers after last message!
         for ( Handler handler : getLogger().getHandlers() )
         {

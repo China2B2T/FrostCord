@@ -192,6 +192,7 @@ public final class UserConnection implements ProxiedPlayer
     public void setDisplayName(String name)
     {
         Preconditions.checkNotNull( name, "displayName" );
+        Preconditions.checkArgument( name.length() <= 16, "Display name cannot be longer than 16 characters" ); // Travertine
         displayName = name;
     }
 
@@ -485,7 +486,7 @@ public final class UserConnection implements ProxiedPlayer
         // transform score components
         message = ChatComponentTransformer.getInstance().transform( this, true, message );
 
-        if ( position == ChatMessageType.ACTION_BAR && getPendingConnection().getVersion() < ProtocolConstants.MINECRAFT_1_17 )
+        if ( position == ChatMessageType.ACTION_BAR && getPendingConnection().getVersion() < ProtocolConstants.MINECRAFT_1_17 && getPendingConnection().getVersion() >= ProtocolConstants.MINECRAFT_1_8 )
         {
             // Versions older than 1.11 cannot send the Action bar with the new JSON formattings
             // Fix by converting to a legacy message, see https://bugs.mojang.com/browse/MC-119145
@@ -681,6 +682,7 @@ public final class UserConnection implements ProxiedPlayer
     @Override
     public void setTabHeader(BaseComponent header, BaseComponent footer)
     {
+        if ( ProtocolConstants.isBeforeOrEq( pendingConnection.getVersion(), ProtocolConstants.MINECRAFT_1_7_6 ) ) return; // Travertine
         header = ChatComponentTransformer.getInstance().transform( this, true, header )[0];
         footer = ChatComponentTransformer.getInstance().transform( this, true, footer )[0];
 
@@ -693,6 +695,7 @@ public final class UserConnection implements ProxiedPlayer
     @Override
     public void setTabHeader(BaseComponent[] header, BaseComponent[] footer)
     {
+        if ( ProtocolConstants.isBeforeOrEq( pendingConnection.getVersion(), ProtocolConstants.MINECRAFT_1_7_6 ) ) return; // Travertine
         header = ChatComponentTransformer.getInstance().transform( this, true, header );
         footer = ChatComponentTransformer.getInstance().transform( this, true, footer );
 
@@ -722,6 +725,7 @@ public final class UserConnection implements ProxiedPlayer
 
     public void setCompressionThreshold(int compressionThreshold)
     {
+        if ( ProtocolConstants.isBeforeOrEq( pendingConnection.getVersion(), ProtocolConstants.MINECRAFT_1_7_6 ) ) return; // Travertine
         if ( !ch.isClosing() && this.compressionThreshold == -1 && compressionThreshold >= 0 )
         {
             this.compressionThreshold = compressionThreshold;

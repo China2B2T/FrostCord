@@ -7,6 +7,8 @@ public class ProtocolConstants
 {
 
     private static final boolean SNAPSHOT_SUPPORT = Boolean.getBoolean( "net.md_5.bungee.protocol.snapshot" );
+    public static final int MINECRAFT_1_7_2 = 4;
+    public static final int MINECRAFT_1_7_6 = 5;
     public static final int MINECRAFT_1_8 = 47;
     public static final int MINECRAFT_1_9 = 107;
     public static final int MINECRAFT_1_9_1 = 108;
@@ -41,6 +43,7 @@ public class ProtocolConstants
     static
     {
         ImmutableList.Builder<String> supportedVersions = ImmutableList.<String>builder().add(
+                "1.7.x",
                 "1.8.x",
                 "1.9.x",
                 "1.10.x",
@@ -53,6 +56,8 @@ public class ProtocolConstants
                 "1.17.x"
         );
         ImmutableList.Builder<Integer> supportedVersionIds = ImmutableList.<Integer>builder().add(
+                ProtocolConstants.MINECRAFT_1_7_2,
+                ProtocolConstants.MINECRAFT_1_7_6,
                 ProtocolConstants.MINECRAFT_1_8,
                 ProtocolConstants.MINECRAFT_1_9,
                 ProtocolConstants.MINECRAFT_1_9_1,

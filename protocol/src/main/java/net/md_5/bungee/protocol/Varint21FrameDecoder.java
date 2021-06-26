@@ -6,10 +6,12 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.CorruptedFrameException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Varint21FrameDecoder extends ByteToMessageDecoder
 {
 
+    private AtomicLong lastEmptyPacket = new AtomicLong(0); // Travertine
     private static boolean DIRECT_WARNING;
 
     @Override
@@ -42,7 +44,15 @@ public class Varint21FrameDecoder extends ByteToMessageDecoder
                 int length = DefinedPacket.readVarInt( Unpooled.wrappedBuffer( buf ) );
                 if ( false && length == 0) // Waterfall - ignore
                 {
-                    throw new CorruptedFrameException( "Empty Packet!" );
+                    // Travertine start - vanilla 1.7 client sometimes sends empty packets.
+                    long currentTime = System.currentTimeMillis();
+                    long lastEmptyPacket = this.lastEmptyPacket.getAndSet(currentTime);
+
+                    if (currentTime - lastEmptyPacket < 50L)
+                    {
+                        throw new CorruptedFrameException( "Too many empty packets" );
+                    }
+                    // Travertine end
                 }
 
                 if ( in.readableBytes() < length )

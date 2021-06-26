@@ -8,6 +8,7 @@ import java.util.Locale;
 import java.util.Queue;
 import java.util.Set;
 import java.util.UUID;
+import java.nio.charset.StandardCharsets;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.md_5.bungee.api.ChatColor;
@@ -248,12 +249,16 @@ public class ServerConnector extends PacketHandler
             {
                 ByteBuf brand = ByteBufAllocator.DEFAULT.heapBuffer();
 
-                try
+                // Travertine start
+                String brandString = bungee.getName() + " (" + bungee.getVersion() + ")";
+
+                if ( ProtocolConstants.isBeforeOrEq( user.getPendingConnection().getVersion(), ProtocolConstants.MINECRAFT_1_7_6 ) )
                 {
-                    DefinedPacket.writeString( bungee.getName() + " (" + bungee.getVersion() + ")", brand );
-                    user.unsafe().sendPacket( new PluginMessage( user.getPendingConnection().getVersion() >= ProtocolConstants.MINECRAFT_1_13 ? "minecraft:brand" : "MC|Brand", DefinedPacket.toArray( brand ), handshakeHandler.isServerForge() ) );
-                } finally
+                    user.unsafe().sendPacket( new PluginMessage( "MC|Brand", brandString.getBytes( StandardCharsets.UTF_8 ), handshakeHandler.isServerForge() ) );
+                } else
                 {
+                    DefinedPacket.writeString(brandString, brand);
+                    user.unsafe().sendPacket( new PluginMessage( user.getPendingConnection().getVersion() >= ProtocolConstants.MINECRAFT_1_13 ? "minecraft:brand" : "MC|Brand", DefinedPacket.toArray(brand), handshakeHandler.isServerForge() ) );
                     brand.release();
                 }
             }
@@ -267,7 +272,7 @@ public class ServerConnector extends PacketHandler
             Scoreboard serverScoreboard = user.getServerSentScoreboard();
             for ( Objective objective : serverScoreboard.getObjectives() )
             {
-                user.unsafe().sendPacket( new ScoreboardObjective( objective.getName(), objective.getValue(), ScoreboardObjective.HealthDisplay.fromString( objective.getType() ), (byte) 1 ) );
+                user.unsafe().sendPacket( new ScoreboardObjective( objective.getName(), objective.getValue(), objective.getType() == null ? null : ScoreboardObjective.HealthDisplay.fromString(objective.getType()), (byte) 1 ) ); // Travertine - 1.7
             }
             for ( Score score : serverScoreboard.getScores() )
             {
@@ -412,6 +417,14 @@ public class ServerConnector extends PacketHandler
             if ( pluginMessage.getTag().equals( ForgeConstants.FML_HANDSHAKE_TAG ) || pluginMessage.getTag().equals( ForgeConstants.FORGE_REGISTER ) )
             {
                 this.handshakeHandler.handle( pluginMessage );
+
+                // Travertine start
+                if ( user.getForgeClientHandler().checkUserOutdated() )
+                {
+                    ch.close();
+                    user.getPendingConnects().remove(target);
+                }
+                // Travertine end
 
                 // We send the message as part of the handler, so don't send it here.
                 throw CancelSendSignal.INSTANCE;

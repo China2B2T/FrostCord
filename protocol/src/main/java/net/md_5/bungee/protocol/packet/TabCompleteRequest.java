@@ -1,17 +1,17 @@
 package net.md_5.bungee.protocol.packet;
 
+import net.md_5.bungee.protocol.MultiVersionPacketV17;
 import io.netty.buffer.ByteBuf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import net.md_5.bungee.protocol.AbstractPacketHandler;
-import net.md_5.bungee.protocol.DefinedPacket;
 import net.md_5.bungee.protocol.ProtocolConstants;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class TabCompleteRequest extends DefinedPacket
+public class TabCompleteRequest extends MultiVersionPacketV17
 {
 
     private int transactionId;
@@ -33,6 +33,13 @@ public class TabCompleteRequest extends DefinedPacket
         this.hasPositon = hasPosition;
         this.position = position;
     }
+    // Travertine start
+    @Override
+    public void v17Read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion)
+    {
+        cursor = readString( buf );
+    }
+    // Travertine end
 
     @Override
     public void read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion)
@@ -56,6 +63,14 @@ public class TabCompleteRequest extends DefinedPacket
             }
         }
     }
+
+    // Travertine start
+    @Override
+    public void v17Write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion)
+    {
+        writeString( cursor, buf );
+    }
+    // Travertine end
 
     @Override
     public void write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion)

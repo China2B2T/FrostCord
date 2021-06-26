@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.UserConnection;
 import net.md_5.bungee.protocol.ProtocolConstants;
 import net.md_5.bungee.protocol.packet.EntityRemoveEffect;
@@ -22,6 +23,12 @@ public class ForgeClientHandler
 
     @NonNull
     private final UserConnection con;
+
+    // Travertine start
+    @Getter
+    @Setter(AccessLevel.PACKAGE)
+    private boolean forgeOutdated = false;
+    // Travertine end
 
     /**
      * The users' mod list.
@@ -175,4 +182,22 @@ public class ForgeClientHandler
     {
         return fmlTokenInHandshake || clientModList != null;
     }
+
+    // Travertine start
+    /**
+      * Checks to see if a user is using an outdated FML build, and takes
+      * appropriate action on the User side. This should only be called during a
+      * server connection, by the ServerConnector
+      *
+      * @return <code>true</code> if the user's FML build is outdated, otherwise
+      * <code>false</code>
+      */
+    public boolean checkUserOutdated() {
+        if (forgeOutdated) {
+            con.disconnect( BungeeCord.getInstance().getTranslation("connect_kick_outdated_forge") );
+        }
+        return forgeOutdated;
+    }
+    // Travertine end
+
 }
