@@ -1,17 +1,15 @@
+  
 #!/bin/sh
 
-# Waterfall - rewrite below to extend platform support
+set -eu
 
-if [[ "$OSTYPE" == "darwin"* ]]; then
-  # brew install mbedtls zlib
-  PREFIX="osx-"
-  CXX_ARGS="/usr/local/lib/libmbedcrypto.a -lz -I$JAVA_HOME/include/ -I$JAVA_HOME/include/darwin/ -I/usr/local/include -L/usr/local/lib"
-else
-  # apt-get install libmbedtls-dev zlib1g-dev
-  CXX_ARGS="-lcrypto -lz -I$JAVA_HOME/include/ -I$JAVA_HOME/include/linux/"
-fi
+echo "Compiling mbedtls"
+(cd mbedtls && make no_test)
 
-CXX="g++ -shared -fPIC -O3 -Wall -Werror"
+echo "Compiling zlib"
+(cd zlib && CFLAGS=-fPIC ./configure --static && make)
 
-$CXX src/main/c/NativeCipherImpl.cpp -o src/main/resources/${PREFIX}native-cipher.so $CXX_ARGS
-$CXX src/main/c/NativeCompressImpl.cpp -o src/main/resources/${PREFIX}native-compress.so $CXX_ARGS
+CXX="g++ -shared -fPIC -Wl,--wrap=memcpy -O3 -Wall -Werror -I$JAVA_HOME/include/ -I$JAVA_HOME/include/linux/"
+
+$CXX -Imbedtls/include src/main/c/NativeCipherImpl.cpp -o src/main/resources/native-cipher.so mbedtls/library/libmbedcrypto.a
+$CXX -Izlib src/main/c/NativeCompressImpl.cpp -o src/main/resources/native-compress.so zlib/libz.a

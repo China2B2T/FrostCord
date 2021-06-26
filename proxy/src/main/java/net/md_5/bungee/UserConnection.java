@@ -294,9 +294,9 @@ public final class UserConnection implements ProxiedPlayer {
                         sendMessage(bungee.getTranslation("fallback_lobby"));
                         connect(def, null, true, ServerConnectEvent.Reason.LOBBY_FALLBACK);
                     } else if (dimensionChange) {
-                        disconnect(bungee.getTranslation("fallback_kick", future.cause().getClass().getName()));
+                        sendMessage(bungee.getTranslation("fallback_kick", connectionFailMessage(future.cause())));
                     } else {
-                        sendMessage(bungee.getTranslation("fallback_kick", future.cause().getClass().getName()));
+                        sendMessage(bungee.getTranslation("fallback_kick", connectionFailMessage(future.cause())));
                     }
                 }
             }
@@ -312,6 +312,14 @@ public final class UserConnection implements ProxiedPlayer {
             b.localAddress(getPendingConnection().getListener().getHost().getHostString(), 0);
         }
         b.connect().addListener(listener);
+    }
+
+    private String connectionFailMessage(Throwable cause) {
+        if ( cause instanceof ConnectTimeoutException ) {
+            return bungee.getTranslation("timeout");
+        } else {
+            return cause.getClass().getName();
+        }
     }
 
     @Override

@@ -23,8 +23,12 @@ public class JavaCipher implements BungeeCipher {
         }
     }
 
-    public JavaCipher() throws GeneralSecurityException {
-        this.cipher = Cipher.getInstance("AES/CFB8/NoPadding");
+    public JavaCipher() {
+        try {
+            this.cipher = Cipher.getInstance( "AES/CFB8/NoPadding" );
+        } catch ( GeneralSecurityException ex ) {
+            throw new RuntimeException( ex );
+        }
     }
 
     @Override

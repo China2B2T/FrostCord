@@ -4,16 +4,17 @@ import com.google.common.io.ByteStreams;
 import net.md_5.bungee.jni.cipher.BungeeCipher;
 
 import java.io.*;
+import java.util.function.Supplier;
 
 public final class NativeCode<T> {
 
     private final String name;
-    private final Class<? extends T> javaImpl;
-    private final Class<? extends T> nativeImpl;
+    private final Supplier<? extends T> javaImpl;
+    private final Supplier<? extends T> nativeImpl;
     //
     private boolean loaded;
 
-    public NativeCode(String name, Class<? extends T> javaImpl, Class<? extends T> nativeImpl) {
+    public NativeCode(String name, Supplier<? extends T> javaImpl, Supplier<? extends T> nativeImpl) {
         if ("Mac OS X".equals(System.getProperty("os.name"))) name = "osx-" + name; // Waterfall
         this.name = name;
         this.javaImpl = javaImpl;
@@ -21,11 +22,7 @@ public final class NativeCode<T> {
     }
 
     public T newInstance() {
-        try {
-            return (loaded) ? nativeImpl.getDeclaredConstructor().newInstance() : javaImpl.getDeclaredConstructor().newInstance();
-        } catch (ReflectiveOperationException ex) {
-            throw new RuntimeException("Error getting instance", ex);
-        }
+        return (loaded ? nativeImpl.get() : javaImpl.get());
     }
 
     public boolean load() {
