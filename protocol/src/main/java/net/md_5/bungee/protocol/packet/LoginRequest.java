@@ -13,27 +13,23 @@ import net.md_5.bungee.protocol.ProtocolConstants;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class LoginRequest extends DefinedPacket
-{
+public class LoginRequest extends DefinedPacket {
 
     private String data;
 
     @Override
-    public void read(ByteBuf buf)
-    {
-        data = readString( buf, 16 );
+    public void read(ByteBuf buf) {
+        data = readString(buf, 16);
     }
 
     @Override
-    public void write(ByteBuf buf)
-    {
-        writeString( data, buf );
+    public void write(ByteBuf buf) {
+        writeString(data, buf);
     }
 
     @Override
-    public void handle(AbstractPacketHandler handler) throws Exception
-    {
-        handler.handle( this );
+    public void handle(AbstractPacketHandler handler) throws Exception {
+        handler.handle(this);
     }
 
     // Waterfall start: Additional DoS mitigations, courtesy of Velocity

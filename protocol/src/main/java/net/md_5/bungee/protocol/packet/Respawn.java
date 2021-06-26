@@ -14,8 +14,7 @@ import se.llbit.nbt.Tag;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Respawn extends DefinedPacket
-{
+public class Respawn extends DefinedPacket {
 
     private Object dimension;
     private String worldName;
@@ -29,84 +28,65 @@ public class Respawn extends DefinedPacket
     private boolean copyMeta;
 
     @Override
-    public void read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion)
-    {
-        if ( protocolVersion >= ProtocolConstants.MINECRAFT_1_16 )
-        {
-            if ( protocolVersion >= ProtocolConstants.MINECRAFT_1_16_2 )
-            {
-                dimension = readTag( buf );
-            } else
-            {
-                dimension = readString( buf );
+    public void read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
+        if (protocolVersion >= ProtocolConstants.MINECRAFT_1_16) {
+            if (protocolVersion >= ProtocolConstants.MINECRAFT_1_16_2) {
+                dimension = readTag(buf);
+            } else {
+                dimension = readString(buf);
             }
-            worldName = readString( buf );
-        } else
-        {
+            worldName = readString(buf);
+        } else {
             dimension = buf.readInt();
         }
-        if ( protocolVersion >= ProtocolConstants.MINECRAFT_1_15 )
-        {
+        if (protocolVersion >= ProtocolConstants.MINECRAFT_1_15) {
             seed = buf.readLong();
         }
-        if ( protocolVersion < ProtocolConstants.MINECRAFT_1_14 )
-        {
+        if (protocolVersion < ProtocolConstants.MINECRAFT_1_14) {
             difficulty = buf.readUnsignedByte();
         }
         gameMode = buf.readUnsignedByte();
-        if ( protocolVersion >= ProtocolConstants.MINECRAFT_1_16 )
-        {
+        if (protocolVersion >= ProtocolConstants.MINECRAFT_1_16) {
             previousGameMode = buf.readUnsignedByte();
             debug = buf.readBoolean();
             flat = buf.readBoolean();
             copyMeta = buf.readBoolean();
-        } else
-        {
-            levelType = readString( buf );
+        } else {
+            levelType = readString(buf);
         }
     }
 
     @Override
-    public void write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion)
-    {
-        if ( protocolVersion >= ProtocolConstants.MINECRAFT_1_16 )
-        {
-            if ( protocolVersion >= ProtocolConstants.MINECRAFT_1_16_2 )
-            {
-                writeTag( (Tag) dimension, buf );
-            } else
-            {
-                writeString( (String) dimension, buf );
+    public void write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
+        if (protocolVersion >= ProtocolConstants.MINECRAFT_1_16) {
+            if (protocolVersion >= ProtocolConstants.MINECRAFT_1_16_2) {
+                writeTag((Tag) dimension, buf);
+            } else {
+                writeString((String) dimension, buf);
             }
-            writeString( worldName, buf );
-        } else
-        {
-            buf.writeInt( ( (Integer) dimension ) );
+            writeString(worldName, buf);
+        } else {
+            buf.writeInt(((Integer) dimension));
         }
-        if ( protocolVersion >= ProtocolConstants.MINECRAFT_1_15 )
-        {
-            buf.writeLong( seed );
+        if (protocolVersion >= ProtocolConstants.MINECRAFT_1_15) {
+            buf.writeLong(seed);
         }
-        if ( protocolVersion < ProtocolConstants.MINECRAFT_1_14 )
-        {
-            buf.writeByte( difficulty );
+        if (protocolVersion < ProtocolConstants.MINECRAFT_1_14) {
+            buf.writeByte(difficulty);
         }
-        buf.writeByte( gameMode );
-        if ( protocolVersion >= ProtocolConstants.MINECRAFT_1_16 )
-        {
-            buf.writeByte( previousGameMode );
-            buf.writeBoolean( debug );
-            buf.writeBoolean( flat );
-            buf.writeBoolean( copyMeta );
-        } else
-        {
-            writeString( levelType, buf );
+        buf.writeByte(gameMode);
+        if (protocolVersion >= ProtocolConstants.MINECRAFT_1_16) {
+            buf.writeByte(previousGameMode);
+            buf.writeBoolean(debug);
+            buf.writeBoolean(flat);
+            buf.writeBoolean(copyMeta);
+        } else {
+            writeString(levelType, buf);
         }
     }
 
     @Override
-    public void handle(AbstractPacketHandler handler) throws Exception
-    {
-        handler.handle( this );
+    public void handle(AbstractPacketHandler handler) throws Exception {
+        handler.handle(this);
     }
 }

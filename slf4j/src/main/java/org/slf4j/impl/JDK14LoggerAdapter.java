@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2004-2011 QOS.ch
  * All rights reserved.
- *
+ * <p>
  * Permission is hereby granted, free  of charge, to any person obtaining
  * a  copy  of this  software  and  associated  documentation files  (the
  * "Software"), to  deal in  the Software without  restriction, including
@@ -9,10 +9,10 @@
  * distribute,  sublicense, and/or sell  copies of  the Software,  and to
  * permit persons to whom the Software  is furnished to do so, subject to
  * the following conditions:
- *
+ * <p>
  * The  above  copyright  notice  and  this permission  notice  shall  be
  * included in all copies or substantial portions of the Software.
- *
+ * <p>
  * THE  SOFTWARE IS  PROVIDED  "AS  IS", WITHOUT  WARRANTY  OF ANY  KIND,
  * EXPRESS OR  IMPLIED, INCLUDING  BUT NOT LIMITED  TO THE  WARRANTIES OF
  * MERCHANTABILITY,    FITNESS    FOR    A   PARTICULAR    PURPOSE    AND
@@ -20,12 +20,8 @@
  * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
  * OF CONTRACT, TORT OR OTHERWISE,  ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- *
  */
 package org.slf4j.impl;
-
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
 
 import org.slf4j.Logger;
 import org.slf4j.Marker;
@@ -36,12 +32,15 @@ import org.slf4j.helpers.MarkerIgnoringBase;
 import org.slf4j.helpers.MessageFormatter;
 import org.slf4j.spi.LocationAwareLogger;
 
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+
 /**
  * A wrapper over {@link java.util.logging.Logger java.util.logging.Logger} in
  * conformity with the {@link Logger} interface. Note that the logging levels
  * mentioned in this class refer to those defined in the java.util.logging
  * package.
- * 
+ *
  * @author Ceki G&uuml;lc&uuml;
  * @author Peter Royal
  */
@@ -60,7 +59,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
 
     /**
      * Is this logger instance enabled for the FINEST level?
-     * 
+     *
      * @return True if this Logger is enabled for level FINEST, false otherwise.
      */
     public boolean isTraceEnabled() {
@@ -69,7 +68,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
 
     /**
      * Log a message object at level FINEST.
-     * 
+     *
      * @param msg
      *          - the message object to be logged
      */
@@ -82,12 +81,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
     /**
      * Log a message at level FINEST according to the specified format and
      * argument.
-     * 
+     *
      * <p>
      * This form avoids superfluous object creation when the logger is disabled
      * for level FINEST.
      * </p>
-     * 
+     *
      * @param format
      *          the format string
      * @param arg
@@ -103,12 +102,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
     /**
      * Log a message at level FINEST according to the specified format and
      * arguments.
-     * 
+     *
      * <p>
      * This form avoids superfluous object creation when the logger is disabled
      * for the FINEST level.
      * </p>
-     * 
+     *
      * @param format
      *          the format string
      * @param arg1
@@ -126,12 +125,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
     /**
      * Log a message at level FINEST according to the specified format and
      * arguments.
-     * 
+     *
      * <p>
      * This form avoids superfluous object creation when the logger is disabled
      * for the FINEST level.
      * </p>
-     * 
+     *
      * @param format
      *          the format string
      * @param argArray
@@ -146,7 +145,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
 
     /**
      * Log an exception (throwable) at level FINEST with an accompanying message.
-     * 
+     *
      * @param msg
      *          the message accompanying the exception
      * @param t
@@ -160,7 +159,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
 
     /**
      * Is this logger instance enabled for the FINE level?
-     * 
+     *
      * @return True if this Logger is enabled for level FINE, false otherwise.
      */
     public boolean isDebugEnabled() {
@@ -169,7 +168,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
 
     /**
      * Log a message object at level FINE.
-     * 
+     *
      * @param msg
      *          - the message object to be logged
      */
@@ -181,12 +180,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
 
     /**
      * Log a message at level FINE according to the specified format and argument.
-     * 
+     *
      * <p>
      * This form avoids superfluous object creation when the logger is disabled
      * for level FINE.
      * </p>
-     * 
+     *
      * @param format
      *          the format string
      * @param arg
@@ -202,12 +201,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
     /**
      * Log a message at level FINE according to the specified format and
      * arguments.
-     * 
+     *
      * <p>
      * This form avoids superfluous object creation when the logger is disabled
      * for the FINE level.
      * </p>
-     * 
+     *
      * @param format
      *          the format string
      * @param arg1
@@ -225,12 +224,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
     /**
      * Log a message at level FINE according to the specified format and
      * arguments.
-     * 
+     *
      * <p>
      * This form avoids superfluous object creation when the logger is disabled
      * for the FINE level.
      * </p>
-     * 
+     *
      * @param format
      *          the format string
      * @param argArray
@@ -245,7 +244,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
 
     /**
      * Log an exception (throwable) at level FINE with an accompanying message.
-     * 
+     *
      * @param msg
      *          the message accompanying the exception
      * @param t
@@ -259,7 +258,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
 
     /**
      * Is this logger instance enabled for the INFO level?
-     * 
+     *
      * @return True if this Logger is enabled for the INFO level, false otherwise.
      */
     public boolean isInfoEnabled() {
@@ -268,7 +267,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
 
     /**
      * Log a message object at the INFO level.
-     * 
+     *
      * @param msg
      *          - the message object to be logged
      */
@@ -280,12 +279,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
 
     /**
      * Log a message at level INFO according to the specified format and argument.
-     * 
+     *
      * <p>
      * This form avoids superfluous object creation when the logger is disabled
      * for the INFO level.
      * </p>
-     * 
+     *
      * @param format
      *          the format string
      * @param arg
@@ -301,12 +300,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
     /**
      * Log a message at the INFO level according to the specified format and
      * arguments.
-     * 
+     *
      * <p>
      * This form avoids superfluous object creation when the logger is disabled
      * for the INFO level.
      * </p>
-     * 
+     *
      * @param format
      *          the format string
      * @param arg1
@@ -324,12 +323,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
     /**
      * Log a message at level INFO according to the specified format and
      * arguments.
-     * 
+     *
      * <p>
      * This form avoids superfluous object creation when the logger is disabled
      * for the INFO level.
      * </p>
-     * 
+     *
      * @param format
      *          the format string
      * @param argArray
@@ -345,7 +344,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
     /**
      * Log an exception (throwable) at the INFO level with an accompanying
      * message.
-     * 
+     *
      * @param msg
      *          the message accompanying the exception
      * @param t
@@ -359,7 +358,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
 
     /**
      * Is this logger instance enabled for the WARNING level?
-     * 
+     *
      * @return True if this Logger is enabled for the WARNING level, false
      *         otherwise.
      */
@@ -369,7 +368,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
 
     /**
      * Log a message object at the WARNING level.
-     * 
+     *
      * @param msg
      *          - the message object to be logged
      */
@@ -382,12 +381,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
     /**
      * Log a message at the WARNING level according to the specified format and
      * argument.
-     * 
+     *
      * <p>
      * This form avoids superfluous object creation when the logger is disabled
      * for the WARNING level.
      * </p>
-     * 
+     *
      * @param format
      *          the format string
      * @param arg
@@ -403,12 +402,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
     /**
      * Log a message at the WARNING level according to the specified format and
      * arguments.
-     * 
+     *
      * <p>
      * This form avoids superfluous object creation when the logger is disabled
      * for the WARNING level.
      * </p>
-     * 
+     *
      * @param format
      *          the format string
      * @param arg1
@@ -426,12 +425,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
     /**
      * Log a message at level WARNING according to the specified format and
      * arguments.
-     * 
+     *
      * <p>
      * This form avoids superfluous object creation when the logger is disabled
      * for the WARNING level.
      * </p>
-     * 
+     *
      * @param format
      *          the format string
      * @param argArray
@@ -447,7 +446,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
     /**
      * Log an exception (throwable) at the WARNING level with an accompanying
      * message.
-     * 
+     *
      * @param msg
      *          the message accompanying the exception
      * @param t
@@ -461,7 +460,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
 
     /**
      * Is this logger instance enabled for level SEVERE?
-     * 
+     *
      * @return True if this Logger is enabled for level SEVERE, false otherwise.
      */
     public boolean isErrorEnabled() {
@@ -470,7 +469,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
 
     /**
      * Log a message object at the SEVERE level.
-     * 
+     *
      * @param msg
      *          - the message object to be logged
      */
@@ -483,12 +482,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
     /**
      * Log a message at the SEVERE level according to the specified format and
      * argument.
-     * 
+     *
      * <p>
      * This form avoids superfluous object creation when the logger is disabled
      * for the SEVERE level.
      * </p>
-     * 
+     *
      * @param format
      *          the format string
      * @param arg
@@ -504,12 +503,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
     /**
      * Log a message at the SEVERE level according to the specified format and
      * arguments.
-     * 
+     *
      * <p>
      * This form avoids superfluous object creation when the logger is disabled
      * for the SEVERE level.
      * </p>
-     * 
+     *
      * @param format
      *          the format string
      * @param arg1
@@ -527,12 +526,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
     /**
      * Log a message at level SEVERE according to the specified format and
      * arguments.
-     * 
+     *
      * <p>
      * This form avoids superfluous object creation when the logger is disabled
      * for the SEVERE level.
      * </p>
-     * 
+     *
      * @param format
      *          the format string
      * @param arguments
@@ -548,7 +547,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
     /**
      * Log an exception (throwable) at the SEVERE level with an accompanying
      * message.
-     * 
+     *
      * @param msg
      *          the message accompanying the exception
      * @param t
@@ -564,9 +563,9 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
      * Log the message at the specified level with the specified throwable if any.
      * This method creates a LogRecord and fills in caller date before calling
      * this instance's JDK14 logger.
-     * 
+     *
      * See bug report #13 for more details.
-     * 
+     *
      * @param level
      * @param msg
      * @param t
@@ -587,7 +586,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
 
     /**
      * Fill in caller data if possible.
-     * 
+     *
      * @param record
      *          The record to update
      */
@@ -636,23 +635,23 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements Loca
     private Level slf4jLevelIntToJULLevel(int slf4jLevelInt) {
         Level julLevel;
         switch (slf4jLevelInt) {
-        case LocationAwareLogger.TRACE_INT:
-            julLevel = Level.FINEST;
-            break;
-        case LocationAwareLogger.DEBUG_INT:
-            julLevel = Level.FINE;
-            break;
-        case LocationAwareLogger.INFO_INT:
-            julLevel = Level.INFO;
-            break;
-        case LocationAwareLogger.WARN_INT:
-            julLevel = Level.WARNING;
-            break;
-        case LocationAwareLogger.ERROR_INT:
-            julLevel = Level.SEVERE;
-            break;
-        default:
-            throw new IllegalStateException("Level number " + slf4jLevelInt + " is not recognized.");
+            case LocationAwareLogger.TRACE_INT:
+                julLevel = Level.FINEST;
+                break;
+            case LocationAwareLogger.DEBUG_INT:
+                julLevel = Level.FINE;
+                break;
+            case LocationAwareLogger.INFO_INT:
+                julLevel = Level.INFO;
+                break;
+            case LocationAwareLogger.WARN_INT:
+                julLevel = Level.WARNING;
+                break;
+            case LocationAwareLogger.ERROR_INT:
+                julLevel = Level.SEVERE;
+                break;
+            default:
+                throw new IllegalStateException("Level number " + slf4jLevelInt + " is not recognized.");
         }
         return julLevel;
     }

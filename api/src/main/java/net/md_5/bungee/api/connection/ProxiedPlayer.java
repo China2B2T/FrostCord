@@ -1,31 +1,25 @@
 package net.md_5.bungee.api.connection;
 
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
-import net.md_5.bungee.api.Callback;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.ServerConnectRequest;
-import net.md_5.bungee.api.SkinConfiguration;
-import net.md_5.bungee.api.Title;
+import net.md_5.bungee.api.*;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.api.score.Scoreboard;
 
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
+
 /**
  * Represents a player who's connection is being connected to somewhere else,
  * whether it be a remote or embedded server.
  */
-public interface ProxiedPlayer extends Connection, CommandSender
-{
+public interface ProxiedPlayer extends Connection, CommandSender {
 
     /**
      * Represents the player's chat state.
      */
-    public enum ChatMode
-    {
+    public enum ChatMode {
 
         /**
          * The player will see all chat.
@@ -42,8 +36,7 @@ public interface ProxiedPlayer extends Connection, CommandSender
 
     }
 
-    public enum MainHand
-    {
+    public enum MainHand {
 
         LEFT,
         RIGHT;
@@ -67,7 +60,7 @@ public interface ProxiedPlayer extends Connection, CommandSender
      * Send a message to the specified screen position of this player.
      *
      * @param position the screen position
-     * @param message the message to send
+     * @param message  the message to send
      */
     public void sendMessage(ChatMessageType position, BaseComponent... message);
 
@@ -75,14 +68,14 @@ public interface ProxiedPlayer extends Connection, CommandSender
      * Send a message to the specified screen position of this player.
      *
      * @param position the screen position
-     * @param message the message to send
+     * @param message  the message to send
      */
     public void sendMessage(ChatMessageType position, BaseComponent message);
 
     /**
      * Send a message to this player.
      *
-     * @param sender the sender of the message
+     * @param sender  the sender of the message
      * @param message the message to send
      */
     public void sendMessage(UUID sender, BaseComponent... message);
@@ -90,7 +83,7 @@ public interface ProxiedPlayer extends Connection, CommandSender
     /**
      * Send a message to this player.
      *
-     * @param sender the sender of the message
+     * @param sender  the sender of the message
      * @param message the message to send
      */
     public void sendMessage(UUID sender, BaseComponent message);
@@ -119,10 +112,10 @@ public interface ProxiedPlayer extends Connection, CommandSender
      * closing the current one. Depending on the implementation, this method
      * might return before the user has been connected.
      *
-     * @param target the new server to connect to
+     * @param target   the new server to connect to
      * @param callback the method called when the connection is complete, or
-     * when an exception is encountered. The boolean parameter denotes success
-     * (true) or failure (false).
+     *                 when an exception is encountered. The boolean parameter denotes success
+     *                 (true) or failure (false).
      */
     void connect(ServerInfo target, Callback<Boolean> callback);
 
@@ -131,11 +124,11 @@ public interface ProxiedPlayer extends Connection, CommandSender
      * closing the current one. Depending on the implementation, this method
      * might return before the user has been connected.
      *
-     * @param target the new server to connect to
+     * @param target   the new server to connect to
      * @param callback the method called when the connection is complete, or
-     * when an exception is encountered. The boolean parameter denotes success
-     * (true) or failure (false).
-     * @param reason the reason for connecting to the new server
+     *                 when an exception is encountered. The boolean parameter denotes success
+     *                 (true) or failure (false).
+     * @param reason   the reason for connecting to the new server
      */
     void connect(ServerInfo target, Callback<Boolean> callback, ServerConnectEvent.Reason reason);
 
@@ -164,13 +157,13 @@ public interface ProxiedPlayer extends Connection, CommandSender
 
     /**
      * Send a plugin message to this player.
-     *
+     * <p>
      * In recent Minecraft versions channel names must contain a colon separator
      * and consist of [a-z0-9/._-]. This will be enforced in a future version.
      * The "BungeeCord" channel is an exception and may only take this form.
      *
      * @param channel the channel to send this data via
-     * @param data the data to send
+     * @param data    the data to send
      */
     void sendData(String channel, byte[] data);
 

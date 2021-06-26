@@ -1,11 +1,11 @@
 package net.md_5.bungee.module;
 
-import java.io.File;
 import lombok.Data;
 
+import java.io.File;
+
 @Data
-public class ModuleSpec
-{
+public class ModuleSpec {
 
     private final String name;
     private final File file;

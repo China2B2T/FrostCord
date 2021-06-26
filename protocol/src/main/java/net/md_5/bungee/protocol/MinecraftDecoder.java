@@ -4,13 +4,13 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.CorruptedFrameException;
 import io.netty.handler.codec.MessageToMessageDecoder;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @AllArgsConstructor
-public class MinecraftDecoder extends MessageToMessageDecoder<ByteBuf>
-{
+public class MinecraftDecoder extends MessageToMessageDecoder<ByteBuf> {
 
     @Setter
     private Protocol protocol;
@@ -27,17 +27,15 @@ public class MinecraftDecoder extends MessageToMessageDecoder<ByteBuf>
     }
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception
-    {
+    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         // See Varint21FrameDecoder for the general reasoning. We add this here as ByteToMessageDecoder#handlerRemoved()
         // will fire any cumulated data through the pipeline, so we want to try and stop it here.
-        if ( !ctx.channel().isActive() )
-        {
+        if (!ctx.channel().isActive()) {
             return;
         }
 
-        Protocol.DirectionData prot = ( server ) ? protocol.TO_SERVER : protocol.TO_CLIENT;
-        
+        Protocol.DirectionData prot = (server) ? protocol.TO_SERVER : protocol.TO_CLIENT;
+
         // FlameCord - Check size before decoding
         if (prot == protocol.TO_SERVER) {
             final int readableBytes = in.readableBytes();
@@ -52,37 +50,31 @@ public class MinecraftDecoder extends MessageToMessageDecoder<ByteBuf>
 
         ByteBuf slice = in.copy(); // Can't slice this one due to EntityMap :(
 
-        try
-        {
+        try {
             // Waterfall start
             if (in.readableBytes() == 0 && !server) {
                 return;
             }
             // Waterfall end
 
-            int packetId = DefinedPacket.readVarInt( in );
+            int packetId = DefinedPacket.readVarInt(in);
 
-            DefinedPacket packet = prot.createPacket( packetId, protocolVersion, supportsForge );
-            if ( packet != null )
-            {
+            DefinedPacket packet = prot.createPacket(packetId, protocolVersion, supportsForge);
+            if (packet != null) {
                 doLengthSanityChecks(in, packet, prot.getDirection(), packetId); // Waterfall: Additional DoS mitigations
-                packet.read0( in, prot.getDirection(), protocolVersion );
+                packet.read0(in, prot.getDirection(), protocolVersion);
 
-                if ( in.isReadable() )
-                {
-                    throw new BadPacketException( "Did not read all bytes from packet " + packet.getClass() + " " + packetId + " Protocol " + protocol + " Direction " + prot.getDirection() );
+                if (in.isReadable()) {
+                    throw new BadPacketException("Did not read all bytes from packet " + packet.getClass() + " " + packetId + " Protocol " + protocol + " Direction " + prot.getDirection());
                 }
-            } else
-            {
-                in.skipBytes( in.readableBytes() );
+            } else {
+                in.skipBytes(in.readableBytes());
             }
 
-            out.add( new PacketWrapper( packet, slice ) );
+            out.add(new PacketWrapper(packet, slice));
             slice = null;
-        } finally
-        {
-            if ( slice != null )
-            {
+        } finally {
+            if (slice != null) {
                 slice.release();
             }
         }

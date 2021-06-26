@@ -1,13 +1,6 @@
 package net.md_5.bungee.api;
 
 import com.google.common.base.Preconditions;
-import java.io.File;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.util.Collection;
-import java.util.Map;
-import java.util.UUID;
-import java.util.logging.Logger;
 import lombok.Getter;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.config.ConfigurationAdapter;
@@ -17,8 +10,15 @@ import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 import net.md_5.bungee.api.scheduler.TaskScheduler;
 
-public abstract class ProxyServer
-{
+import java.io.File;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.util.Collection;
+import java.util.Map;
+import java.util.UUID;
+import java.util.logging.Logger;
+
+public abstract class ProxyServer {
 
     @Getter
     private static ProxyServer instance;
@@ -29,10 +29,9 @@ public abstract class ProxyServer
      *
      * @param instance the new instance to set
      */
-    public static void setInstance(ProxyServer instance)
-    {
-        Preconditions.checkNotNull( instance, "instance" );
-        Preconditions.checkArgument( ProxyServer.instance == null, "Instance already set" );
+    public static void setInstance(ProxyServer instance) {
+        Preconditions.checkNotNull(instance, "instance");
+        Preconditions.checkArgument(ProxyServer.instance == null, "Instance already set");
         ProxyServer.instance = instance;
     }
 
@@ -199,9 +198,9 @@ public abstract class ProxyServer
      * Factory method to construct an implementation specific server info
      * instance.
      *
-     * @param name name of the server
-     * @param address connectable Minecraft address + port of the server
-     * @param motd the motd when used as a forced server
+     * @param name       name of the server
+     * @param address    connectable Minecraft address + port of the server
+     * @param motd       the motd when used as a forced server
      * @param restricted whether the server info restricted property will be set
      * @return the constructed instance
      */
@@ -211,9 +210,9 @@ public abstract class ProxyServer
      * Factory method to construct an implementation specific server info
      * instance.
      *
-     * @param name name of the server
-     * @param address connectable Minecraft address + port of the server
-     * @param motd the motd when used as a forced server
+     * @param name       name of the server
+     * @param address    connectable Minecraft address + port of the server
+     * @param motd       the motd when used as a forced server
      * @param restricted whether the server info restricted property will be set
      * @return the constructed instance
      */
@@ -290,7 +289,7 @@ public abstract class ProxyServer
     /**
      * Attempts to match any players with the given name, and returns a list of
      * all possible matches.
-     *
+     * <p>
      * The exact algorithm to use to match players is implementation specific,
      * but in general you can expect this method to return player's whose names
      * begin with the specified prefix.

@@ -1,34 +1,29 @@
 package net.md_5.bungee.forge;
 
 import com.google.common.base.Preconditions;
-import java.util.ArrayDeque;
-import java.util.Map;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.UserConnection;
 import net.md_5.bungee.protocol.ProtocolConstants;
 import net.md_5.bungee.protocol.packet.EntityRemoveEffect;
 import net.md_5.bungee.protocol.packet.PluginMessage;
 
+import java.util.ArrayDeque;
+import java.util.Map;
+
 /**
  * Handles the Forge Client data and handshake procedure.
  */
 @RequiredArgsConstructor
-public class ForgeClientHandler
-{
+public class ForgeClientHandler {
 
     @NonNull
     private final UserConnection con;
 
-    // Travertine start
+
     @Getter
     @Setter(AccessLevel.PACKAGE)
     private boolean forgeOutdated = false;
-    // Travertine end
 
     /**
      * The users' mod list.
@@ -60,26 +55,22 @@ public class ForgeClientHandler
      * @param message The Forge Handshake packet to handle.
      * @throws IllegalArgumentException if invalid packet received
      */
-    public void handle(PluginMessage message) throws IllegalArgumentException
-    {
-        if ( !message.getTag().equalsIgnoreCase( ForgeConstants.FML_HANDSHAKE_TAG ) )
-        {
-            throw new IllegalArgumentException( "Expecting a Forge Handshake packet." );
+    public void handle(PluginMessage message) throws IllegalArgumentException {
+        if (!message.getTag().equalsIgnoreCase(ForgeConstants.FML_HANDSHAKE_TAG)) {
+            throw new IllegalArgumentException("Expecting a Forge Handshake packet.");
         }
 
-        message.setAllowExtendedPacket( true ); // FML allows extended packets so this must be enabled
+        message.setAllowExtendedPacket(true); // FML allows extended packets so this must be enabled
         ForgeClientHandshakeState prevState = state;
-        Preconditions.checkState( packetQueue.size() < 128, "Forge packet queue too big!" );
-        packetQueue.add( message );
-        state = state.send( message, con );
-        if ( state != prevState ) // state finished, send packets
+        Preconditions.checkState(packetQueue.size() < 128, "Forge packet queue too big!");
+        packetQueue.add(message);
+        state = state.send(message, con);
+        if (state != prevState) // state finished, send packets
         {
-            synchronized ( packetQueue )
-            {
-                while ( !packetQueue.isEmpty() )
-                {
-                    ForgeLogger.logClient( ForgeLogger.LogDirection.SENDING, prevState.name(), packetQueue.getFirst() );
-                    con.getForgeServerHandler().receive( packetQueue.removeFirst() );
+            synchronized (packetQueue) {
+                while (!packetQueue.isEmpty()) {
+                    ForgeLogger.logClient(ForgeLogger.LogDirection.SENDING, prevState.name(), packetQueue.getFirst());
+                    con.getForgeServerHandler().receive(packetQueue.removeFirst());
                 }
             }
         }
@@ -91,17 +82,15 @@ public class ForgeClientHandler
      * @param message The message to being received.
      * @throws IllegalArgumentException if invalid packet received
      */
-    public void receive(PluginMessage message) throws IllegalArgumentException
-    {
-        state = state.handle( message, con );
+    public void receive(PluginMessage message) throws IllegalArgumentException {
+        state = state.handle(message, con);
     }
 
     /**
      * Resets the client handshake state to HELLO, and, if we know the handshake
      * has been completed before, send the reset packet.
      */
-    public void resetHandshake()
-    {
+    public void resetHandshake() {
         state = ForgeClientHandshakeState.HELLO;
 
         // This issue only exists in Forge 1.8.9
@@ -109,12 +98,12 @@ public class ForgeClientHandler
             this.resetAllThePotions(con);
         }
 
-        con.unsafe().sendPacket( ForgeConstants.FML_RESET_HANDSHAKE );
+        con.unsafe().sendPacket(ForgeConstants.FML_RESET_HANDSHAKE);
     }
 
     private void resetAllThePotions(UserConnection con) {
         // Just to be sure
-        for (Map.Entry<Integer, Integer> entry: con.getPotions().entries()) {
+        for (Map.Entry<Integer, Integer> entry : con.getPotions().entries()) {
             con.unsafe().sendPacket(new EntityRemoveEffect(entry.getKey(), entry.getValue()));
         }
         con.getPotions().clear();
@@ -124,15 +113,13 @@ public class ForgeClientHandler
      * Sends the server mod list to the client, or stores it for sending later.
      *
      * @param modList The {@link PluginMessage} to send to the client containing
-     * the mod list.
+     *                the mod list.
      * @throws IllegalArgumentException Thrown if the {@link PluginMessage} was
-     * not as expected.
+     *                                  not as expected.
      */
-    public void setServerModList(PluginMessage modList) throws IllegalArgumentException
-    {
-        if ( !modList.getTag().equalsIgnoreCase( ForgeConstants.FML_HANDSHAKE_TAG ) || modList.getData()[0] != 2 )
-        {
-            throw new IllegalArgumentException( "modList" );
+    public void setServerModList(PluginMessage modList) throws IllegalArgumentException {
+        if (!modList.getTag().equalsIgnoreCase(ForgeConstants.FML_HANDSHAKE_TAG) || modList.getData()[0] != 2) {
+            throw new IllegalArgumentException("modList");
         }
 
         this.serverModList = modList;
@@ -142,15 +129,13 @@ public class ForgeClientHandler
      * Sends the server ID list to the client, or stores it for sending later.
      *
      * @param idList The {@link PluginMessage} to send to the client containing
-     * the ID list.
+     *               the ID list.
      * @throws IllegalArgumentException Thrown if the {@link PluginMessage} was
-     * not as expected.
+     *                                  not as expected.
      */
-    public void setServerIdList(PluginMessage idList) throws IllegalArgumentException
-    {
-        if ( !idList.getTag().equalsIgnoreCase( ForgeConstants.FML_HANDSHAKE_TAG ) || idList.getData()[0] != 3 )
-        {
-            throw new IllegalArgumentException( "idList" );
+    public void setServerIdList(PluginMessage idList) throws IllegalArgumentException {
+        if (!idList.getTag().equalsIgnoreCase(ForgeConstants.FML_HANDSHAKE_TAG) || idList.getData()[0] != 3) {
+            throw new IllegalArgumentException("idList");
         }
 
         this.serverIdList = idList;
@@ -161,13 +146,11 @@ public class ForgeClientHandler
      *
      * @return <code>true</code> if the handshake has been completed.
      */
-    public boolean isHandshakeComplete()
-    {
+    public boolean isHandshakeComplete() {
         return this.state == ForgeClientHandshakeState.DONE;
     }
 
-    public void setHandshakeComplete()
-    {
+    public void setHandshakeComplete() {
         this.state = ForgeClientHandshakeState.DONE;
     }
 
@@ -178,26 +161,24 @@ public class ForgeClientHandler
      *
      * @return <code>true</code> if the user is a forge user.
      */
-    public boolean isForgeUser()
-    {
+    public boolean isForgeUser() {
         return fmlTokenInHandshake || clientModList != null;
     }
 
-    // Travertine start
+
     /**
-      * Checks to see if a user is using an outdated FML build, and takes
-      * appropriate action on the User side. This should only be called during a
-      * server connection, by the ServerConnector
-      *
-      * @return <code>true</code> if the user's FML build is outdated, otherwise
-      * <code>false</code>
-      */
+     * Checks to see if a user is using an outdated FML build, and takes
+     * appropriate action on the User side. This should only be called during a
+     * server connection, by the ServerConnector
+     *
+     * @return <code>true</code> if the user's FML build is outdated, otherwise
+     * <code>false</code>
+     */
     public boolean checkUserOutdated() {
         if (forgeOutdated) {
-            con.disconnect( BungeeCord.getInstance().getTranslation("connect_kick_outdated_forge") );
+            con.disconnect(BungeeCord.getInstance().getTranslation("connect_kick_outdated_forge"));
         }
         return forgeOutdated;
     }
-    // Travertine end
 
 }

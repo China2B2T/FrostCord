@@ -1,99 +1,83 @@
 package net.md_5.bungee.tab;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.UUID;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.protocol.ProtocolConstants;
 import net.md_5.bungee.protocol.packet.PlayerListItem;
 
-public class ServerUnique extends TabList
-{
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.UUID;
+
+public class ServerUnique extends TabList {
 
     private final Collection<UUID> uuids = new HashSet<>();
     private final Collection<String> usernames = new HashSet<>(); // Travertine - Support for <=1.7.9
 
-    public ServerUnique(ProxiedPlayer player)
-    {
-        super( player );
+    public ServerUnique(ProxiedPlayer player) {
+        super(player);
     }
 
     @Override
-    public void onUpdate(PlayerListItem playerListItem)
-    {
-        for ( PlayerListItem.Item item : playerListItem.getItems() )
-        {
-            if ( playerListItem.getAction() == PlayerListItem.Action.ADD_PLAYER )
-            {
-                // Travertine start
-                if ( item.getUuid() != null )
-                {
-                    uuids.add( item.getUuid() );
-                } else
-                {
-                    usernames.add( item.getUsername() );
+    public void onUpdate(PlayerListItem playerListItem) {
+        for (PlayerListItem.Item item : playerListItem.getItems()) {
+            if (playerListItem.getAction() == PlayerListItem.Action.ADD_PLAYER) {
+
+                if (item.getUuid() != null) {
+                    uuids.add(item.getUuid());
+                } else {
+                    usernames.add(item.getUsername());
                 }
                 // Travertine end
-            } else if ( playerListItem.getAction() == PlayerListItem.Action.REMOVE_PLAYER )
-            {
-                // Travertine start
-                if ( item.getUuid() != null )
-                {
-                    uuids.remove( item.getUuid() );
-                } else
-                {
-                    usernames.remove( item.getUsername() );
+            } else if (playerListItem.getAction() == PlayerListItem.Action.REMOVE_PLAYER) {
+
+                if (item.getUuid() != null) {
+                    uuids.remove(item.getUuid());
+                } else {
+                    usernames.remove(item.getUsername());
                 }
                 // Travertine end
             }
         }
-        player.unsafe().sendPacket( playerListItem );
+        player.unsafe().sendPacket(playerListItem);
     }
 
     @Override
-    public void onPingChange(int ping)
-    {
+    public void onPingChange(int ping) {
 
     }
 
     @Override
-    public void onServerChange()
-    {
+    public void onServerChange() {
         PlayerListItem packet = new PlayerListItem();
-        packet.setAction( PlayerListItem.Action.REMOVE_PLAYER );
-        PlayerListItem.Item[] items = new PlayerListItem.Item[ uuids.size() + usernames.size() ]; // Travertine
+        packet.setAction(PlayerListItem.Action.REMOVE_PLAYER);
+        PlayerListItem.Item[] items = new PlayerListItem.Item[uuids.size() + usernames.size()]; // Travertine
         int i = 0;
-        for ( UUID uuid : uuids )
-        {
+        for (UUID uuid : uuids) {
             PlayerListItem.Item item = items[i++] = new PlayerListItem.Item();
-            item.setUuid( uuid );
+            item.setUuid(uuid);
         }
-        // Travertine start
-        for ( String username : usernames )
-        {
+
+        for (String username : usernames) {
             PlayerListItem.Item item = items[i++] = new PlayerListItem.Item();
-            item.setUsername( username );
-            item.setDisplayName( username );
+            item.setUsername(username);
+            item.setDisplayName(username);
         }
         // Travertine end
-        packet.setItems( items );
-        // Travertine start
-        if ( ProtocolConstants.isAfterOrEq( player.getPendingConnection().getVersion(), ProtocolConstants.MINECRAFT_1_8 ) )
-        {
-            player.unsafe().sendPacket( packet );
-        } else
-        {
-            // Split up the packet
-            for ( PlayerListItem.Item item : packet.getItems() )
-            {
-                PlayerListItem p2 = new PlayerListItem();
-                p2.setAction( packet.getAction() );
+        packet.setItems(items);
 
-                p2.setItems( new PlayerListItem.Item[]
+        if (ProtocolConstants.isAfterOrEq(player.getPendingConnection().getVersion(), ProtocolConstants.MINECRAFT_1_8)) {
+            player.unsafe().sendPacket(packet);
+        } else {
+            // Split up the packet
+            for (PlayerListItem.Item item : packet.getItems()) {
+                PlayerListItem p2 = new PlayerListItem();
+                p2.setAction(packet.getAction());
+
+                p2.setItems(new PlayerListItem.Item[]
                         {
                                 item
-                        } );
-                player.unsafe().sendPacket( p2 );
+                        });
+                player.unsafe().sendPacket(p2);
             }
         }
         // Travertine end
@@ -102,14 +86,12 @@ public class ServerUnique extends TabList
     }
 
     @Override
-    public void onConnect()
-    {
+    public void onConnect() {
 
     }
 
     @Override
-    public void onDisconnect()
-    {
+    public void onDisconnect() {
 
     }
 }

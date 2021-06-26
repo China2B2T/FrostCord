@@ -1,9 +1,10 @@
 package net.md_5.bungee.api;
 
-import java.util.Collection;
-import java.util.Map;
 import net.md_5.bungee.api.config.ListenerInfo;
 import net.md_5.bungee.api.config.ServerInfo;
+
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * Core configuration adaptor for the proxy api.
@@ -11,8 +12,7 @@ import net.md_5.bungee.api.config.ServerInfo;
  * @deprecated This class is subject to rapid change between releases
  */
 @Deprecated
-public interface ProxyConfig
-{
+public interface ProxyConfig {
 
     /**
      * Time before users are disconnected due to no network activity.

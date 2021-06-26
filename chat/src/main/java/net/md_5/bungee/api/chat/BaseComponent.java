@@ -1,20 +1,16 @@
 package net.md_5.bungee.api.chat;
 
-import java.util.ArrayList;
-import java.util.List;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ComponentBuilder.FormatRetention;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @ToString(exclude = "parent")
 @EqualsAndHashCode(exclude = "parent")
-public abstract class BaseComponent
-{
+public abstract class BaseComponent {
 
     @Setter(AccessLevel.NONE)
     BaseComponent parent;
@@ -84,19 +80,15 @@ public abstract class BaseComponent
      * @deprecated for use by internal classes only, will be removed.
      */
     @Deprecated
-    public BaseComponent()
-    {
+    public BaseComponent() {
     }
 
-    BaseComponent(BaseComponent old)
-    {
-        copyFormatting( old, FormatRetention.ALL, true );
+    BaseComponent(BaseComponent old) {
+        copyFormatting(old, FormatRetention.ALL, true);
 
-        if ( old.getExtra() != null )
-        {
-            for ( BaseComponent extra : old.getExtra() )
-            {
-                addExtra( extra.duplicate() );
+        if (old.getExtra() != null) {
+            for (BaseComponent extra : old.getExtra()) {
+                addExtra(extra.duplicate());
             }
         }
     }
@@ -107,21 +99,19 @@ public abstract class BaseComponent
      *
      * @param component the component to copy from
      */
-    public void copyFormatting(BaseComponent component)
-    {
-        copyFormatting( component, FormatRetention.ALL, true );
+    public void copyFormatting(BaseComponent component) {
+        copyFormatting(component, FormatRetention.ALL, true);
     }
 
     /**
      * Copies the events and formatting of a BaseComponent.
      *
      * @param component the component to copy from
-     * @param replace if already set formatting should be replaced by the new
-     * component
+     * @param replace   if already set formatting should be replaced by the new
+     *                  component
      */
-    public void copyFormatting(BaseComponent component, boolean replace)
-    {
-        copyFormatting( component, FormatRetention.ALL, replace );
+    public void copyFormatting(BaseComponent component, boolean replace) {
+        copyFormatting(component, FormatRetention.ALL, replace);
     }
 
     /**
@@ -129,55 +119,42 @@ public abstract class BaseComponent
      *
      * @param component the component to copy from
      * @param retention the formatting to copy
-     * @param replace if already set formatting should be replaced by the new
-     * component
+     * @param replace   if already set formatting should be replaced by the new
+     *                  component
      */
-    public void copyFormatting(BaseComponent component, FormatRetention retention, boolean replace)
-    {
-        if ( retention == FormatRetention.EVENTS || retention == FormatRetention.ALL )
-        {
-            if ( replace || clickEvent == null )
-            {
-                setClickEvent( component.getClickEvent() );
+    public void copyFormatting(BaseComponent component, FormatRetention retention, boolean replace) {
+        if (retention == FormatRetention.EVENTS || retention == FormatRetention.ALL) {
+            if (replace || clickEvent == null) {
+                setClickEvent(component.getClickEvent());
             }
-            if ( replace || hoverEvent == null )
-            {
-                setHoverEvent( component.getHoverEvent() );
+            if (replace || hoverEvent == null) {
+                setHoverEvent(component.getHoverEvent());
             }
         }
-        if ( retention == FormatRetention.FORMATTING || retention == FormatRetention.ALL )
-        {
-            if ( replace || color == null )
-            {
-                setColor( component.getColorRaw() );
+        if (retention == FormatRetention.FORMATTING || retention == FormatRetention.ALL) {
+            if (replace || color == null) {
+                setColor(component.getColorRaw());
             }
-            if ( replace || font == null )
-            {
-                setFont( component.getFontRaw() );
+            if (replace || font == null) {
+                setFont(component.getFontRaw());
             }
-            if ( replace || bold == null )
-            {
-                setBold( component.isBoldRaw() );
+            if (replace || bold == null) {
+                setBold(component.isBoldRaw());
             }
-            if ( replace || italic == null )
-            {
-                setItalic( component.isItalicRaw() );
+            if (replace || italic == null) {
+                setItalic(component.isItalicRaw());
             }
-            if ( replace || underlined == null )
-            {
-                setUnderlined( component.isUnderlinedRaw() );
+            if (replace || underlined == null) {
+                setUnderlined(component.isUnderlinedRaw());
             }
-            if ( replace || strikethrough == null )
-            {
-                setStrikethrough( component.isStrikethroughRaw() );
+            if (replace || strikethrough == null) {
+                setStrikethrough(component.isStrikethroughRaw());
             }
-            if ( replace || obfuscated == null )
-            {
-                setObfuscated( component.isObfuscatedRaw() );
+            if (replace || obfuscated == null) {
+                setObfuscated(component.isObfuscatedRaw());
             }
-            if ( replace || insertion == null )
-            {
-                setInsertion( component.getInsertion() );
+            if (replace || insertion == null) {
+                setInsertion(component.getInsertion());
             }
         }
     }
@@ -187,22 +164,19 @@ public abstract class BaseComponent
      *
      * @param retention the formatting to retain
      */
-    public void retain(FormatRetention retention)
-    {
-        if ( retention == FormatRetention.FORMATTING || retention == FormatRetention.NONE )
-        {
-            setClickEvent( null );
-            setHoverEvent( null );
+    public void retain(FormatRetention retention) {
+        if (retention == FormatRetention.FORMATTING || retention == FormatRetention.NONE) {
+            setClickEvent(null);
+            setHoverEvent(null);
         }
-        if ( retention == FormatRetention.EVENTS || retention == FormatRetention.NONE )
-        {
-            setColor( null );
-            setBold( null );
-            setItalic( null );
-            setUnderlined( null );
-            setStrikethrough( null );
-            setObfuscated( null );
-            setInsertion( null );
+        if (retention == FormatRetention.EVENTS || retention == FormatRetention.NONE) {
+            setColor(null);
+            setBold(null);
+            setItalic(null);
+            setUnderlined(null);
+            setStrikethrough(null);
+            setObfuscated(null);
+            setInsertion(null);
         }
     }
 
@@ -220,10 +194,9 @@ public abstract class BaseComponent
      * @deprecated API use discouraged, use traditional duplicate
      */
     @Deprecated
-    public BaseComponent duplicateWithoutFormatting()
-    {
+    public BaseComponent duplicateWithoutFormatting() {
         BaseComponent component = duplicate();
-        component.retain( FormatRetention.NONE );
+        component.retain(FormatRetention.NONE);
         return component;
     }
 
@@ -234,12 +207,10 @@ public abstract class BaseComponent
      * @param components the components to convert
      * @return the string in the old format
      */
-    public static String toLegacyText(BaseComponent... components)
-    {
+    public static String toLegacyText(BaseComponent... components) {
         StringBuilder builder = new StringBuilder();
-        for ( BaseComponent msg : components )
-        {
-            builder.append( msg.toLegacyText() );
+        for (BaseComponent msg : components) {
+            builder.append(msg.toLegacyText());
         }
         return builder.toString();
     }
@@ -250,12 +221,10 @@ public abstract class BaseComponent
      * @param components the components to convert
      * @return the string as plain text
      */
-    public static String toPlainText(BaseComponent... components)
-    {
+    public static String toPlainText(BaseComponent... components) {
         StringBuilder builder = new StringBuilder();
-        for ( BaseComponent msg : components )
-        {
-            builder.append( msg.toPlainText() );
+        for (BaseComponent msg : components) {
+            builder.append(msg.toPlainText());
         }
         return builder.toString();
     }
@@ -267,12 +236,9 @@ public abstract class BaseComponent
      *
      * @return the color of this component
      */
-    public ChatColor getColor()
-    {
-        if ( color == null )
-        {
-            if ( parent == null )
-            {
+    public ChatColor getColor() {
+        if (color == null) {
+            if (parent == null) {
                 return ChatColor.WHITE;
             }
             return parent.getColor();
@@ -286,8 +252,7 @@ public abstract class BaseComponent
      *
      * @return the color of this component
      */
-    public ChatColor getColorRaw()
-    {
+    public ChatColor getColorRaw() {
         return color;
     }
 
@@ -297,12 +262,9 @@ public abstract class BaseComponent
      *
      * @return the font of this component, or null if default font
      */
-    public String getFont()
-    {
-        if ( font == null )
-        {
-            if ( parent == null )
-            {
+    public String getFont() {
+        if (font == null) {
+            if (parent == null) {
                 return null;
             }
             return parent.getFont();
@@ -316,8 +278,7 @@ public abstract class BaseComponent
      *
      * @return the font of this component
      */
-    public String getFontRaw()
-    {
+    public String getFontRaw() {
         return font;
     }
 
@@ -328,10 +289,8 @@ public abstract class BaseComponent
      *
      * @return whether the component is bold
      */
-    public boolean isBold()
-    {
-        if ( bold == null )
-        {
+    public boolean isBold() {
+        if (bold == null) {
             return parent != null && parent.isBold();
         }
         return bold;
@@ -343,8 +302,7 @@ public abstract class BaseComponent
      *
      * @return whether the component is bold
      */
-    public Boolean isBoldRaw()
-    {
+    public Boolean isBoldRaw() {
         return bold;
     }
 
@@ -355,10 +313,8 @@ public abstract class BaseComponent
      *
      * @return whether the component is italic
      */
-    public boolean isItalic()
-    {
-        if ( italic == null )
-        {
+    public boolean isItalic() {
+        if (italic == null) {
             return parent != null && parent.isItalic();
         }
         return italic;
@@ -370,8 +326,7 @@ public abstract class BaseComponent
      *
      * @return whether the component is italic
      */
-    public Boolean isItalicRaw()
-    {
+    public Boolean isItalicRaw() {
         return italic;
     }
 
@@ -382,10 +337,8 @@ public abstract class BaseComponent
      *
      * @return whether the component is underlined
      */
-    public boolean isUnderlined()
-    {
-        if ( underlined == null )
-        {
+    public boolean isUnderlined() {
+        if (underlined == null) {
             return parent != null && parent.isUnderlined();
         }
         return underlined;
@@ -397,8 +350,7 @@ public abstract class BaseComponent
      *
      * @return whether the component is underlined
      */
-    public Boolean isUnderlinedRaw()
-    {
+    public Boolean isUnderlinedRaw() {
         return underlined;
     }
 
@@ -409,10 +361,8 @@ public abstract class BaseComponent
      *
      * @return whether the component is strikethrough
      */
-    public boolean isStrikethrough()
-    {
-        if ( strikethrough == null )
-        {
+    public boolean isStrikethrough() {
+        if (strikethrough == null) {
             return parent != null && parent.isStrikethrough();
         }
         return strikethrough;
@@ -424,8 +374,7 @@ public abstract class BaseComponent
      *
      * @return whether the component is strikethrough
      */
-    public Boolean isStrikethroughRaw()
-    {
+    public Boolean isStrikethroughRaw() {
         return strikethrough;
     }
 
@@ -436,10 +385,8 @@ public abstract class BaseComponent
      *
      * @return whether the component is obfuscated
      */
-    public boolean isObfuscated()
-    {
-        if ( obfuscated == null )
-        {
+    public boolean isObfuscated() {
+        if (obfuscated == null) {
             return parent != null && parent.isObfuscated();
         }
         return obfuscated;
@@ -451,15 +398,12 @@ public abstract class BaseComponent
      *
      * @return whether the component is obfuscated
      */
-    public Boolean isObfuscatedRaw()
-    {
+    public Boolean isObfuscatedRaw() {
         return obfuscated;
     }
 
-    public void setExtra(List<BaseComponent> components)
-    {
-        for ( BaseComponent component : components )
-        {
+    public void setExtra(List<BaseComponent> components) {
+        for (BaseComponent component : components) {
             component.parent = this;
         }
         extra = components;
@@ -471,9 +415,8 @@ public abstract class BaseComponent
      *
      * @param text the text to append
      */
-    public void addExtra(String text)
-    {
-        addExtra( new TextComponent( text ) );
+    public void addExtra(String text) {
+        addExtra(new TextComponent(text));
     }
 
     /**
@@ -482,14 +425,12 @@ public abstract class BaseComponent
      *
      * @param component the component to append
      */
-    public void addExtra(BaseComponent component)
-    {
-        if ( extra == null )
-        {
+    public void addExtra(BaseComponent component) {
+        if (extra == null) {
             extra = new ArrayList<BaseComponent>();
         }
         component.parent = this;
-        extra.add( component );
+        extra.add(component);
     }
 
     /**
@@ -497,8 +438,7 @@ public abstract class BaseComponent
      *
      * @return Whether any formatting or events are applied
      */
-    public boolean hasFormatting()
-    {
+    public boolean hasFormatting() {
         return color != null || font != null || bold != null
                 || italic != null || underlined != null
                 || strikethrough != null || obfuscated != null
@@ -510,20 +450,16 @@ public abstract class BaseComponent
      *
      * @return the string as plain text
      */
-    public String toPlainText()
-    {
+    public String toPlainText() {
         StringBuilder builder = new StringBuilder();
-        toPlainText( builder );
+        toPlainText(builder);
         return builder.toString();
     }
 
-    void toPlainText(StringBuilder builder)
-    {
-        if ( extra != null )
-        {
-            for ( BaseComponent e : extra )
-            {
-                e.toPlainText( builder );
+    void toPlainText(StringBuilder builder) {
+        if (extra != null) {
+            for (BaseComponent e : extra) {
+                e.toPlainText(builder);
             }
         }
     }
@@ -534,46 +470,36 @@ public abstract class BaseComponent
      *
      * @return the string in the old format
      */
-    public String toLegacyText()
-    {
+    public String toLegacyText() {
         StringBuilder builder = new StringBuilder();
-        toLegacyText( builder );
+        toLegacyText(builder);
         return builder.toString();
     }
 
-    void toLegacyText(StringBuilder builder)
-    {
-        if ( extra != null )
-        {
-            for ( BaseComponent e : extra )
-            {
-                e.toLegacyText( builder );
+    void toLegacyText(StringBuilder builder) {
+        if (extra != null) {
+            for (BaseComponent e : extra) {
+                e.toLegacyText(builder);
             }
         }
     }
 
-    void addFormat(StringBuilder builder)
-    {
-        builder.append( getColor() );
-        if ( isBold() )
-        {
-            builder.append( ChatColor.BOLD );
+    void addFormat(StringBuilder builder) {
+        builder.append(getColor());
+        if (isBold()) {
+            builder.append(ChatColor.BOLD);
         }
-        if ( isItalic() )
-        {
-            builder.append( ChatColor.ITALIC );
+        if (isItalic()) {
+            builder.append(ChatColor.ITALIC);
         }
-        if ( isUnderlined() )
-        {
-            builder.append( ChatColor.UNDERLINE );
+        if (isUnderlined()) {
+            builder.append(ChatColor.UNDERLINE);
         }
-        if ( isStrikethrough() )
-        {
-            builder.append( ChatColor.STRIKETHROUGH );
+        if (isStrikethrough()) {
+            builder.append(ChatColor.STRIKETHROUGH);
         }
-        if ( isObfuscated() )
-        {
-            builder.append( ChatColor.MAGIC );
+        if (isObfuscated()) {
+            builder.append(ChatColor.MAGIC);
         }
     }
 }

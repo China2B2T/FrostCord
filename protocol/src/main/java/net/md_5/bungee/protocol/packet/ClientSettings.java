@@ -1,21 +1,20 @@
 package net.md_5.bungee.protocol.packet;
 
-import net.md_5.bungee.protocol.MultiVersionPacketV17;
-import net.md_5.bungee.protocol.DefinedPacket;
 import io.netty.buffer.ByteBuf;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import net.md_5.bungee.protocol.AbstractPacketHandler;
+import net.md_5.bungee.protocol.DefinedPacket;
+import net.md_5.bungee.protocol.MultiVersionPacketV17;
 import net.md_5.bungee.protocol.ProtocolConstants;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class ClientSettings extends MultiVersionPacketV17
-{
+public class ClientSettings extends MultiVersionPacketV17 {
 
     private String locale;
     private byte viewDistance;
@@ -26,77 +25,64 @@ public class ClientSettings extends MultiVersionPacketV17
     private int mainHand;
     private boolean disableTextFiltering;
 
-    // Travertine start
+
     @Override
-    public void v17Read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion)
-    {
-        locale = readString( buf );
+    public void v17Read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
+        locale = readString(buf);
         viewDistance = buf.readByte();
         chatFlags = buf.readUnsignedByte();
         chatColours = buf.readBoolean();
         skinParts = buf.readByte();
         difficulty = buf.readByte();
     }
-    // Travertine end
 
     @Override
-    public void read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion)
-    {
-        locale = readString( buf, 16 );
+    public void read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
+        locale = readString(buf, 16);
         viewDistance = buf.readByte();
-        chatFlags = protocolVersion >= ProtocolConstants.MINECRAFT_1_9 ? DefinedPacket.readVarInt( buf ) : buf.readUnsignedByte();
+        chatFlags = protocolVersion >= ProtocolConstants.MINECRAFT_1_9 ? DefinedPacket.readVarInt(buf) : buf.readUnsignedByte();
         chatColours = buf.readBoolean();
         skinParts = buf.readByte();
-        if ( protocolVersion >= ProtocolConstants.MINECRAFT_1_9 )
-        {
-            mainHand = DefinedPacket.readVarInt( buf );
+        if (protocolVersion >= ProtocolConstants.MINECRAFT_1_9) {
+            mainHand = DefinedPacket.readVarInt(buf);
         }
-        if ( protocolVersion >= ProtocolConstants.MINECRAFT_1_17 )
-        {
+        if (protocolVersion >= ProtocolConstants.MINECRAFT_1_17) {
             disableTextFiltering = buf.readBoolean();
         }
     }
 
     @Override
-    public void write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion)
-    {
-        writeString( locale, buf );
-        buf.writeByte( viewDistance );
-        if ( protocolVersion >= ProtocolConstants.MINECRAFT_1_9 )
-        {
-            DefinedPacket.writeVarInt( chatFlags, buf );
-        } else
-        {
-            buf.writeByte( chatFlags );
+    public void write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
+        writeString(locale, buf);
+        buf.writeByte(viewDistance);
+        if (protocolVersion >= ProtocolConstants.MINECRAFT_1_9) {
+            DefinedPacket.writeVarInt(chatFlags, buf);
+        } else {
+            buf.writeByte(chatFlags);
         }
-        buf.writeBoolean( chatColours );
-        buf.writeByte( skinParts );
-        if ( protocolVersion >= ProtocolConstants.MINECRAFT_1_9 )
-        {
-            DefinedPacket.writeVarInt( mainHand, buf );
+        buf.writeBoolean(chatColours);
+        buf.writeByte(skinParts);
+        if (protocolVersion >= ProtocolConstants.MINECRAFT_1_9) {
+            DefinedPacket.writeVarInt(mainHand, buf);
         }
-        if ( protocolVersion >= ProtocolConstants.MINECRAFT_1_17 )
-        {
-            buf.writeBoolean( disableTextFiltering );
+        if (protocolVersion >= ProtocolConstants.MINECRAFT_1_17) {
+            buf.writeBoolean(disableTextFiltering);
         }
     }
 
-    // Travertine start
-    @Override
-    public void v17Write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion)
-    {
-        writeString( locale, buf );
-        buf.writeByte( viewDistance );
-        buf.writeByte( chatFlags );
-        buf.writeBoolean( chatColours );
-        buf.writeByte( skinParts );
-        buf.writeByte( difficulty );
-    }
-    // Travertine end
 
     @Override
-    public void handle(AbstractPacketHandler handler) throws Exception
-    {
-        handler.handle( this );
+    public void v17Write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
+        writeString(locale, buf);
+        buf.writeByte(viewDistance);
+        buf.writeByte(chatFlags);
+        buf.writeBoolean(chatColours);
+        buf.writeByte(skinParts);
+        buf.writeByte(difficulty);
+    }
+
+    @Override
+    public void handle(AbstractPacketHandler handler) throws Exception {
+        handler.handle(this);
     }
 }

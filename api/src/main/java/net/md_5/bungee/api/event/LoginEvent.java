@@ -1,10 +1,6 @@
 package net.md_5.bungee.api.event;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import net.md_5.bungee.api.Callback;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -17,8 +13,7 @@ import net.md_5.bungee.api.plugin.Cancellable;
 @Data
 @ToString(callSuper = false)
 @EqualsAndHashCode(callSuper = false)
-public class LoginEvent extends AsyncEvent<LoginEvent> implements Cancellable
-{
+public class LoginEvent extends AsyncEvent<LoginEvent> implements Cancellable {
 
     /**
      * Cancelled state.
@@ -34,9 +29,8 @@ public class LoginEvent extends AsyncEvent<LoginEvent> implements Cancellable
      */
     private final PendingConnection connection;
 
-    public LoginEvent(PendingConnection connection, Callback<LoginEvent> done)
-    {
-        super( done );
+    public LoginEvent(PendingConnection connection, Callback<LoginEvent> done) {
+        super(done);
         this.connection = connection;
     }
 
@@ -45,9 +39,8 @@ public class LoginEvent extends AsyncEvent<LoginEvent> implements Cancellable
      * @deprecated Use component methods instead.
      */
     @Deprecated
-    public String getCancelReason()
-    {
-        return BaseComponent.toLegacyText( getCancelReasonComponents() );
+    public String getCancelReason() {
+        return BaseComponent.toLegacyText(getCancelReasonComponents());
     }
 
     /**
@@ -57,13 +50,11 @@ public class LoginEvent extends AsyncEvent<LoginEvent> implements Cancellable
      * instead.
      */
     @Deprecated
-    public void setCancelReason(String cancelReason)
-    {
-        setCancelReason( TextComponent.fromLegacyText( cancelReason ) );
+    public void setCancelReason(String cancelReason) {
+        setCancelReason(TextComponent.fromLegacyText(cancelReason));
     }
 
-    public void setCancelReason(BaseComponent... cancelReason)
-    {
+    public void setCancelReason(BaseComponent... cancelReason) {
         this.cancelReasonComponents = cancelReason;
     }
 }
