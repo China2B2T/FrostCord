@@ -44,19 +44,6 @@
         <module>native</module>
     </modules>
 
-    <scm>
-        <connection>scm:git:git@github.com:SpigotMC/BungeeCord.git</connection>
-        <developerConnection>scm:git:git@github.com:SpigotMC/BungeeCord.git</developerConnection>
-        <url>git@github.com:SpigotMC/BungeeCord.git</url>
-    </scm>
-    <issueManagement>
-        <system>GitHub</system>
-        <url>https://github.com/SpigotMC/BungeeCord/issues</url>
-    </issueManagement>
-    <ciManagement>
-        <system>jenkins</system>
-        <url>http://ci.md-5.net/job/BungeeCord</url>
-    </ciManagement>
 
     <distributionManagement>
         <snapshotRepository>
@@ -112,7 +99,7 @@
                 <artifactId>scriptus</artifactId>
                 <version>0.4.1</version>
                 <configuration>
-                    <format>git:${project.name}:${project.version}:%s:${build.number}</format>
+                    <format>${project.version}:${build.number}</format>
                 </configuration>
                 <executions>
                     <execution>
