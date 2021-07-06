@@ -99,7 +99,7 @@
                 <artifactId>scriptus</artifactId>
                 <version>0.4.1</version>
                 <configuration>
-                    <format>${project.version}:${build.number}</format>
+                    <format>${project.version}:%s</format>
                 </configuration>
                 <executions>
                     <execution>
