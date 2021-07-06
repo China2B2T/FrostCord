@@ -13,6 +13,6 @@ public class CommandBungee extends Command {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        sender.sendMessage(ChatColor.GOLD + "This server is running " + ProxyServer.getInstance().getName() + " version " + ProxyServer.getInstance().getVersion());
+        sender.sendMessage(ChatColor.GOLD + "This proxy is running " + ProxyServer.getInstance().getName() + " version " + ProxyServer.getInstance().getVersion());
     }
 }
