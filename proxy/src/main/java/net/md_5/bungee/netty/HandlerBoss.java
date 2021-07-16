@@ -68,34 +68,29 @@ public class HandlerBoss extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        // FlameCord - Return if channel isn't active
-        if (!ctx.channel().isActive()) {
-            return;
-        }
-
         if (msg instanceof HAProxyMessage) {
             HAProxyMessage proxy = (HAProxyMessage) msg;
             try {
-                InetSocketAddress newAddress = new InetSocketAddress(proxy.sourceAddress(), proxy.sourcePort());
+                if (proxy.sourceAddress() != null) {
+                    InetSocketAddress newAddress = new InetSocketAddress(proxy.sourceAddress(), proxy.sourcePort());
 
-                ProxyServer.getInstance().getLogger().log(Level.FINE, "Set remote address via PROXY {0} -> {1}", new Object[]
-                        {
-                                channel.getRemoteAddress(), newAddress
-                        });
+                    ProxyServer.getInstance().getLogger().log(Level.FINE, "Set remote address via PROXY {0} -> {1}", new Object[]
+                            {
+                                    channel.getRemoteAddress(), newAddress
+                            });
 
-                channel.setRemoteAddress(newAddress);
+                    channel.setRemoteAddress(newAddress);
+                }
             } finally {
                 proxy.release();
             }
             return;
         }
 
-        PacketWrapper packet = (PacketWrapper) msg;
-
-
-        try {
-            if (handler != null) {
-                boolean sendPacket = handler.shouldHandle(packet);
+        if (handler != null) {
+            PacketWrapper packet = (PacketWrapper) msg;
+            boolean sendPacket = handler.shouldHandle(packet);
+            try {
                 if (sendPacket && packet.packet != null) {
                     try {
                         packet.packet.handle(handler);
@@ -106,9 +101,9 @@ public class HandlerBoss extends ChannelInboundHandlerAdapter {
                 if (sendPacket) {
                     handler.handle(packet);
                 }
+            } finally {
+                packet.trySingleRelease();
             }
-        } finally {
-            packet.trySingleRelease();
         }
     }
 

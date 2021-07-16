@@ -71,39 +71,10 @@ public abstract class EntityMap {
             case ProtocolConstants.MINECRAFT_1_16_4:
                 return EntityMap_1_16_2.INSTANCE_1_16_2;
             case ProtocolConstants.MINECRAFT_1_17:
+            case ProtocolConstants.MINECRAFT_1_17_1:
                 return EntityMap_1_16_2.INSTANCE_1_17;
         }
         throw new RuntimeException("Version " + version + " has no entity map");
-    }
-
-    protected void addRewrite(int id, ProtocolConstants.Direction direction, boolean varint) {
-        if (direction == ProtocolConstants.Direction.TO_CLIENT) {
-            if (varint) {
-                clientboundVarInts[id] = true;
-            } else {
-                clientboundInts[id] = true;
-            }
-        } else if (varint) {
-            serverboundVarInts[id] = true;
-        } else {
-            serverboundInts[id] = true;
-        }
-    }
-
-    public void rewriteServerbound(ByteBuf packet, int oldId, int newId) {
-        rewrite(packet, oldId, newId, serverboundInts, serverboundVarInts);
-    }
-
-    public void rewriteServerbound(ByteBuf packet, int oldId, int newId, int protocolVersion) {
-        rewriteServerbound(packet, oldId, newId);
-    }
-
-    public void rewriteClientbound(ByteBuf packet, int oldId, int newId) {
-        rewrite(packet, oldId, newId, clientboundInts, clientboundVarInts);
-    }
-
-    public void rewriteClientbound(ByteBuf packet, int oldId, int newId, int protocolVersion) {
-        rewriteClientbound(packet, oldId, newId);
     }
 
     protected static void rewriteInt(ByteBuf packet, int oldId, int newId, int offset) {
@@ -304,5 +275,35 @@ public abstract class EntityMap {
             rewriteVarInt(packet, oldId, newId, readerIndex + packetIdLength);
         }
         packet.readerIndex(readerIndex);
+    }
+
+    protected void addRewrite(int id, ProtocolConstants.Direction direction, boolean varint) {
+        if (direction == ProtocolConstants.Direction.TO_CLIENT) {
+            if (varint) {
+                clientboundVarInts[id] = true;
+            } else {
+                clientboundInts[id] = true;
+            }
+        } else if (varint) {
+            serverboundVarInts[id] = true;
+        } else {
+            serverboundInts[id] = true;
+        }
+    }
+
+    public void rewriteServerbound(ByteBuf packet, int oldId, int newId) {
+        rewrite(packet, oldId, newId, serverboundInts, serverboundVarInts);
+    }
+
+    public void rewriteServerbound(ByteBuf packet, int oldId, int newId, int protocolVersion) {
+        rewriteServerbound(packet, oldId, newId);
+    }
+
+    public void rewriteClientbound(ByteBuf packet, int oldId, int newId) {
+        rewrite(packet, oldId, newId, clientboundInts, clientboundVarInts);
+    }
+
+    public void rewriteClientbound(ByteBuf packet, int oldId, int newId, int protocolVersion) {
+        rewriteClientbound(packet, oldId, newId);
     }
 }
