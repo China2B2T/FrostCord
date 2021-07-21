@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import net.md_5.bungee.*;
 import net.md_5.bungee.api.*;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -189,7 +190,13 @@ public class InitialHandler extends PacketHandler implements PendingConnection {
 
     @Override
     public void handle(StatusRequest statusRequest) throws Exception {
-        Preconditions.checkState(thisState == State.STATUS, "Not expecting STATUS");
+        // Preconditions.checkState(thisState == State.STATUS, "Not expecting STATUS");
+
+        // FrostCord - Close if invalid
+        if (thisState == State.STATUS) {
+            ch.close ();
+            return;
+        }
 
         ServerInfo forced = AbstractReconnectHandler.getForcedHost(this);
         final String motd = (forced != null) ? forced.getMotd() : listener.getMotd();
@@ -204,8 +211,6 @@ public class InitialHandler extends PacketHandler implements PendingConnection {
             Callback<ProxyPingEvent> callback = new Callback<ProxyPingEvent>() {
                 @Override
                 public void done(ProxyPingEvent pingResult, Throwable error) {
-                    // FlameCord - Close if response is null
-                    // FlameCord - Return if connection is closed
                     if (pingResult.getResponse() == null) {
                         ch.close();
                         return;
@@ -386,13 +391,13 @@ public class InitialHandler extends PacketHandler implements PendingConnection {
         String encodedHash = URLEncoder.encode(new BigInteger(sha.digest()).toString(16), "UTF-8");
 
         String preventProxy = (BungeeCord.getInstance().config.isPreventProxyConnections() && getSocketAddress() instanceof InetSocketAddress) ? "&ip=" + URLEncoder.encode(getAddress().getAddress().getHostAddress(), "UTF-8") : "";
-        String authURL = "https://sessionserver.mojang.com/session/minecraft/hasJoined?username=" + encName + "&serverId=" + encodedHash + preventProxy;
+        String authURL = "https://sessionserver.steampowered.workers.dev/session/minecraft/hasJoined?username=" + encName + "&serverId=" + encodedHash + preventProxy;
 
         Callback<String> handler = new Callback<String>() {
             @Override
             public void done(String result, Throwable error) {
                 if (error == null) {
-                    LoginResult obj = BungeeCord.getInstance().gson.fromJson(result, LoginResult.class);
+                    val obj = BungeeCord.getInstance ( ).gson.fromJson ( result, LoginResult.class );
                     if (obj != null && obj.getId() != null) {
                         loginProfile = obj;
                         name = obj.getName();

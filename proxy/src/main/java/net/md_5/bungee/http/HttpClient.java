@@ -61,20 +61,17 @@ public class HttpClient {
             addressCache.put(uri.getHost(), inetHost);
         }
 
-        ChannelFutureListener future = new ChannelFutureListener() {
-            @Override
-            public void operationComplete(ChannelFuture future) throws Exception {
-                if (future.isSuccess()) {
-                    String path = uri.getRawPath() + ((uri.getRawQuery() == null) ? "" : "?" + uri.getRawQuery());
+        ChannelFutureListener future = future1 -> {
+            if (future1.isSuccess()) {
+                String path = uri.getRawPath() + ((uri.getRawQuery() == null) ? "" : "?" + uri.getRawQuery());
 
-                    HttpRequest request = new DefaultHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.GET, path);
-                    request.headers().set(HttpHeaderNames.HOST, uri.getHost());
+                HttpRequest request = new DefaultHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.GET, path);
+                request.headers().set(HttpHeaderNames.HOST, uri.getHost());
 
-                    future.channel().writeAndFlush(request);
-                } else {
-                    addressCache.invalidate(uri.getHost());
-                    callback.done(null, future.cause());
-                }
+                future1.channel().writeAndFlush(request);
+            } else {
+                addressCache.invalidate(uri.getHost());
+                callback.done(null, future1.cause());
             }
         };
 

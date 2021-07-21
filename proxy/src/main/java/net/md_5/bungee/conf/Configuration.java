@@ -51,7 +51,7 @@ public class Configuration implements ProxyConfig {
      * Whether we log proxy commands to the proxy log
      */
     private boolean logCommands;
-    private boolean logPings = true;
+    private boolean logPings = false;
     private int remotePingCache = -1;
     private int playerLimit = -1;
     private Collection<String> disabledCommands;
