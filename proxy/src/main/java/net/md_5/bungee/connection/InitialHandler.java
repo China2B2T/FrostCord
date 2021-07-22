@@ -190,12 +190,17 @@ public class InitialHandler extends PacketHandler implements PendingConnection {
 
     @Override
     public void handle(StatusRequest statusRequest) throws Exception {
-         Preconditions.checkState(thisState == State.STATUS, "Not expecting STATUS");
+        // FrostCord - Remove unnecessary warning
+        // Preconditions.checkState(thisState == State.STATUS, "Not expecting STATUS");
 
         // FrostCord - Close if invalid
         if (thisState == State.STATUS) {
-            ch.close ();
-//            return;
+            String address = ch.getRemoteAddress ().toString ();
+            Firewall.tickViolation ( address, 1 );
+
+            if (Firewall.isBlocked ( address )) {
+                ch.close ();
+            }
         }
 
         ServerInfo forced = AbstractReconnectHandler.getForcedHost(this);
@@ -343,24 +348,20 @@ public class InitialHandler extends PacketHandler implements PendingConnection {
             return;
         }
 
-        Callback<PreLoginEvent> callback = new Callback<PreLoginEvent>() {
-
-            @Override
-            public void done(PreLoginEvent result, Throwable error) {
-                if (result.isCancelled()) {
-                    disconnect(result.getCancelReasonComponents());
-                    return;
-                }
-                if (ch.isClosed()) {
-                    return;
-                }
-                if (onlineMode) {
-                    unsafe().sendPacket(request = EncryptionUtil.encryptRequest());
-                } else {
-                    finish();
-                }
-                thisState = State.ENCRYPT;
+        Callback<PreLoginEvent> callback = (result, error) -> {
+            if (result.isCancelled()) {
+                disconnect(result.getCancelReasonComponents());
+                return;
             }
+            if (ch.isClosed()) {
+                return;
+            }
+            if (onlineMode) {
+                unsafe().sendPacket(request = EncryptionUtil.encryptRequest());
+            } else {
+                finish();
+            }
+            thisState = State.ENCRYPT;
         };
 
         // fire pre login event
@@ -393,23 +394,20 @@ public class InitialHandler extends PacketHandler implements PendingConnection {
         String preventProxy = (BungeeCord.getInstance().config.isPreventProxyConnections() && getSocketAddress() instanceof InetSocketAddress) ? "&ip=" + URLEncoder.encode(getAddress().getAddress().getHostAddress(), "UTF-8") : "";
         String authURL = "https://sessionserver.steampowered.workers.dev/session/minecraft/hasJoined?username=" + encName + "&serverId=" + encodedHash + preventProxy;
 
-        Callback<String> handler = new Callback<String>() {
-            @Override
-            public void done(String result, Throwable error) {
-                if (error == null) {
-                    val obj = BungeeCord.getInstance ( ).gson.fromJson ( result, LoginResult.class );
-                    if (obj != null && obj.getId() != null) {
-                        loginProfile = obj;
-                        name = obj.getName();
-                        uniqueId = Util.getUUID(obj.getId());
-                        finish();
-                        return;
-                    }
-                    disconnect(bungee.getTranslation("offline_mode_player"));
-                } else {
-                    disconnect(bungee.getTranslation("mojang_fail"));
-                    bungee.getLogger().log(Level.SEVERE, "Error authenticating " + getName() + " with minecraft.net", error);
+        Callback<String> handler = (result, error) -> {
+            if (error == null) {
+                val obj = BungeeCord.getInstance ( ).gson.fromJson ( result, LoginResult.class );
+                if (obj != null && obj.getId() != null) {
+                    loginProfile = obj;
+                    name = obj.getName();
+                    uniqueId = Util.getUUID(obj.getId());
+                    finish();
+                    return;
                 }
+                disconnect(bungee.getTranslation("offline_mode_player"));
+            } else {
+                disconnect(bungee.getTranslation("mojang_fail"));
+                bungee.getLogger().log(Level.SEVERE, "Error authenticating " + getName() + " with minecraft.net", error);
             }
         };
 
