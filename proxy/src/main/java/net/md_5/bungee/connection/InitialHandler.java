@@ -190,12 +190,12 @@ public class InitialHandler extends PacketHandler implements PendingConnection {
 
     @Override
     public void handle(StatusRequest statusRequest) throws Exception {
-        // Preconditions.checkState(thisState == State.STATUS, "Not expecting STATUS");
+         Preconditions.checkState(thisState == State.STATUS, "Not expecting STATUS");
 
         // FrostCord - Close if invalid
         if (thisState == State.STATUS) {
             ch.close ();
-            return;
+//            return;
         }
 
         ServerInfo forced = AbstractReconnectHandler.getForcedHost(this);
