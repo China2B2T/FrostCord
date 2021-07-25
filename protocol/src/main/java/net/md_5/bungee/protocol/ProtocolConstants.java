@@ -43,7 +43,8 @@ public class ProtocolConstants {
 
     static {
         ImmutableList.Builder<String> supportedVersions = ImmutableList.<String>builder().add(
-                "1.7.x",
+                // FrostBin - Remove 1.7 for now
+//                "1.7.x",
                 "1.8.x",
                 "1.9.x",
                 "1.10.x",

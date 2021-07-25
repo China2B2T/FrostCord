@@ -219,7 +219,7 @@ public class BungeeCord extends ProxyServer {
             ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.DISABLED); // Eats performance
         }
 
-        getLogger().info("Loading FrostCord version " + getVersion() + " by Rabb1t0w0...");
+        getLogger().info("Loading FrostCord version " + getVersion() + " by Rabbit0w0...");
 
         eventLoops = PipelineUtils.newEventLoopGroup(0, new ThreadFactoryBuilder().setNameFormat("Netty IO Thread #%1$d").build());
 

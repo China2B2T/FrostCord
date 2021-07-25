@@ -191,17 +191,17 @@ public class InitialHandler extends PacketHandler implements PendingConnection {
     @Override
     public void handle(StatusRequest statusRequest) throws Exception {
         // FrostCord - Remove unnecessary warning
-        // Preconditions.checkState(thisState == State.STATUS, "Not expecting STATUS");
+        Preconditions.checkState(thisState == State.STATUS, "Not expecting STATUS");
 
         // FrostCord - Close if invalid
-        if (thisState == State.STATUS) {
-            String address = ch.getRemoteAddress ().toString ();
-            Firewall.tickViolation ( address, 1 );
-
-            if (Firewall.isBlocked ( address )) {
-                ch.close ();
-            }
-        }
+//        if (thisState == State.STATUS) {
+//            String address = ch.getRemoteAddress ().toString ();
+//            Firewall.tickViolation ( address, 1 );
+//
+//            if (Firewall.isBlocked ( address )) {
+//                ch.close ();
+//            }
+//        }
 
         ServerInfo forced = AbstractReconnectHandler.getForcedHost(this);
         final String motd = (forced != null) ? forced.getMotd() : listener.getMotd();
@@ -213,36 +213,33 @@ public class InitialHandler extends PacketHandler implements PendingConnection {
                 bungee.getLogger().log(Level.WARNING, "Error pinging remote server", error);
             }
 
-            Callback<ProxyPingEvent> callback = new Callback<ProxyPingEvent>() {
-                @Override
-                public void done(ProxyPingEvent pingResult, Throwable error) {
-                    if (pingResult.getResponse() == null) {
-                        ch.close();
-                        return;
-                    } else if (ch.isClosed()) {
-                        return;
-                    }
-
-                    Gson gson = handshake.getProtocolVersion() == ProtocolConstants.MINECRAFT_1_7_2 ? BungeeCord.getInstance().gsonLegacy : BungeeCord.getInstance().gson; // Travertine
-                    if (bungee.getConnectionThrottle() != null) {
-                        bungee.getConnectionThrottle().unthrottle(getSocketAddress());
-                    }
-
-                    if (ProtocolConstants.isBeforeOrEq(handshake.getProtocolVersion(), ProtocolConstants.MINECRAFT_1_8)) {
-                        // Minecraft < 1.9 doesn't send string server descriptions as chat components. Older 1.7
-                        // clients even crash when encountering a chat component instead of a string. To be on the
-                        // safe side, always send legacy descriptions for < 1.9 clients.
-                        JsonElement element = gson.toJsonTree(pingResult.getResponse());
-                        Preconditions.checkArgument(element.isJsonObject(), "Response is not a JSON object");
-                        JsonObject object = element.getAsJsonObject();
-                        object.addProperty("description", pingResult.getResponse().getDescription());
-
-                        unsafe.sendPacket(new StatusResponse(gson.toJson(element)));
-                    } else {
-                        unsafe.sendPacket(new StatusResponse(gson.toJson(pingResult.getResponse())));
-                    }
-                    // Travertine end
+            Callback<ProxyPingEvent> callback = (pingResult, error1) -> {
+                if (pingResult.getResponse() == null) {
+                    ch.close();
+                    return;
+                } else if (ch.isClosed()) {
+                    return;
                 }
+
+                Gson gson = handshake.getProtocolVersion() == ProtocolConstants.MINECRAFT_1_7_2 ? BungeeCord.getInstance().gsonLegacy : BungeeCord.getInstance().gson; // Travertine
+                if (bungee.getConnectionThrottle() != null) {
+                    bungee.getConnectionThrottle().unthrottle(getSocketAddress());
+                }
+
+                if (ProtocolConstants.isBeforeOrEq(handshake.getProtocolVersion(), ProtocolConstants.MINECRAFT_1_8)) {
+                    // Minecraft < 1.9 doesn't send string server descriptions as chat components. Older 1.7
+                    // clients even crash when encountering a chat component instead of a string. To be on the
+                    // safe side, always send legacy descriptions for < 1.9 clients.
+                    JsonElement element = gson.toJsonTree(pingResult.getResponse());
+                    Preconditions.checkArgument(element.isJsonObject(), "Response is not a JSON object");
+                    JsonObject object = element.getAsJsonObject();
+                    object.addProperty("description", pingResult.getResponse().getDescription());
+
+                    unsafe.sendPacket(new StatusResponse(gson.toJson(element)));
+                } else {
+                    unsafe.sendPacket(new StatusResponse(gson.toJson(pingResult.getResponse())));
+                }
+                // Travertine end
             };
 
             bungee.getPluginManager().callEvent(new ProxyPingEvent(InitialHandler.this, result, callback));

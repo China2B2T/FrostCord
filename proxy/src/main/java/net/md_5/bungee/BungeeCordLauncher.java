@@ -61,9 +61,9 @@ public class BungeeCordLauncher {
 
         if (!options.has("noconsole")) {
             String line;
-            while (bungee.isRunning && (line = bungee.getConsoleReader().readLine(">")) != null) {
+            while (bungee.isRunning && (line = bungee.getConsoleReader().readLine("> ")) != null) {
                 if (!bungee.getPluginManager().dispatchCommand(ConsoleCommandSender.getInstance(), line)) {
-                    bungee.getConsole().sendMessage(new ComponentBuilder("Command not found").color(ChatColor.RED).create());
+                    bungee.getConsole().sendMessage(new ComponentBuilder("Unknown command!").color(ChatColor.RED).create());
                 }
             }
         }
