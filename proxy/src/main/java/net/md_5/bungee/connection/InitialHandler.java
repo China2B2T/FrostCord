@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import lombok.var;
 import net.md_5.bungee.*;
 import net.md_5.bungee.api.*;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -41,8 +42,11 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 
 @RequiredArgsConstructor
@@ -388,27 +392,45 @@ public class InitialHandler extends PacketHandler implements PendingConnection {
         }
         String encodedHash = URLEncoder.encode(new BigInteger(sha.digest()).toString(16), "UTF-8");
 
+        AtomicReference<String> source = new AtomicReference<> ( "sessionserver.mojang.com" );
+
+        String[] sourceList = new String[]{"sessionserver.mojang.com", "sessionserver.steampowered.workers.dev"};
+
         String preventProxy = (BungeeCord.getInstance().config.isPreventProxyConnections() && getSocketAddress() instanceof InetSocketAddress) ? "&ip=" + URLEncoder.encode(getAddress().getAddress().getHostAddress(), "UTF-8") : "";
-        String authURL = "https://sessionserver.steampowered.workers.dev/session/minecraft/hasJoined?username=" + encName + "&serverId=" + encodedHash + preventProxy;
 
-        Callback<String> handler = (result, error) -> {
-            if (error == null) {
-                val obj = BungeeCord.getInstance ( ).gson.fromJson ( result, LoginResult.class );
-                if (obj != null && obj.getId() != null) {
-                    loginProfile = obj;
-                    name = obj.getName();
-                    uniqueId = Util.getUUID(obj.getId());
-                    finish();
-                    return;
+        AtomicBoolean state = new AtomicBoolean ( true );
+
+        for (String i : sourceList) {
+            String authURL = "https://" + i + "/session/minecraft/hasJoined?username=" + encName + "&serverId=" + encodedHash + preventProxy;
+
+            Callback<String> handler = (result, error) -> {
+                if (error == null) {
+                    val obj = BungeeCord.getInstance ( ).gson.fromJson ( result, LoginResult.class );
+                    if (obj != null && obj.getId() != null) {
+                        loginProfile = obj;
+                        name = obj.getName();
+                        uniqueId = Util.getUUID(obj.getId());
+                        finish();
+                        return;
+                    }
+                    disconnect(bungee.getTranslation("offline_mode_player"));
+                } else {
+                    state.set ( false );
+                    // disconnect(bungee.getTranslation("mojang_fail"));
+                    bungee.getLogger().log(Level.WARNING, "Error authenticating " + getName() + " with " + i + ": " + error.getMessage ());
                 }
-                disconnect(bungee.getTranslation("offline_mode_player"));
-            } else {
-                disconnect(bungee.getTranslation("mojang_fail"));
-                bungee.getLogger().log(Level.SEVERE, "Error authenticating " + getName() + " with minecraft.net", error);
-            }
-        };
+            };
 
-        HttpClient.get(authURL, ch.getHandle().eventLoop(), handler);
+            HttpClient.get(authURL, ch.getHandle().eventLoop(), handler);
+
+            if (!state.get ()) {
+                HttpClient.get(authURL, ch.getHandle().eventLoop(), handler);
+            } else {
+                return;
+            }
+        }
+
+        disconnect(bungee.getTranslation("mojang_fail"));
     }
 
     private void finish() {
