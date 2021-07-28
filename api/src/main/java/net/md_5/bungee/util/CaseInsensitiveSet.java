@@ -7,10 +7,10 @@ import java.util.Collection;
 public class CaseInsensitiveSet extends TCustomHashSet<String> {
 
     public CaseInsensitiveSet() {
-        super(CaseInsensitiveHashingStrategy.INSTANCE);
+        super ( CaseInsensitiveHashingStrategy.INSTANCE );
     }
 
     public CaseInsensitiveSet(Collection<? extends String> collection) {
-        super(CaseInsensitiveHashingStrategy.INSTANCE, collection);
+        super ( CaseInsensitiveHashingStrategy.INSTANCE, collection );
     }
 }

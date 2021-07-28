@@ -11,30 +11,30 @@ import java.util.zip.Deflater;
 
 public class PacketCompressor extends MessageToByteEncoder<ByteBuf> {
 
-    private final BungeeZlib zlib = CompressFactory.zlib.newInstance();
+    private final BungeeZlib zlib = CompressFactory.zlib.newInstance ( );
     @Setter
     private int threshold = 256;
 
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
-        zlib.init(true, Deflater.DEFAULT_COMPRESSION);
+        zlib.init ( true, Deflater.DEFAULT_COMPRESSION );
     }
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-        zlib.free();
+        zlib.free ( );
     }
 
     @Override
     protected void encode(ChannelHandlerContext ctx, ByteBuf msg, ByteBuf out) throws Exception {
-        int origSize = msg.readableBytes();
+        int origSize = msg.readableBytes ( );
         if (origSize < threshold) {
-            DefinedPacket.writeVarInt(0, out);
-            out.writeBytes(msg);
+            DefinedPacket.writeVarInt ( 0, out );
+            out.writeBytes ( msg );
         } else {
-            DefinedPacket.writeVarInt(origSize, out);
+            DefinedPacket.writeVarInt ( origSize, out );
 
-            zlib.process(msg, out);
+            zlib.process ( msg, out );
         }
     }
 }

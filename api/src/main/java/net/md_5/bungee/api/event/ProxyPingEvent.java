@@ -25,7 +25,7 @@ public class ProxyPingEvent extends AsyncEvent<ProxyPingEvent> {
     private ServerPing response;
 
     public ProxyPingEvent(PendingConnection connection, ServerPing response, Callback<ProxyPingEvent> done) {
-        super(done);
+        super ( done );
         this.connection = connection;
         this.response = response;
     }

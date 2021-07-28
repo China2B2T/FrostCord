@@ -27,7 +27,7 @@ public class ChatEvent extends TargetedEvent implements Cancellable {
     private String message;
 
     public ChatEvent(Connection sender, Connection receiver, String message) {
-        super(sender, receiver);
+        super ( sender, receiver );
         this.message = message;
     }
 
@@ -37,7 +37,7 @@ public class ChatEvent extends TargetedEvent implements Cancellable {
      * @return if this message is a command
      */
     public boolean isCommand() {
-        return message.length() > 0 && message.charAt(0) == '/';
+        return message.length ( ) > 0 && message.charAt ( 0 ) == '/';
     }
 
     /**
@@ -48,14 +48,14 @@ public class ChatEvent extends TargetedEvent implements Cancellable {
      * net.md_5.bungee.api.CommandSender)
      */
     public boolean isProxyCommand() {
-        if (!isCommand()) {
+        if (!isCommand ( )) {
             return false;
         }
 
-        int index = message.indexOf(" ");
-        String commandName = (index == -1) ? message.substring(1) : message.substring(1, index);
-        CommandSender sender = (getSender() instanceof CommandSender) ? (CommandSender) getSender() : null;
+        int index = message.indexOf ( " " );
+        String commandName = (index == -1) ? message.substring ( 1 ) : message.substring ( 1, index );
+        CommandSender sender = (getSender ( ) instanceof CommandSender) ? (CommandSender) getSender ( ) : null;
 
-        return ProxyServer.getInstance().getPluginManager().isExecutableCommand(commandName, sender);
+        return ProxyServer.getInstance ( ).getPluginManager ( ).isExecutableCommand ( commandName, sender );
     }
 }

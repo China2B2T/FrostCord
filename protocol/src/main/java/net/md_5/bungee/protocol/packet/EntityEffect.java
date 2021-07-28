@@ -23,40 +23,40 @@ public class EntityEffect extends MultiVersionPacketV17 {
 
     @Override
     protected void v17Read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        this.entityId = buf.readInt();
-        this.effectId = buf.readUnsignedByte();
-        this.amplifier = buf.readUnsignedByte();
-        this.duration = buf.readShort();
+        this.entityId = buf.readInt ( );
+        this.effectId = buf.readUnsignedByte ( );
+        this.amplifier = buf.readUnsignedByte ( );
+        this.duration = buf.readShort ( );
     }
 
     @Override
     public void read(ByteBuf buf) {
-        this.entityId = readVarInt(buf);
-        this.effectId = buf.readUnsignedByte();
-        this.amplifier = buf.readUnsignedByte();
-        this.duration = readVarInt(buf);
-        this.hideParticles = buf.readBoolean();
+        this.entityId = readVarInt ( buf );
+        this.effectId = buf.readUnsignedByte ( );
+        this.amplifier = buf.readUnsignedByte ( );
+        this.duration = readVarInt ( buf );
+        this.hideParticles = buf.readBoolean ( );
     }
 
     @Override
     protected void v17Write(ByteBuf buf) {
-        buf.writeInt(effectId);
-        buf.writeByte(effectId);
-        buf.writeByte(amplifier);
-        buf.writeShort(duration);
+        buf.writeInt ( effectId );
+        buf.writeByte ( effectId );
+        buf.writeByte ( amplifier );
+        buf.writeShort ( duration );
     }
 
     @Override
     public void write(ByteBuf buf) {
-        writeVarInt(this.entityId, buf);
-        buf.writeByte(this.effectId);
-        buf.writeByte(this.amplifier);
-        writeVarInt(this.duration, buf);
-        buf.writeBoolean(this.hideParticles);
+        writeVarInt ( this.entityId, buf );
+        buf.writeByte ( this.effectId );
+        buf.writeByte ( this.amplifier );
+        writeVarInt ( this.duration, buf );
+        buf.writeBoolean ( this.hideParticles );
     }
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
-        handler.handle(this);
+        handler.handle ( this );
     }
 }

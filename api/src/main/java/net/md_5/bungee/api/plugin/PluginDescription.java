@@ -37,11 +37,11 @@ public class PluginDescription {
     /**
      * Plugin hard dependencies.
      */
-    private Set<String> depends = new HashSet<>();
+    private Set<String> depends = new HashSet<> ( );
     /**
      * Plugin soft dependencies.
      */
-    private Set<String> softDepends = new HashSet<>();
+    private Set<String> softDepends = new HashSet<> ( );
     /**
      * File we were loaded from.
      */
@@ -53,5 +53,5 @@ public class PluginDescription {
     /**
      * Optional libraries.
      */
-    private List<String> libraries = new LinkedList<>();
+    private List<String> libraries = new LinkedList<> ( );
 }

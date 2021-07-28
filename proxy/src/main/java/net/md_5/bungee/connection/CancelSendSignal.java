@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CancelSendSignal extends Error {
 
-    public static final CancelSendSignal INSTANCE = new CancelSendSignal();
+    public static final CancelSendSignal INSTANCE = new CancelSendSignal ( );
 
     @Override
     public Throwable initCause(Throwable cause) {

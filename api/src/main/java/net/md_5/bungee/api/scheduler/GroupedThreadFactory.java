@@ -14,17 +14,17 @@ public class GroupedThreadFactory implements ThreadFactory {
     public static final class BungeeGroup extends ThreadGroup {
 
         private BungeeGroup(String name) {
-            super(name);
+            super ( name );
         }
 
     }
 
     public GroupedThreadFactory(Plugin plugin, String name) {
-        this.group = new BungeeGroup(name);
+        this.group = new BungeeGroup ( name );
     }
 
     @Override
     public Thread newThread(Runnable r) {
-        return new Thread(group, r);
+        return new Thread ( group, r );
     }
 }

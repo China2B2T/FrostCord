@@ -14,28 +14,28 @@ public class LegacyDecoder extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         // See check in Varint21FrameDecoder for more details
-        if (!ctx.channel().isActive()) {
-            in.skipBytes(in.readableBytes());
+        if (!ctx.channel ( ).isActive ( )) {
+            in.skipBytes ( in.readableBytes ( ) );
             return;
         }
 
-        if (!in.isReadable()) {
+        if (!in.isReadable ( )) {
             return;
         }
 
-        in.markReaderIndex();
-        short packetID = in.readUnsignedByte();
+        in.markReaderIndex ( );
+        short packetID = in.readUnsignedByte ( );
 
         if (packetID == 0xFE) {
-            out.add(new PacketWrapper(new LegacyPing(in.isReadable() && in.readUnsignedByte() == 0x01), Unpooled.EMPTY_BUFFER));
+            out.add ( new PacketWrapper ( new LegacyPing ( in.isReadable ( ) && in.readUnsignedByte ( ) == 0x01 ), Unpooled.EMPTY_BUFFER ) );
             return;
-        } else if (packetID == 0x02 && in.isReadable()) {
-            in.skipBytes(in.readableBytes());
-            out.add(new PacketWrapper(new LegacyHandshake(), Unpooled.EMPTY_BUFFER));
+        } else if (packetID == 0x02 && in.isReadable ( )) {
+            in.skipBytes ( in.readableBytes ( ) );
+            out.add ( new PacketWrapper ( new LegacyHandshake ( ), Unpooled.EMPTY_BUFFER ) );
             return;
         }
 
-        in.resetReaderIndex();
-        ctx.pipeline().remove(this);
+        in.resetReaderIndex ( );
+        ctx.pipeline ( ).remove ( this );
     }
 }

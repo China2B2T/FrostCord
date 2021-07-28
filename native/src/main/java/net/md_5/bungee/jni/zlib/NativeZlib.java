@@ -9,23 +9,23 @@ import java.util.zip.DataFormatException;
 public class NativeZlib implements BungeeZlib {
 
     @Getter
-    private final NativeCompressImpl nativeCompress = new NativeCompressImpl();
+    private final NativeCompressImpl nativeCompress = new NativeCompressImpl ( );
     /*============================================================================*/
     private boolean compress;
     private long ctx;
 
     @Override
     public void init(boolean compress, int level) {
-        free();
+        free ( );
 
         this.compress = compress;
-        this.ctx = nativeCompress.init(compress, level);
+        this.ctx = nativeCompress.init ( compress, level );
     }
 
     @Override
     public void free() {
         if (ctx != 0) {
-            nativeCompress.end(ctx, compress);
+            nativeCompress.end ( ctx, compress );
             ctx = 0;
         }
 
@@ -36,20 +36,20 @@ public class NativeZlib implements BungeeZlib {
     @Override
     public void process(ByteBuf in, ByteBuf out) throws DataFormatException {
         // Smoke tests
-        in.memoryAddress();
-        out.memoryAddress();
-        Preconditions.checkState(ctx != 0, "Invalid pointer to compress!");
+        in.memoryAddress ( );
+        out.memoryAddress ( );
+        Preconditions.checkState ( ctx != 0, "Invalid pointer to compress!" );
 
-        while (!nativeCompress.finished && (compress || in.isReadable())) {
-            out.ensureWritable(8192);
+        while (!nativeCompress.finished && (compress || in.isReadable ( ))) {
+            out.ensureWritable ( 8192 );
 
-            int processed = nativeCompress.process(ctx, in.memoryAddress() + in.readerIndex(), in.readableBytes(), out.memoryAddress() + out.writerIndex(), out.writableBytes(), compress);
+            int processed = nativeCompress.process ( ctx, in.memoryAddress ( ) + in.readerIndex ( ), in.readableBytes ( ), out.memoryAddress ( ) + out.writerIndex ( ), out.writableBytes ( ), compress );
 
-            in.readerIndex(in.readerIndex() + nativeCompress.consumed);
-            out.writerIndex(out.writerIndex() + processed);
+            in.readerIndex ( in.readerIndex ( ) + nativeCompress.consumed );
+            out.writerIndex ( out.writerIndex ( ) + processed );
         }
 
-        nativeCompress.reset(ctx, compress);
+        nativeCompress.reset ( ctx, compress );
         nativeCompress.consumed = 0;
         nativeCompress.finished = false;
     }

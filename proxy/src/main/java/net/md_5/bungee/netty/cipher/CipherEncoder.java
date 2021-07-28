@@ -13,11 +13,11 @@ public class CipherEncoder extends MessageToByteEncoder<ByteBuf> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, ByteBuf in, ByteBuf out) throws Exception {
-        cipher.cipher(in, out);
+        cipher.cipher ( in, out );
     }
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-        cipher.free();
+        cipher.free ( );
     }
 }

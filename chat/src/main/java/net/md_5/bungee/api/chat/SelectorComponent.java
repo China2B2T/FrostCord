@@ -34,25 +34,25 @@ public final class SelectorComponent extends BaseComponent {
      * @param original the original for the new selector component
      */
     public SelectorComponent(SelectorComponent original) {
-        super(original);
-        setSelector(original.getSelector());
+        super ( original );
+        setSelector ( original.getSelector ( ) );
     }
 
     @Override
     public SelectorComponent duplicate() {
-        return new SelectorComponent(this);
+        return new SelectorComponent ( this );
     }
 
     @Override
     protected void toPlainText(StringBuilder builder) {
-        builder.append(this.selector);
-        super.toPlainText(builder);
+        builder.append ( this.selector );
+        super.toPlainText ( builder );
     }
 
     @Override
     protected void toLegacyText(StringBuilder builder) {
-        addFormat(builder);
-        builder.append(this.selector);
-        super.toLegacyText(builder);
+        addFormat ( builder );
+        builder.append ( this.selector );
+        super.toLegacyText ( builder );
     }
 }

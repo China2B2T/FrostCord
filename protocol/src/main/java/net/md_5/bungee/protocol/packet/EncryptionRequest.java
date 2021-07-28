@@ -22,35 +22,35 @@ public class EncryptionRequest extends MultiVersionPacketV17 {
 
     @Override
     public void v17Read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        serverId = readString(buf);
-        publicKey = v17readArray(buf);
-        verifyToken = v17readArray(buf);
+        serverId = readString ( buf );
+        publicKey = v17readArray ( buf );
+        verifyToken = v17readArray ( buf );
     }
 
     @Override
     public void read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        serverId = readString(buf);
-        publicKey = readArray(buf);
-        verifyToken = readArray(buf);
+        serverId = readString ( buf );
+        publicKey = readArray ( buf );
+        verifyToken = readArray ( buf );
     }
 
 
     @Override
     public void v17Write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        writeString(serverId, buf);
-        v17writeArray(publicKey, buf, false);
-        v17writeArray(verifyToken, buf, false);
+        writeString ( serverId, buf );
+        v17writeArray ( publicKey, buf, false );
+        v17writeArray ( verifyToken, buf, false );
     }
 
     @Override
     public void write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        writeString(serverId, buf);
-        writeArray(publicKey, buf);
-        writeArray(verifyToken, buf);
+        writeString ( serverId, buf );
+        writeArray ( publicKey, buf );
+        writeArray ( verifyToken, buf );
     }
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
-        handler.handle(this);
+        handler.handle ( this );
     }
 }

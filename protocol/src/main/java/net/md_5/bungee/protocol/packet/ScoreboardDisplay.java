@@ -22,18 +22,18 @@ public class ScoreboardDisplay extends DefinedPacket {
 
     @Override
     public void read(ByteBuf buf) {
-        position = buf.readByte();
-        name = readString(buf);
+        position = buf.readByte ( );
+        name = readString ( buf );
     }
 
     @Override
     public void write(ByteBuf buf) {
-        buf.writeByte(position);
-        writeString(name, buf);
+        buf.writeByte ( position );
+        writeString ( name, buf );
     }
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
-        handler.handle(this);
+        handler.handle ( this );
     }
 }

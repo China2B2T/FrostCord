@@ -8,20 +8,16 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.command.ConsoleCommandSender;
 
 import java.security.Security;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 public class BungeeCordLauncher {
 
     public static void main(String[] args) throws Exception {
-        Security.setProperty("networkaddress.cache.ttl", "30");
-        Security.setProperty("networkaddress.cache.negative.ttl", "10");
+        Security.setProperty ( "networkaddress.cache.ttl", "30" );
+        Security.setProperty ( "networkaddress.cache.negative.ttl", "10" );
         // For JDK9+ we force-enable multi-release jar file support #3087
-        if (System.getProperty("jdk.util.jar.enableMultiRelease") == null) {
-            System.setProperty("jdk.util.jar.enableMultiRelease", "force");
+        if (System.getProperty ( "jdk.util.jar.enableMultiRelease" ) == null) {
+            System.setProperty ( "jdk.util.jar.enableMultiRelease", "force" );
         }
 
         // Waterfall start
@@ -32,38 +28,38 @@ public class BungeeCordLauncher {
         // Note: io.netty.allocator.pageSize << io.netty.allocator.maxOrder is the formula used to
         // compute the chunk size. We lower maxOrder from its default of 11 to 9. (We also use a null
         // check, so that the user is free to choose another setting if need be.)
-        if (System.getProperty("io.netty.allocator.maxOrder") == null) {
-            System.setProperty("io.netty.allocator.maxOrder", "9");
+        if (System.getProperty ( "io.netty.allocator.maxOrder" ) == null) {
+            System.setProperty ( "io.netty.allocator.maxOrder", "9" );
         }
         // Waterfall end
 
-        OptionParser parser = new OptionParser();
-        parser.allowsUnrecognizedOptions();
-        parser.acceptsAll(Arrays.asList("help"), "Show the help");
-        parser.acceptsAll(Arrays.asList("v", "version"), "Print version and exit");
-        parser.acceptsAll(Arrays.asList("noconsole"), "Disable console input");
+        OptionParser parser = new OptionParser ( );
+        parser.allowsUnrecognizedOptions ( );
+        parser.acceptsAll ( Arrays.asList ( "help" ), "Show the help" );
+        parser.acceptsAll ( Arrays.asList ( "v", "version" ), "Print version and exit" );
+        parser.acceptsAll ( Arrays.asList ( "noconsole" ), "Disable console input" );
 
-        OptionSet options = parser.parse(args);
+        OptionSet options = parser.parse ( args );
 
-        if (options.has("help")) {
-            parser.printHelpOn(System.out);
+        if (options.has ( "help" )) {
+            parser.printHelpOn ( System.out );
             return;
         }
-        if (options.has("version")) {
-            System.out.println(BungeeCord.class.getPackage().getImplementationVersion());
+        if (options.has ( "version" )) {
+            System.out.println ( BungeeCord.class.getPackage ( ).getImplementationVersion ( ) );
             return;
         }
 
-        BungeeCord bungee = new BungeeCord();
-        ProxyServer.setInstance(bungee);
-        bungee.getLogger().info("Enabled " + bungee.getName() + " version " + bungee.getVersion());
-        bungee.start();
+        BungeeCord bungee = new BungeeCord ( );
+        ProxyServer.setInstance ( bungee );
+        bungee.getLogger ( ).info ( "Enabled " + bungee.getName ( ) + " version " + bungee.getVersion ( ) );
+        bungee.start ( );
 
-        if (!options.has("noconsole")) {
+        if (!options.has ( "noconsole" )) {
             String line;
-            while (bungee.isRunning && (line = bungee.getConsoleReader().readLine("> ")) != null) {
-                if (!bungee.getPluginManager().dispatchCommand(ConsoleCommandSender.getInstance(), line)) {
-                    bungee.getConsole().sendMessage(new ComponentBuilder("Unknown command!").color(ChatColor.RED).create());
+            while (bungee.isRunning && (line = bungee.getConsoleReader ( ).readLine ( "> " )) != null) {
+                if (!bungee.getPluginManager ( ).dispatchCommand ( ConsoleCommandSender.getInstance ( ), line )) {
+                    bungee.getConsole ( ).sendMessage ( new ComponentBuilder ( "Unknown command!" ).color ( ChatColor.RED ).create ( ) );
                 }
             }
         }

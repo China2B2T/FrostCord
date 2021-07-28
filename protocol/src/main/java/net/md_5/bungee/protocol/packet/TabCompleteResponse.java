@@ -37,52 +37,52 @@ public class TabCompleteResponse extends DefinedPacket {
     @Override
     public void read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
         if (protocolVersion >= ProtocolConstants.MINECRAFT_1_13) {
-            transactionId = readVarInt(buf);
-            int start = readVarInt(buf);
-            int length = readVarInt(buf);
-            StringRange range = StringRange.between(start, start + length);
+            transactionId = readVarInt ( buf );
+            int start = readVarInt ( buf );
+            int length = readVarInt ( buf );
+            StringRange range = StringRange.between ( start, start + length );
 
-            int cnt = readVarInt(buf);
-            List<Suggestion> matches = new LinkedList<>();
+            int cnt = readVarInt ( buf );
+            List<Suggestion> matches = new LinkedList<> ( );
             for (int i = 0; i < cnt; i++) {
-                String match = readString(buf);
-                String tooltip = buf.readBoolean() ? readString(buf) : null;
+                String match = readString ( buf );
+                String tooltip = buf.readBoolean ( ) ? readString ( buf ) : null;
 
-                matches.add(new Suggestion(range, match, new LiteralMessage(tooltip)));
+                matches.add ( new Suggestion ( range, match, new LiteralMessage ( tooltip ) ) );
             }
 
-            suggestions = new Suggestions(range, matches);
+            suggestions = new Suggestions ( range, matches );
         }
 
         if (protocolVersion < ProtocolConstants.MINECRAFT_1_13) {
-            commands = readStringArray(buf);
+            commands = readStringArray ( buf );
         }
     }
 
     @Override
     public void write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
         if (protocolVersion >= ProtocolConstants.MINECRAFT_1_13) {
-            writeVarInt(transactionId, buf);
-            writeVarInt(suggestions.getRange().getStart(), buf);
-            writeVarInt(suggestions.getRange().getLength(), buf);
+            writeVarInt ( transactionId, buf );
+            writeVarInt ( suggestions.getRange ( ).getStart ( ), buf );
+            writeVarInt ( suggestions.getRange ( ).getLength ( ), buf );
 
-            writeVarInt(suggestions.getList().size(), buf);
-            for (Suggestion suggestion : suggestions.getList()) {
-                writeString(suggestion.getText(), buf);
-                buf.writeBoolean(suggestion.getTooltip() != null && suggestion.getTooltip().getString() != null);
-                if (suggestion.getTooltip() != null && suggestion.getTooltip().getString() != null) {
-                    writeString(suggestion.getTooltip().getString(), buf);
+            writeVarInt ( suggestions.getList ( ).size ( ), buf );
+            for (Suggestion suggestion : suggestions.getList ( )) {
+                writeString ( suggestion.getText ( ), buf );
+                buf.writeBoolean ( suggestion.getTooltip ( ) != null && suggestion.getTooltip ( ).getString ( ) != null );
+                if (suggestion.getTooltip ( ) != null && suggestion.getTooltip ( ).getString ( ) != null) {
+                    writeString ( suggestion.getTooltip ( ).getString ( ), buf );
                 }
             }
         }
 
         if (protocolVersion < ProtocolConstants.MINECRAFT_1_13) {
-            writeStringArray(commands, buf);
+            writeStringArray ( commands, buf );
         }
     }
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
-        handler.handle(this);
+        handler.handle ( this );
     }
 }

@@ -21,7 +21,7 @@ public class ConnectionInitEvent extends AsyncEvent<ConnectionInitEvent> impleme
     private boolean isCancelled = false;
 
     public ConnectionInitEvent(SocketAddress remoteAddress, ListenerInfo listener, Callback<ConnectionInitEvent> done) {
-        super(done);
+        super ( done );
         this.remoteAddress = remoteAddress;
         this.listener = listener;
     }

@@ -11,7 +11,7 @@ import java.util.Collection;
 
 public class ServerConnectRequestTest {
 
-    private static final ServerInfo DUMMY_INFO = new ServerInfo() {
+    private static final ServerInfo DUMMY_INFO = new ServerInfo ( ) {
         @Override
         public String getName() {
             return null;
@@ -68,11 +68,11 @@ public class ServerConnectRequestTest {
 
     @Test(expected = NullPointerException.class)
     public void testNullTarget() {
-        ServerConnectRequest.builder().target(null).reason(ServerConnectEvent.Reason.JOIN_PROXY).build();
+        ServerConnectRequest.builder ( ).target ( null ).reason ( ServerConnectEvent.Reason.JOIN_PROXY ).build ( );
     }
 
     @Test(expected = NullPointerException.class)
     public void testNullReason() {
-        ServerConnectRequest.builder().target(DUMMY_INFO).reason(null).build();
+        ServerConnectRequest.builder ( ).target ( DUMMY_INFO ).reason ( null ).build ( );
     }
 }

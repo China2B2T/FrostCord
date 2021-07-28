@@ -28,21 +28,21 @@ public class ScoreboardObjective extends MultiVersionPacketV17 {
 
     @Override
     public void v17Read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        name = readString(buf);
-        value = readString(buf);
-        action = buf.readByte();
+        name = readString ( buf );
+        value = readString ( buf );
+        action = buf.readByte ( );
     }
 
     @Override
     public void read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        name = readString(buf);
-        action = buf.readByte();
+        name = readString ( buf );
+        action = buf.readByte ( );
         if (action == 0 || action == 2) {
-            value = readString(buf);
+            value = readString ( buf );
             if (protocolVersion >= ProtocolConstants.MINECRAFT_1_13) {
-                type = HealthDisplay.values()[readVarInt(buf)];
+                type = HealthDisplay.values ( )[readVarInt ( buf )];
             } else {
-                type = HealthDisplay.fromString(readString(buf));
+                type = HealthDisplay.fromString ( readString ( buf ) );
             }
         }
     }
@@ -50,28 +50,28 @@ public class ScoreboardObjective extends MultiVersionPacketV17 {
 
     @Override
     public void v17Write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        writeString(name, buf);
-        writeString(value, buf);
-        buf.writeByte(action);
+        writeString ( name, buf );
+        writeString ( value, buf );
+        buf.writeByte ( action );
     }
 
     @Override
     public void write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        writeString(name, buf);
-        buf.writeByte(action);
+        writeString ( name, buf );
+        buf.writeByte ( action );
         if (action == 0 || action == 2) {
-            writeString(value, buf);
+            writeString ( value, buf );
             if (protocolVersion >= ProtocolConstants.MINECRAFT_1_13) {
-                writeVarInt(type.ordinal(), buf);
+                writeVarInt ( type.ordinal ( ), buf );
             } else {
-                writeString(type.toString(), buf);
+                writeString ( type.toString ( ), buf );
             }
         }
     }
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
-        handler.handle(this);
+        handler.handle ( this );
     }
 
     public enum HealthDisplay {
@@ -80,11 +80,11 @@ public class ScoreboardObjective extends MultiVersionPacketV17 {
 
         @Override
         public String toString() {
-            return super.toString().toLowerCase(Locale.ROOT);
+            return super.toString ( ).toLowerCase ( Locale.ROOT );
         }
 
         public static HealthDisplay fromString(String s) {
-            return valueOf(s.toUpperCase(Locale.ROOT));
+            return valueOf ( s.toUpperCase ( Locale.ROOT ) );
         }
     }
 }

@@ -15,11 +15,11 @@ public class CipherDecoder extends MessageToMessageDecoder<ByteBuf> {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
-        out.add(cipher.cipher(ctx, msg));
+        out.add ( cipher.cipher ( ctx, msg ) );
     }
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-        cipher.free();
+        cipher.free ( );
     }
 }

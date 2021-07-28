@@ -6,7 +6,7 @@ public class NativeCompressImpl {
     boolean finished;
 
     static {
-        initFields();
+        initFields ( );
     }
 
     static native void initFields();

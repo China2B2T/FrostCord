@@ -40,19 +40,19 @@ public final class ItemTag {
     }
 
     public static ItemTag ofNbt(String nbt) {
-        return new ItemTag(nbt);
+        return new ItemTag ( nbt );
     }
 
     public static class Serializer implements JsonSerializer<ItemTag>, JsonDeserializer<ItemTag> {
 
         @Override
         public ItemTag deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
-            return ItemTag.ofNbt(element.getAsJsonPrimitive().getAsString());
+            return ItemTag.ofNbt ( element.getAsJsonPrimitive ( ).getAsString ( ) );
         }
 
         @Override
         public JsonElement serialize(ItemTag itemTag, Type type, JsonSerializationContext context) {
-            return context.serialize(itemTag.getNbt());
+            return context.serialize ( itemTag.getNbt ( ) );
         }
     }
 }

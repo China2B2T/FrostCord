@@ -14,33 +14,33 @@ import java.util.logging.LogRecord;
 @RequiredArgsConstructor
 public class ConciseFormatter extends Formatter {
 
-    private final DateFormat date = new SimpleDateFormat(System.getProperty("net.md_5.bungee.log-date-format", "HH:mm:ss"));
+    private final DateFormat date = new SimpleDateFormat ( System.getProperty ( "net.md_5.bungee.log-date-format", "HH:mm:ss" ) );
     private final boolean coloured;
 
     @Override
     @SuppressWarnings("ThrowableResultIgnored")
     public String format(LogRecord record) {
-        StringBuilder formatted = new StringBuilder();
+        StringBuilder formatted = new StringBuilder ( );
 
-        formatted.append(date.format(record.getMillis()));
-        formatted.append(" [");
-        appendLevel(formatted, record.getLevel());
-        formatted.append("] ");
-        formatted.append(formatMessage(record));
-        formatted.append('\n');
+        formatted.append ( date.format ( record.getMillis ( ) ) );
+        formatted.append ( " [" );
+        appendLevel ( formatted, record.getLevel ( ) );
+        formatted.append ( "] " );
+        formatted.append ( formatMessage ( record ) );
+        formatted.append ( '\n' );
 
-        if (record.getThrown() != null) {
-            StringWriter writer = new StringWriter();
-            record.getThrown().printStackTrace(new PrintWriter(writer));
-            formatted.append(writer);
+        if (record.getThrown ( ) != null) {
+            StringWriter writer = new StringWriter ( );
+            record.getThrown ( ).printStackTrace ( new PrintWriter ( writer ) );
+            formatted.append ( writer );
         }
 
-        return formatted.toString();
+        return formatted.toString ( );
     }
 
     private void appendLevel(StringBuilder builder, Level level) {
         if (!coloured) {
-            builder.append(level.getLocalizedName());
+            builder.append ( level.getLocalizedName ( ) );
             return;
         }
 
@@ -56,6 +56,6 @@ public class ConciseFormatter extends Formatter {
             color = ChatColor.AQUA;
         }
 
-        builder.append(color).append(level.getLocalizedName()).append(ChatColor.RESET);
+        builder.append ( color ).append ( level.getLocalizedName ( ) ).append ( ChatColor.RESET );
     }
 }

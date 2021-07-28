@@ -14,16 +14,16 @@ public class LegacyHandshake extends DefinedPacket {
 
     @Override
     public void read(ByteBuf buf) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException ( "Not supported yet." );
     }
 
     @Override
     public void write(ByteBuf buf) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException ( "Not supported yet." );
     }
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
-        handler.handle(this);
+        handler.handle ( this );
     }
 }

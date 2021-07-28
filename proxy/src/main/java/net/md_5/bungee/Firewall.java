@@ -9,7 +9,7 @@ public class Firewall {
     private static LinkedHashMap<String, Integer> blocked;
 
     public static void tickViolation(String address, int point) {
-        ProxyServer.getInstance ().getLogger ().log ( Level.WARNING, "Ticked " + address );
+        ProxyServer.getInstance ( ).getLogger ( ).log ( Level.WARNING, "Ticked " + address );
 
         // TODO: Add a timer
         if (blocked.containsKey ( address )) {

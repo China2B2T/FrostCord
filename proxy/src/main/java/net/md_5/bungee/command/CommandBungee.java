@@ -8,11 +8,11 @@ import net.md_5.bungee.api.plugin.Command;
 public class CommandBungee extends Command {
 
     public CommandBungee() {
-        super("bungee");
+        super ( "bungee" );
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        sender.sendMessage(ChatColor.GOLD + "This proxy is running " + ProxyServer.getInstance().getName() + " version " + ProxyServer.getInstance().getVersion());
+        sender.sendMessage ( ChatColor.GOLD + "This proxy is running " + ProxyServer.getInstance ( ).getName ( ) + " version " + ProxyServer.getInstance ( ).getVersion ( ) );
     }
 }

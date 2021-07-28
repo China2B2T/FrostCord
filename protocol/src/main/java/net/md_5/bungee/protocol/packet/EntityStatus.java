@@ -22,18 +22,18 @@ public class EntityStatus extends DefinedPacket {
 
     @Override
     public void read(ByteBuf buf) {
-        entityId = buf.readInt();
-        status = buf.readByte();
+        entityId = buf.readInt ( );
+        status = buf.readByte ( );
     }
 
     @Override
     public void write(ByteBuf buf) {
-        buf.writeInt(entityId);
-        buf.writeByte(status);
+        buf.writeInt ( entityId );
+        buf.writeByte ( status );
     }
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
-        handler.handle(this);
+        handler.handle ( this );
     }
 }

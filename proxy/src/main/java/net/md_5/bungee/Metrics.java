@@ -34,7 +34,7 @@ public class Metrics extends TimerTask {
             // We use the inverse of firstPost because if it is the first time we are posting,
             // it is not a interval ping, so it evaluates to FALSE
             // Each time thereafter it will evaluate to TRUE, i.e PING!
-            postPlugin(!firstPost);
+            postPlugin ( !firstPost );
 
             // After the first post we set firstPost to false
             // Each post thereafter will be a ping
@@ -52,39 +52,39 @@ public class Metrics extends TimerTask {
      */
     private void postPlugin(boolean isPing) throws IOException {
         // Construct the post data
-        final StringBuilder data = new StringBuilder();
-        data.append(encode("guid")).append('=').append(encode(BungeeCord.getInstance().config.getUuid()));
-        encodeDataPair(data, "version", ProxyServer.getInstance().getVersion());
-        encodeDataPair(data, "server", "0");
-        encodeDataPair(data, "players", Integer.toString(ProxyServer.getInstance().getOnlineCount()));
-        encodeDataPair(data, "revision", String.valueOf(REVISION));
+        final StringBuilder data = new StringBuilder ( );
+        data.append ( encode ( "guid" ) ).append ( '=' ).append ( encode ( BungeeCord.getInstance ( ).config.getUuid ( ) ) );
+        encodeDataPair ( data, "version", ProxyServer.getInstance ( ).getVersion ( ) );
+        encodeDataPair ( data, "server", "0" );
+        encodeDataPair ( data, "players", Integer.toString ( ProxyServer.getInstance ( ).getOnlineCount ( ) ) );
+        encodeDataPair ( data, "revision", String.valueOf ( REVISION ) );
 
         // If we're pinging, append it
         if (isPing) {
-            encodeDataPair(data, "ping", "true");
+            encodeDataPair ( data, "ping", "true" );
         }
 
         // Create the url
-        URL url = new URL(BASE_URL + String.format(REPORT_URL, encode("BungeeCord")));
+        URL url = new URL ( BASE_URL + String.format ( REPORT_URL, encode ( "BungeeCord" ) ) );
 
         // Connect to the website
         URLConnection connection;
 
-        connection = url.openConnection();
+        connection = url.openConnection ( );
 
-        connection.setDoOutput(true);
+        connection.setDoOutput ( true );
         final BufferedReader reader;
         final String response;
-        try (OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream())) {
-            writer.write(data.toString());
-            writer.flush();
-            reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            response = reader.readLine();
+        try (OutputStreamWriter writer = new OutputStreamWriter ( connection.getOutputStream ( ) )) {
+            writer.write ( data.toString ( ) );
+            writer.flush ( );
+            reader = new BufferedReader ( new InputStreamReader ( connection.getInputStream ( ) ) );
+            response = reader.readLine ( );
         }
-        reader.close();
+        reader.close ( );
 
-        if (response == null || response.startsWith("ERR")) {
-            throw new IOException(response); //Throw the exception
+        if (response == null || response.startsWith ( "ERR" )) {
+            throw new IOException ( response ); //Throw the exception
         }
     }
 
@@ -105,7 +105,7 @@ public class Metrics extends TimerTask {
      * @throws UnsupportedEncodingException if UTF-8 encoding not supported
      */
     private static void encodeDataPair(final StringBuilder buffer, final String key, final String value) throws UnsupportedEncodingException {
-        buffer.append('&').append(encode(key)).append('=').append(encode(value));
+        buffer.append ( '&' ).append ( encode ( key ) ).append ( '=' ).append ( encode ( value ) );
     }
 
     /**
@@ -116,6 +116,6 @@ public class Metrics extends TimerTask {
      * @throws UnsupportedEncodingException if UTF-8 encoding not supported
      */
     private static String encode(final String text) throws UnsupportedEncodingException {
-        return URLEncoder.encode(text, "UTF-8");
+        return URLEncoder.encode ( text, "UTF-8" );
     }
 }

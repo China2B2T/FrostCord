@@ -45,12 +45,12 @@ public class ServerConnectEvent extends Event implements Cancellable {
 
     @Deprecated
     public ServerConnectEvent(ProxiedPlayer player, ServerInfo target) {
-        this(player, target, Reason.UNKNOWN);
+        this ( player, target, Reason.UNKNOWN );
     }
 
     @Deprecated
     public ServerConnectEvent(ProxiedPlayer player, ServerInfo target, Reason reason) {
-        this(player, target, reason, null);
+        this ( player, target, reason, null );
     }
 
     public ServerConnectEvent(ProxiedPlayer player, ServerInfo target, Reason reason, ServerConnectRequest request) {

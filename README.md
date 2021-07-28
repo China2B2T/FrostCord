@@ -2,6 +2,7 @@ FrostCord
 ==========
 
 FrostCord is a optimized fork of BungeeCord, merged some patches from 3rd-party.
+
 - Travertine
 - Waterfall
 - FlameCord

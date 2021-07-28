@@ -18,22 +18,22 @@ public class ConnectionThrottle {
     private final int throttleLimit;
 
     public ConnectionThrottle(int throttleTime, int throttleLimit) {
-        this(Ticker.systemTicker(), throttleTime, throttleLimit);
+        this ( Ticker.systemTicker ( ), throttleTime, throttleLimit );
     }
 
     @VisibleForTesting
     ConnectionThrottle(Ticker ticker, int throttleTime, int throttleLimit) {
-        this.throttle = CacheBuilder.newBuilder()
-                .ticker(ticker)
-                .concurrencyLevel(Runtime.getRuntime().availableProcessors())
-                .initialCapacity(100)
-                .expireAfterWrite(throttleTime, TimeUnit.MILLISECONDS)
-                .build(new CacheLoader<InetAddress, AtomicInteger>() {
+        this.throttle = CacheBuilder.newBuilder ( )
+                .ticker ( ticker )
+                .concurrencyLevel ( Runtime.getRuntime ( ).availableProcessors ( ) )
+                .initialCapacity ( 100 )
+                .expireAfterWrite ( throttleTime, TimeUnit.MILLISECONDS )
+                .build ( new CacheLoader<InetAddress, AtomicInteger> ( ) {
                     @Override
                     public AtomicInteger load(InetAddress key) throws Exception {
-                        return new AtomicInteger();
+                        return new AtomicInteger ( );
                     }
-                });
+                } );
         this.throttleLimit = throttleLimit;
     }
 
@@ -42,10 +42,10 @@ public class ConnectionThrottle {
             return;
         }
 
-        InetAddress address = ((InetSocketAddress) socketAddress).getAddress();
-        AtomicInteger throttleCount = throttle.getIfPresent(address);
+        InetAddress address = ((InetSocketAddress) socketAddress).getAddress ( );
+        AtomicInteger throttleCount = throttle.getIfPresent ( address );
         if (throttleCount != null) {
-            throttleCount.decrementAndGet();
+            throttleCount.decrementAndGet ( );
         }
     }
 
@@ -54,8 +54,8 @@ public class ConnectionThrottle {
             return false;
         }
 
-        InetAddress address = ((InetSocketAddress) socketAddress).getAddress();
-        int throttleCount = throttle.getUnchecked(address).incrementAndGet();
+        InetAddress address = ((InetSocketAddress) socketAddress).getAddress ( );
+        int throttleCount = throttle.getUnchecked ( address ).incrementAndGet ( );
 
         return throttleCount > throttleLimit;
     }

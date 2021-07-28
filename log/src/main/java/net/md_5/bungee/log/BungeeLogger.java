@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 public class BungeeLogger extends Logger {
 
-    private final LogDispatcher dispatcher = new LogDispatcher(this);
+    private final LogDispatcher dispatcher = new LogDispatcher ( this );
 
     @SuppressWarnings(
             {
@@ -19,33 +19,33 @@ public class BungeeLogger extends Logger {
             })
     @SuppressFBWarnings("SC_START_IN_CTOR")
     public BungeeLogger(String loggerName, String filePattern, ConsoleReader reader) {
-        super(loggerName, null);
-        setLevel(Level.ALL);
+        super ( loggerName, null );
+        setLevel ( Level.ALL );
 
         try {
-            FileHandler fileHandler = new FileHandler(filePattern, 1 << 24, 8, true);
-            fileHandler.setLevel(Level.parse(System.getProperty("net.md_5.bungee.file-log-level", "INFO")));
-            fileHandler.setFormatter(new ConciseFormatter(false));
-            addHandler(fileHandler);
+            FileHandler fileHandler = new FileHandler ( filePattern, 1 << 24, 8, true );
+            fileHandler.setLevel ( Level.parse ( System.getProperty ( "net.md_5.bungee.file-log-level", "INFO" ) ) );
+            fileHandler.setFormatter ( new ConciseFormatter ( false ) );
+            addHandler ( fileHandler );
 
-            ColouredWriter consoleHandler = new ColouredWriter(reader);
-            consoleHandler.setLevel(Level.parse(System.getProperty("net.md_5.bungee.console-log-level", "INFO")));
-            consoleHandler.setFormatter(new ConciseFormatter(true));
-            addHandler(consoleHandler);
+            ColouredWriter consoleHandler = new ColouredWriter ( reader );
+            consoleHandler.setLevel ( Level.parse ( System.getProperty ( "net.md_5.bungee.console-log-level", "INFO" ) ) );
+            consoleHandler.setFormatter ( new ConciseFormatter ( true ) );
+            addHandler ( consoleHandler );
         } catch (IOException ex) {
-            System.err.println("Could not register logger!");
-            ex.printStackTrace();
+            System.err.println ( "Could not register logger!" );
+            ex.printStackTrace ( );
         }
 
-        dispatcher.start();
+        dispatcher.start ( );
     }
 
     @Override
     public void log(LogRecord record) {
-        dispatcher.queue(record);
+        dispatcher.queue ( record );
     }
 
     void doLog(LogRecord record) {
-        super.log(record);
+        super.log ( record );
     }
 }

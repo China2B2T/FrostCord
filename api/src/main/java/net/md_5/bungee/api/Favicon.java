@@ -21,16 +21,16 @@ import java.io.IOException;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class Favicon {
 
-    private static final TypeAdapter<Favicon> FAVICON_TYPE_ADAPTER = new TypeAdapter<Favicon>() {
+    private static final TypeAdapter<Favicon> FAVICON_TYPE_ADAPTER = new TypeAdapter<Favicon> ( ) {
         @Override
         public void write(JsonWriter out, Favicon value) throws IOException {
-            TypeAdapters.STRING.write(out, value == null ? null : value.getEncoded());
+            TypeAdapters.STRING.write ( out, value == null ? null : value.getEncoded ( ) );
         }
 
         @Override
         public Favicon read(JsonReader in) throws IOException {
-            String enc = TypeAdapters.STRING.read(in);
-            return enc == null ? null : create(enc);
+            String enc = TypeAdapters.STRING.read ( in );
+            return enc == null ? null : create ( enc );
         }
     };
 
@@ -55,31 +55,31 @@ public class Favicon {
      */
     public static Favicon create(BufferedImage image) {
         // check size
-        if (image.getWidth() != 64 || image.getHeight() != 64) {
-            throw new IllegalArgumentException("Server icon must be exactly 64x64 pixels");
+        if (image.getWidth ( ) != 64 || image.getHeight ( ) != 64) {
+            throw new IllegalArgumentException ( "Server icon must be exactly 64x64 pixels" );
         }
 
         // dump image PNG
         byte[] imageBytes;
         try {
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            ImageIO.write(image, "PNG", stream);
-            imageBytes = stream.toByteArray();
+            ByteArrayOutputStream stream = new ByteArrayOutputStream ( );
+            ImageIO.write ( image, "PNG", stream );
+            imageBytes = stream.toByteArray ( );
         } catch (IOException e) {
             // ByteArrayOutputStream should never throw this
-            throw new AssertionError(e);
+            throw new AssertionError ( e );
         }
 
         // encode with header
-        String encoded = "data:image/png;base64," + BaseEncoding.base64().encode(imageBytes);
+        String encoded = "data:image/png;base64," + BaseEncoding.base64 ( ).encode ( imageBytes );
 
         // check encoded image size
-        if (encoded.length() > Short.MAX_VALUE) {
-            throw new IllegalArgumentException("Favicon file too large for server to process");
+        if (encoded.length ( ) > Short.MAX_VALUE) {
+            throw new IllegalArgumentException ( "Favicon file too large for server to process" );
         }
 
         // create
-        return new Favicon(encoded);
+        return new Favicon ( encoded );
     }
 
     /**
@@ -91,6 +91,6 @@ public class Favicon {
      */
     @Deprecated
     public static Favicon create(String encodedString) {
-        return new Favicon(encodedString);
+        return new Favicon ( encodedString );
     }
 }

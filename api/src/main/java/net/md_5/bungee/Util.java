@@ -26,27 +26,27 @@ public class Util {
     public static SocketAddress getAddr(String hostline) {
         URI uri = null;
         try {
-            uri = new URI(hostline);
+            uri = new URI ( hostline );
         } catch (URISyntaxException ex) {
         }
 
-        if (uri != null && "unix".equals(uri.getScheme())) {
-            return new DomainSocketAddress(uri.getPath());
+        if (uri != null && "unix".equals ( uri.getScheme ( ) )) {
+            return new DomainSocketAddress ( uri.getPath ( ) );
         }
 
-        if (uri == null || uri.getHost() == null) {
+        if (uri == null || uri.getHost ( ) == null) {
             try {
-                uri = new URI("tcp://" + hostline);
+                uri = new URI ( "tcp://" + hostline );
             } catch (URISyntaxException ex) {
-                throw new IllegalArgumentException("Bad hostline: " + hostline, ex);
+                throw new IllegalArgumentException ( "Bad hostline: " + hostline, ex );
             }
         }
 
-        if (uri.getHost() == null) {
-            throw new IllegalArgumentException("Invalid host/address: " + hostline);
+        if (uri.getHost ( ) == null) {
+            throw new IllegalArgumentException ( "Invalid host/address: " + hostline );
         }
 
-        return new InetSocketAddress(uri.getHost(), (uri.getPort()) == -1 ? DEFAULT_PORT : uri.getPort());
+        return new InetSocketAddress ( uri.getHost ( ), (uri.getPort ( )) == -1 ? DEFAULT_PORT : uri.getPort ( ) );
     }
 
     /**
@@ -56,7 +56,7 @@ public class Util {
      * @return the hex representation of the integer
      */
     public static String hex(int i) {
-        return String.format("0x%02X", i);
+        return String.format ( "0x%02X", i );
     }
 
     /**
@@ -68,17 +68,17 @@ public class Util {
      */
     public static String exception(Throwable t) {
         // TODO: We should use clear manually written exceptions
-        StackTraceElement[] trace = t.getStackTrace();
-        return t.getClass().getSimpleName() + " : " + t.getMessage()
-                + ((trace.length > 0) ? " @ " + t.getStackTrace()[0].getClassName() + ":" + t.getStackTrace()[0].getLineNumber() : "");
+        StackTraceElement[] trace = t.getStackTrace ( );
+        return t.getClass ( ).getSimpleName ( ) + " : " + t.getMessage ( )
+                + ((trace.length > 0) ? " @ " + t.getStackTrace ( )[0].getClassName ( ) + ":" + t.getStackTrace ( )[0].getLineNumber ( ) : "");
     }
 
     public static String csv(Iterable<?> objects) {
-        return format(objects, ", ");
+        return format ( objects, ", " );
     }
 
     public static String format(Iterable<?> objects, String separators) {
-        return Joiner.on(separators).join(objects);
+        return Joiner.on ( separators ).join ( objects );
     }
 
     /**
@@ -88,6 +88,6 @@ public class Util {
      * @return The result
      */
     public static UUID getUUID(String uuid) {
-        return new UUID(UnsignedLongs.parseUnsignedLong(uuid.substring(0, 16), 16), UnsignedLongs.parseUnsignedLong(uuid.substring(16), 16));
+        return new UUID ( UnsignedLongs.parseUnsignedLong ( uuid.substring ( 0, 16 ), 16 ), UnsignedLongs.parseUnsignedLong ( uuid.substring ( 16 ), 16 ) );
     }
 }

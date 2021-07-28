@@ -31,7 +31,7 @@ public class TabCompleteResponseEvent extends TargetedEvent implements Cancellab
     private final List<String> suggestions;
 
     public TabCompleteResponseEvent(Connection sender, Connection receiver, List<String> suggestions) {
-        super(sender, receiver);
+        super ( sender, receiver );
         this.suggestions = suggestions;
     }
 }

@@ -18,16 +18,16 @@ public class ViewDistance extends DefinedPacket {
 
     @Override
     public void read(ByteBuf buf) {
-        distance = DefinedPacket.readVarInt(buf);
+        distance = DefinedPacket.readVarInt ( buf );
     }
 
     @Override
     public void write(ByteBuf buf) {
-        DefinedPacket.writeVarInt(distance, buf);
+        DefinedPacket.writeVarInt ( distance, buf );
     }
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
-        handler.handle(this);
+        handler.handle ( this );
     }
 }

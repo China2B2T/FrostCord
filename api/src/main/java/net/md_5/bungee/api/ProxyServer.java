@@ -30,8 +30,8 @@ public abstract class ProxyServer {
      * @param instance the new instance to set
      */
     public static void setInstance(ProxyServer instance) {
-        Preconditions.checkNotNull(instance, "instance");
-        Preconditions.checkArgument(ProxyServer.instance == null, "Instance already set");
+        Preconditions.checkNotNull ( instance, "instance" );
+        Preconditions.checkArgument ( ProxyServer.instance == null, "Instance already set" );
         ProxyServer.instance = instance;
     }
 

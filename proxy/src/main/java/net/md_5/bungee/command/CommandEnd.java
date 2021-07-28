@@ -12,15 +12,15 @@ import net.md_5.bungee.api.plugin.Command;
 public class CommandEnd extends Command {
 
     public CommandEnd() {
-        super("end", "bungeecord.command.end");
+        super ( "end", "bungeecord.command.end" );
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            BungeeCord.getInstance().stop();
+            BungeeCord.getInstance ( ).stop ( );
         } else {
-            BungeeCord.getInstance().stop(Joiner.on(' ').join(args));
+            BungeeCord.getInstance ( ).stop ( Joiner.on ( ' ' ).join ( args ) );
         }
     }
 }

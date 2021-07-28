@@ -26,9 +26,9 @@ enum ForgeClientHandshakeState implements IForgeClientPacketHandler<ForgeClientH
     START {
         @Override
         public ForgeClientHandshakeState handle(PluginMessage message, UserConnection con) {
-            ForgeLogger.logClient(ForgeLogger.LogDirection.RECEIVED, this.name(), message);
-            con.unsafe().sendPacket(message);
-            con.getForgeClientHandler().setState(HELLO);
+            ForgeLogger.logClient ( ForgeLogger.LogDirection.RECEIVED, this.name ( ), message );
+            con.unsafe ( ).sendPacket ( message );
+            con.getForgeClientHandler ( ).setState ( HELLO );
             return HELLO;
         }
 
@@ -52,10 +52,10 @@ enum ForgeClientHandshakeState implements IForgeClientPacketHandler<ForgeClientH
     HELLO {
         @Override
         public ForgeClientHandshakeState handle(PluginMessage message, UserConnection con) {
-            ForgeLogger.logClient(ForgeLogger.LogDirection.RECEIVED, this.name(), message);
+            ForgeLogger.logClient ( ForgeLogger.LogDirection.RECEIVED, this.name ( ), message );
             // Server Hello.
-            if (message.getData()[0] == 0) {
-                con.unsafe().sendPacket(message);
+            if (message.getData ( )[0] == 0) {
+                con.unsafe ( ).sendPacket ( message );
             }
 
             return this;
@@ -64,28 +64,28 @@ enum ForgeClientHandshakeState implements IForgeClientPacketHandler<ForgeClientH
         @Override
         public ForgeClientHandshakeState send(PluginMessage message, UserConnection con) {
             // Client Hello.
-            if (message.getData()[0] == 1) {
+            if (message.getData ( )[0] == 1) {
                 return this;
             }
 
             // Mod list.
-            if (message.getData()[0] == 2) {
-                if (con.getForgeClientHandler().getClientModList() == null) {
+            if (message.getData ( )[0] == 2) {
+                if (con.getForgeClientHandler ( ).getClientModList ( ) == null) {
                     // This is the first Forge connection - so get the mods now.
                     // Once we've done it, no point doing it again.
-                    Map<String, String> clientModList = ForgeUtils.readModList(message);
-                    con.getForgeClientHandler().setClientModList(clientModList);
+                    Map<String, String> clientModList = ForgeUtils.readModList ( message );
+                    con.getForgeClientHandler ( ).setClientModList ( clientModList );
 
                     // If the user is below 1.8, we need to check the version of FML - it's not always an OK version.
-                    if (ProtocolConstants.isBeforeOrEq(con.getPendingConnection().getVersion(), ProtocolConstants.MINECRAFT_1_7_6)) {
+                    if (ProtocolConstants.isBeforeOrEq ( con.getPendingConnection ( ).getVersion ( ), ProtocolConstants.MINECRAFT_1_7_6 )) {
                         // Get the version from the mod list.
-                        int buildNumber = ForgeUtils.getFmlBuildNumber(clientModList);
+                        int buildNumber = ForgeUtils.getFmlBuildNumber ( clientModList );
 
                         // If we get 0, we're probably using a testing build, so let it though. Otherwise, check the build number.
                         if (buildNumber < ForgeConstants.FML_MIN_BUILD_VERSION && buildNumber != 0) {
                             // Mark the user as an old Forge user. This will then cause any Forge ServerConnectors to cancel any
                             // connections to it.
-                            con.getForgeClientHandler().setForgeOutdated(true);
+                            con.getForgeClientHandler ( ).setForgeOutdated ( true );
                         }
                     }
                     // Travertine end
@@ -101,10 +101,10 @@ enum ForgeClientHandshakeState implements IForgeClientPacketHandler<ForgeClientH
     WAITINGSERVERDATA {
         @Override
         public ForgeClientHandshakeState handle(PluginMessage message, UserConnection con) {
-            ForgeLogger.logClient(ForgeLogger.LogDirection.RECEIVED, this.name(), message);
+            ForgeLogger.logClient ( ForgeLogger.LogDirection.RECEIVED, this.name ( ), message );
             // Mod list.
-            if (message.getData()[0] == 2) {
-                con.unsafe().sendPacket(message);
+            if (message.getData ( )[0] == 2) {
+                con.unsafe ( ).sendPacket ( message );
             }
 
             return this;
@@ -119,14 +119,14 @@ enum ForgeClientHandshakeState implements IForgeClientPacketHandler<ForgeClientH
     WAITINGSERVERCOMPLETE {
         @Override
         public ForgeClientHandshakeState handle(PluginMessage message, UserConnection con) {
-            ForgeLogger.logClient(ForgeLogger.LogDirection.RECEIVED, this.name(), message);
+            ForgeLogger.logClient ( ForgeLogger.LogDirection.RECEIVED, this.name ( ), message );
             // Mod ID's.
-            if (message.getData()[0] == 3) {
-                con.unsafe().sendPacket(message);
+            if (message.getData ( )[0] == 3) {
+                con.unsafe ( ).sendPacket ( message );
                 return this;
             }
 
-            con.unsafe().sendPacket(message); // pass everything else
+            con.unsafe ( ).sendPacket ( message ); // pass everything else
             return this;
         }
 
@@ -140,9 +140,9 @@ enum ForgeClientHandshakeState implements IForgeClientPacketHandler<ForgeClientH
         @Override
         public ForgeClientHandshakeState handle(PluginMessage message, UserConnection con) {
             // Ack.
-            if (message.getData()[0] == -1) {
-                ForgeLogger.logClient(ForgeLogger.LogDirection.RECEIVED, this.name(), message);
-                con.unsafe().sendPacket(message);
+            if (message.getData ( )[0] == -1) {
+                ForgeLogger.logClient ( ForgeLogger.LogDirection.RECEIVED, this.name ( ), message );
+                con.unsafe ( ).sendPacket ( message );
             }
 
             return this;
@@ -158,10 +158,10 @@ enum ForgeClientHandshakeState implements IForgeClientPacketHandler<ForgeClientH
         @Override
         public ForgeClientHandshakeState handle(PluginMessage message, UserConnection con) {
             // Ack.
-            if ((message.getTag().equals(ForgeConstants.FML_HANDSHAKE_TAG) && message.getData()[0] == -1)
-                    || message.getTag().equals(ForgeConstants.FORGE_REGISTER)) {
-                ForgeLogger.logClient(ForgeLogger.LogDirection.RECEIVED, this.name(), message);
-                con.unsafe().sendPacket(message);
+            if ((message.getTag ( ).equals ( ForgeConstants.FML_HANDSHAKE_TAG ) && message.getData ( )[0] == -1)
+                    || message.getTag ( ).equals ( ForgeConstants.FORGE_REGISTER )) {
+                ForgeLogger.logClient ( ForgeLogger.LogDirection.RECEIVED, this.name ( ), message );
+                con.unsafe ( ).sendPacket ( message );
             }
 
             return this;
@@ -178,9 +178,9 @@ enum ForgeClientHandshakeState implements IForgeClientPacketHandler<ForgeClientH
     DONE {
         @Override
         public ForgeClientHandshakeState handle(PluginMessage message, UserConnection con) {
-            ForgeLogger.logClient(ForgeLogger.LogDirection.RECEIVED, this.name(), message);
-            if (message.getTag().equals(ForgeConstants.FORGE_REGISTER)) {
-                con.unsafe().sendPacket(message);
+            ForgeLogger.logClient ( ForgeLogger.LogDirection.RECEIVED, this.name ( ), message );
+            if (message.getTag ( ).equals ( ForgeConstants.FORGE_REGISTER )) {
+                con.unsafe ( ).sendPacket ( message );
             }
 
             return this;

@@ -21,26 +21,26 @@ public class LoginPayloadRequest extends DefinedPacket {
 
     @Override
     public void read(ByteBuf buf) {
-        id = readVarInt(buf);
-        channel = readString(buf);
+        id = readVarInt ( buf );
+        channel = readString ( buf );
 
-        int len = buf.readableBytes();
+        int len = buf.readableBytes ( );
         if (len > 1048576) {
-            throw new OverflowPacketException("Payload may not be larger than 1048576 bytes");
+            throw new OverflowPacketException ( "Payload may not be larger than 1048576 bytes" );
         }
         data = new byte[len];
-        buf.readBytes(data);
+        buf.readBytes ( data );
     }
 
     @Override
     public void write(ByteBuf buf) {
-        writeVarInt(id, buf);
-        writeString(channel, buf);
-        buf.writeBytes(data);
+        writeVarInt ( id, buf );
+        writeString ( channel, buf );
+        buf.writeBytes ( data );
     }
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
-        handler.handle(this);
+        handler.handle ( this );
     }
 }

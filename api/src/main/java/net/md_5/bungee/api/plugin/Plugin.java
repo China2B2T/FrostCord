@@ -29,15 +29,15 @@ public class Plugin {
     private Logger logger;
 
     public Plugin() {
-        ClassLoader classLoader = getClass().getClassLoader();
-        Preconditions.checkState(classLoader instanceof PluginClassloader, "Plugin requires " + PluginClassloader.class.getName());
+        ClassLoader classLoader = getClass ( ).getClassLoader ( );
+        Preconditions.checkState ( classLoader instanceof PluginClassloader, "Plugin requires " + PluginClassloader.class.getName ( ) );
 
-        ((PluginClassloader) classLoader).init(this);
+        ((PluginClassloader) classLoader).init ( this );
     }
 
     protected Plugin(ProxyServer proxy, PluginDescription description) {
-        ClassLoader classLoader = getClass().getClassLoader();
-        Preconditions.checkState(!(classLoader instanceof PluginClassloader), "Cannot use initialization constructor at runtime");
+        ClassLoader classLoader = getClass ( ).getClassLoader ( );
+        Preconditions.checkState ( !(classLoader instanceof PluginClassloader), "Cannot use initialization constructor at runtime" );
 
         // init( proxy, description );
     }
@@ -69,7 +69,7 @@ public class Plugin {
      * @return the data folder of this plugin
      */
     public final File getDataFolder() {
-        return new File(getProxy().getPluginsFolder(), getDescription().getName());
+        return new File ( getProxy ( ).getPluginsFolder ( ), getDescription ( ).getName ( ) );
     }
 
     /**
@@ -81,7 +81,7 @@ public class Plugin {
      * exist
      */
     public final InputStream getResourceAsStream(String name) {
-        return getClass().getClassLoader().getResourceAsStream(name);
+        return getClass ( ).getClassLoader ( ).getResourceAsStream ( name );
     }
 
     /**
@@ -93,8 +93,8 @@ public class Plugin {
     final void init(ProxyServer proxy, PluginDescription description) {
         this.proxy = proxy;
         this.description = description;
-        this.file = description.getFile();
-        this.logger = Logger.getLogger(description.getName()); // Waterfall - Handle plugin prefixes in implementation
+        this.file = description.getFile ( );
+        this.logger = Logger.getLogger ( description.getName ( ) ); // Waterfall - Handle plugin prefixes in implementation
     }
 
     //
@@ -103,9 +103,9 @@ public class Plugin {
     @Deprecated
     public ExecutorService getExecutorService() {
         if (service == null) {
-            String name = (getDescription() == null) ? "unknown" : getDescription().getName();
-            service = Executors.newCachedThreadPool(new ThreadFactoryBuilder().setNameFormat(name + " Pool Thread #%1$d")
-                    .setThreadFactory(new GroupedThreadFactory(this, name)).build());
+            String name = (getDescription ( ) == null) ? "unknown" : getDescription ( ).getName ( );
+            service = Executors.newCachedThreadPool ( new ThreadFactoryBuilder ( ).setNameFormat ( name + " Pool Thread #%1$d" )
+                    .setThreadFactory ( new GroupedThreadFactory ( this, name ) ).build ( ) );
         }
         return service;
     }

@@ -28,15 +28,15 @@ public class BungeeTitle implements Title {
     }
 
     private static TitlePacketHolder<TitleTimes> createAnimationPacket() {
-        TitlePacketHolder<TitleTimes> title = new TitlePacketHolder<>(new net.md_5.bungee.protocol.packet.Title(Action.TIMES), new TitleTimes());
+        TitlePacketHolder<TitleTimes> title = new TitlePacketHolder<> ( new net.md_5.bungee.protocol.packet.Title ( Action.TIMES ), new TitleTimes ( ) );
 
-        title.oldPacket.setFadeIn(20);
-        title.oldPacket.setStay(60);
-        title.oldPacket.setFadeOut(20);
+        title.oldPacket.setFadeIn ( 20 );
+        title.oldPacket.setStay ( 60 );
+        title.oldPacket.setFadeOut ( 20 );
 
-        title.newPacket.setFadeIn(20);
-        title.newPacket.setStay(60);
-        title.newPacket.setFadeOut(20);
+        title.newPacket.setFadeIn ( 20 );
+        title.newPacket.setStay ( 60 );
+        title.newPacket.setFadeOut ( 20 );
 
         return title;
     }
@@ -44,86 +44,86 @@ public class BungeeTitle implements Title {
     @Override
     public Title title(BaseComponent text) {
         if (title == null) {
-            net.md_5.bungee.protocol.packet.Title packet = new net.md_5.bungee.protocol.packet.Title(Action.TITLE);
-            title = new TitlePacketHolder<>(packet, packet);
+            net.md_5.bungee.protocol.packet.Title packet = new net.md_5.bungee.protocol.packet.Title ( Action.TITLE );
+            title = new TitlePacketHolder<> ( packet, packet );
         }
 
-        title.oldPacket.setText(ComponentSerializer.toString(text)); // = newPacket
+        title.oldPacket.setText ( ComponentSerializer.toString ( text ) ); // = newPacket
         return this;
     }
 
     @Override
     public Title title(BaseComponent... text) {
         if (title == null) {
-            net.md_5.bungee.protocol.packet.Title packet = new net.md_5.bungee.protocol.packet.Title(Action.TITLE);
-            title = new TitlePacketHolder<>(packet, packet);
+            net.md_5.bungee.protocol.packet.Title packet = new net.md_5.bungee.protocol.packet.Title ( Action.TITLE );
+            title = new TitlePacketHolder<> ( packet, packet );
         }
 
-        title.oldPacket.setText(ComponentSerializer.toString(text)); // = newPacket
+        title.oldPacket.setText ( ComponentSerializer.toString ( text ) ); // = newPacket
         return this;
     }
 
     @Override
     public Title subTitle(BaseComponent text) {
         if (subtitle == null) {
-            subtitle = new TitlePacketHolder<>(new net.md_5.bungee.protocol.packet.Title(Action.SUBTITLE), new Subtitle());
+            subtitle = new TitlePacketHolder<> ( new net.md_5.bungee.protocol.packet.Title ( Action.SUBTITLE ), new Subtitle ( ) );
         }
 
-        String serialized = ComponentSerializer.toString(text);
-        subtitle.oldPacket.setText(serialized);
-        subtitle.newPacket.setText(serialized);
+        String serialized = ComponentSerializer.toString ( text );
+        subtitle.oldPacket.setText ( serialized );
+        subtitle.newPacket.setText ( serialized );
         return this;
     }
 
     @Override
     public Title subTitle(BaseComponent... text) {
         if (subtitle == null) {
-            subtitle = new TitlePacketHolder<>(new net.md_5.bungee.protocol.packet.Title(Action.SUBTITLE), new Subtitle());
+            subtitle = new TitlePacketHolder<> ( new net.md_5.bungee.protocol.packet.Title ( Action.SUBTITLE ), new Subtitle ( ) );
         }
 
-        String serialized = ComponentSerializer.toString(text);
-        subtitle.oldPacket.setText(serialized);
-        subtitle.newPacket.setText(serialized);
+        String serialized = ComponentSerializer.toString ( text );
+        subtitle.oldPacket.setText ( serialized );
+        subtitle.newPacket.setText ( serialized );
         return this;
     }
 
     @Override
     public Title fadeIn(int ticks) {
         if (times == null) {
-            times = createAnimationPacket();
+            times = createAnimationPacket ( );
         }
 
-        times.oldPacket.setFadeIn(ticks);
-        times.newPacket.setFadeIn(ticks);
+        times.oldPacket.setFadeIn ( ticks );
+        times.newPacket.setFadeIn ( ticks );
         return this;
     }
 
     @Override
     public Title stay(int ticks) {
         if (times == null) {
-            times = createAnimationPacket();
+            times = createAnimationPacket ( );
         }
 
-        times.oldPacket.setStay(ticks);
-        times.newPacket.setStay(ticks);
+        times.oldPacket.setStay ( ticks );
+        times.newPacket.setStay ( ticks );
         return this;
     }
 
     @Override
     public Title fadeOut(int ticks) {
         if (times == null) {
-            times = createAnimationPacket();
+            times = createAnimationPacket ( );
         }
 
-        times.oldPacket.setFadeOut(ticks);
-        times.newPacket.setFadeOut(ticks);
+        times.oldPacket.setFadeOut ( ticks );
+        times.newPacket.setFadeOut ( ticks );
         return this;
     }
 
     @Override
     public Title clear() {
         if (clear == null) {
-            clear = new TitlePacketHolder<>(new net.md_5.bungee.protocol.packet.Title(Action.CLEAR), new ClearTitles());
+            clear = new TitlePacketHolder<> ( new net.md_5.bungee.protocol.packet.Title ( Action.CLEAR ), new ClearTitles ( ) );
         }
 
         title = null; // No need to send title if we clear it after that again
@@ -134,7 +134,7 @@ public class BungeeTitle implements Title {
     @Override
     public Title reset() {
         if (reset == null) {
-            reset = new TitlePacketHolder<>(new net.md_5.bungee.protocol.packet.Title(Action.RESET), new ClearTitles(true));
+            reset = new TitlePacketHolder<> ( new net.md_5.bungee.protocol.packet.Title ( Action.RESET ), new ClearTitles ( true ) );
         }
 
         // No need to send these packets if we reset them later
@@ -147,23 +147,23 @@ public class BungeeTitle implements Title {
 
     private static void sendPacket(ProxiedPlayer player, TitlePacketHolder packet) {
         if (packet != null) {
-            if (player.getPendingConnection().getVersion() >= ProtocolConstants.MINECRAFT_1_17) {
-                player.unsafe().sendPacket(packet.newPacket);
+            if (player.getPendingConnection ( ).getVersion ( ) >= ProtocolConstants.MINECRAFT_1_17) {
+                player.unsafe ( ).sendPacket ( packet.newPacket );
             } else {
-                player.unsafe().sendPacket(packet.oldPacket);
+                player.unsafe ( ).sendPacket ( packet.oldPacket );
             }
         }
     }
 
     @Override
     public Title send(ProxiedPlayer player) {
-        if (ProtocolConstants.isBeforeOrEq(player.getPendingConnection().getVersion(), ProtocolConstants.MINECRAFT_1_7_6))
+        if (ProtocolConstants.isBeforeOrEq ( player.getPendingConnection ( ).getVersion ( ), ProtocolConstants.MINECRAFT_1_7_6 ))
             return this;
-        sendPacket(player, clear);
-        sendPacket(player, reset);
-        sendPacket(player, times);
-        sendPacket(player, subtitle);
-        sendPacket(player, title);
+        sendPacket ( player, clear );
+        sendPacket ( player, reset );
+        sendPacket ( player, times );
+        sendPacket ( player, subtitle );
+        sendPacket ( player, title );
         return this;
     }
 }

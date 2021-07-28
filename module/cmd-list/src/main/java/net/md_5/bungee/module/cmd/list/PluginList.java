@@ -6,6 +6,6 @@ public class PluginList extends Plugin {
 
     @Override
     public void onEnable() {
-        getProxy().getPluginManager().registerCommand(this, new CommandList());
+        getProxy ( ).getPluginManager ( ).registerCommand ( this, new CommandList ( ) );
     }
 }

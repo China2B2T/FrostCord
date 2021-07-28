@@ -30,7 +30,7 @@ public class ForgeServerHandler {
     @Getter
     private boolean serverForge = false;
 
-    private final ArrayDeque<PluginMessage> packetQueue = new ArrayDeque<PluginMessage>();
+    private final ArrayDeque<PluginMessage> packetQueue = new ArrayDeque<PluginMessage> ( );
 
     /**
      * Handles any {@link PluginMessage} that contains a FML Handshake or Forge
@@ -40,20 +40,20 @@ public class ForgeServerHandler {
      * @throws IllegalArgumentException If the wrong packet is sent down.
      */
     public void handle(PluginMessage message) throws IllegalArgumentException {
-        if (!message.getTag().equalsIgnoreCase(ForgeConstants.FML_HANDSHAKE_TAG) && !message.getTag().equalsIgnoreCase(ForgeConstants.FORGE_REGISTER)) {
-            throw new IllegalArgumentException("Expecting a Forge REGISTER or FML Handshake packet.");
+        if (!message.getTag ( ).equalsIgnoreCase ( ForgeConstants.FML_HANDSHAKE_TAG ) && !message.getTag ( ).equalsIgnoreCase ( ForgeConstants.FORGE_REGISTER )) {
+            throw new IllegalArgumentException ( "Expecting a Forge REGISTER or FML Handshake packet." );
         }
 
-        message.setAllowExtendedPacket(true); // FML allows extended packets so this must be enabled
+        message.setAllowExtendedPacket ( true ); // FML allows extended packets so this must be enabled
         ForgeServerHandshakeState prevState = state;
-        packetQueue.add(message);
-        state = state.send(message, con);
+        packetQueue.add ( message );
+        state = state.send ( message, con );
         if (state == ForgeServerHandshakeState.DONE || state != prevState) // send packets
         {
             synchronized (packetQueue) {
-                while (!packetQueue.isEmpty()) {
-                    ForgeLogger.logServer(LogDirection.SENDING, prevState.name(), packetQueue.getFirst());
-                    con.getForgeClientHandler().receive(packetQueue.removeFirst());
+                while (!packetQueue.isEmpty ( )) {
+                    ForgeLogger.logServer ( LogDirection.SENDING, prevState.name ( ), packetQueue.getFirst ( ) );
+                    con.getForgeClientHandler ( ).receive ( packetQueue.removeFirst ( ) );
                 }
             }
         }
@@ -66,7 +66,7 @@ public class ForgeServerHandler {
      * @throws IllegalArgumentException if invalid packet received
      */
     public void receive(PluginMessage message) throws IllegalArgumentException {
-        state = state.handle(message, ch);
+        state = state.handle ( message, ch );
     }
 
     /**

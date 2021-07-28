@@ -34,7 +34,7 @@ public class Configuration implements ProxyConfig {
     /**
      * UUID used for metrics.
      */
-    private String uuid = UUID.randomUUID().toString();
+    private String uuid = UUID.randomUUID ( ).toString ( );
     /**
      * Set of all listeners.
      */
@@ -66,66 +66,66 @@ public class Configuration implements ProxyConfig {
     private boolean forgeSupport;
 
     public void load() {
-        ConfigurationAdapter adapter = ProxyServer.getInstance().getConfigurationAdapter();
-        adapter.load();
+        ConfigurationAdapter adapter = ProxyServer.getInstance ( ).getConfigurationAdapter ( );
+        adapter.load ( );
 
-        File fav = new File("server-icon.png");
-        if (fav.exists()) {
+        File fav = new File ( "server-icon.png" );
+        if (fav.exists ( )) {
             try {
-                favicon = Favicon.create(ImageIO.read(fav));
+                favicon = Favicon.create ( ImageIO.read ( fav ) );
             } catch (IOException | IllegalArgumentException ex) {
-                ProxyServer.getInstance().getLogger().log(Level.WARNING, "Could not load server icon", ex);
+                ProxyServer.getInstance ( ).getLogger ( ).log ( Level.WARNING, "Could not load server icon", ex );
             }
         }
 
-        listeners = adapter.getListeners();
-        timeout = adapter.getInt("timeout", timeout);
-        uuid = adapter.getString("stats", uuid);
-        onlineMode = adapter.getBoolean("online_mode", onlineMode);
-        logCommands = adapter.getBoolean("log_commands", logCommands);
-        logPings = adapter.getBoolean("log_pings", logPings);
-        remotePingCache = adapter.getInt("remote_ping_cache", remotePingCache);
-        playerLimit = adapter.getInt("player_limit", playerLimit);
-        serverConnectTimeout = adapter.getInt("server_connect_timeout", serverConnectTimeout);
-        remotePingTimeout = adapter.getInt("remote_ping_timeout", remotePingTimeout);
-        throttle = adapter.getInt("connection_throttle", throttle);
-        throttleLimit = adapter.getInt("connection_throttle_limit", throttleLimit);
-        ipForward = adapter.getBoolean("ip_forward", ipForward);
-        compressionThreshold = adapter.getInt("network_compression_threshold", compressionThreshold);
-        preventProxyConnections = adapter.getBoolean("prevent_proxy_connections", preventProxyConnections);
-        forgeSupport = adapter.getBoolean("forge_support", forgeSupport);
+        listeners = adapter.getListeners ( );
+        timeout = adapter.getInt ( "timeout", timeout );
+        uuid = adapter.getString ( "stats", uuid );
+        onlineMode = adapter.getBoolean ( "online_mode", onlineMode );
+        logCommands = adapter.getBoolean ( "log_commands", logCommands );
+        logPings = adapter.getBoolean ( "log_pings", logPings );
+        remotePingCache = adapter.getInt ( "remote_ping_cache", remotePingCache );
+        playerLimit = adapter.getInt ( "player_limit", playerLimit );
+        serverConnectTimeout = adapter.getInt ( "server_connect_timeout", serverConnectTimeout );
+        remotePingTimeout = adapter.getInt ( "remote_ping_timeout", remotePingTimeout );
+        throttle = adapter.getInt ( "connection_throttle", throttle );
+        throttleLimit = adapter.getInt ( "connection_throttle_limit", throttleLimit );
+        ipForward = adapter.getBoolean ( "ip_forward", ipForward );
+        compressionThreshold = adapter.getInt ( "network_compression_threshold", compressionThreshold );
+        preventProxyConnections = adapter.getBoolean ( "prevent_proxy_connections", preventProxyConnections );
+        forgeSupport = adapter.getBoolean ( "forge_support", forgeSupport );
 
-        disabledCommands = new CaseInsensitiveSet((Collection<String>) adapter.getList("disabled_commands", Arrays.asList("disabledcommandhere")));
+        disabledCommands = new CaseInsensitiveSet ( (Collection<String>) adapter.getList ( "disabled_commands", Arrays.asList ( "disabledcommandhere" ) ) );
 
-        Preconditions.checkArgument(listeners != null && !listeners.isEmpty(), "No listeners defined.");
+        Preconditions.checkArgument ( listeners != null && !listeners.isEmpty ( ), "No listeners defined." );
 
-        Map<String, ServerInfo> newServers = adapter.getServers();
-        Preconditions.checkArgument(newServers != null && !newServers.isEmpty(), "No servers defined");
+        Map<String, ServerInfo> newServers = adapter.getServers ( );
+        Preconditions.checkArgument ( newServers != null && !newServers.isEmpty ( ), "No servers defined" );
 
         if (servers == null) {
-            servers = new CaseInsensitiveMap<>(newServers);
+            servers = new CaseInsensitiveMap<> ( newServers );
         } else {
-            for (ServerInfo oldServer : servers.values()) {
+            for (ServerInfo oldServer : servers.values ( )) {
                 // Don't allow servers to be removed
-                Preconditions.checkArgument(newServers.containsKey(oldServer.getName()), "Server %s removed on reload!", oldServer.getName());
+                Preconditions.checkArgument ( newServers.containsKey ( oldServer.getName ( ) ), "Server %s removed on reload!", oldServer.getName ( ) );
             }
 
             // Add new servers
-            for (Map.Entry<String, ServerInfo> newServer : newServers.entrySet()) {
-                if (!servers.containsValue(newServer.getValue())) {
-                    servers.put(newServer.getKey(), newServer.getValue());
+            for (Map.Entry<String, ServerInfo> newServer : newServers.entrySet ( )) {
+                if (!servers.containsValue ( newServer.getValue ( ) )) {
+                    servers.put ( newServer.getKey ( ), newServer.getValue ( ) );
                 }
             }
         }
 
         for (ListenerInfo listener : listeners) {
-            for (int i = 0; i < listener.getServerPriority().size(); i++) {
-                String server = listener.getServerPriority().get(i);
-                Preconditions.checkArgument(servers.containsKey(server), "Server %s (priority %s) is not defined", server, i);
+            for (int i = 0; i < listener.getServerPriority ( ).size ( ); i++) {
+                String server = listener.getServerPriority ( ).get ( i );
+                Preconditions.checkArgument ( servers.containsKey ( server ), "Server %s (priority %s) is not defined", server, i );
             }
-            for (String server : listener.getForcedHosts().values()) {
-                if (!servers.containsKey(server)) {
-                    ProxyServer.getInstance().getLogger().log(Level.WARNING, "Forced host server {0} is not defined", server);
+            for (String server : listener.getForcedHosts ( ).values ( )) {
+                if (!servers.containsKey ( server )) {
+                    ProxyServer.getInstance ( ).getLogger ( ).log ( Level.WARNING, "Forced host server {0} is not defined", server );
                 }
             }
         }
@@ -134,7 +134,7 @@ public class Configuration implements ProxyConfig {
     @Override
     @Deprecated
     public String getFavicon() {
-        return getFaviconObject().getEncoded();
+        return getFaviconObject ( ).getEncoded ( );
     }
 
     @Override

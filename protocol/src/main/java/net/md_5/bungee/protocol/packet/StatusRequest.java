@@ -23,7 +23,7 @@ public class StatusRequest extends DefinedPacket {
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
-        handler.handle(this);
+        handler.handle ( this );
     }
 
     // Waterfall start: Additional DoS mitigations, courtesy of Velocity

@@ -15,6 +15,6 @@ public class EventHandlerMethod {
     private final Method method;
 
     public void invoke(Object event) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        method.invoke(listener, event);
+        method.invoke ( listener, event );
     }
 }

@@ -9,20 +9,20 @@ public class SelectorComponentSerializer extends BaseComponentSerializer impleme
 
     @Override
     public SelectorComponent deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
-        JsonObject object = element.getAsJsonObject();
-        if (!object.has("selector")) {
-            throw new JsonParseException("Could not parse JSON: missing 'selector' property");
+        JsonObject object = element.getAsJsonObject ( );
+        if (!object.has ( "selector" )) {
+            throw new JsonParseException ( "Could not parse JSON: missing 'selector' property" );
         }
-        SelectorComponent component = new SelectorComponent(object.get("selector").getAsString());
-        deserialize(object, component, context);
+        SelectorComponent component = new SelectorComponent ( object.get ( "selector" ).getAsString ( ) );
+        deserialize ( object, component, context );
         return component;
     }
 
     @Override
     public JsonElement serialize(SelectorComponent component, Type type, JsonSerializationContext context) {
-        JsonObject object = new JsonObject();
-        serialize(object, component, context);
-        object.addProperty("selector", component.getSelector());
+        JsonObject object = new JsonObject ( );
+        serialize ( object, component, context );
+        object.addProperty ( "selector", component.getSelector ( ) );
         return object;
     }
 }

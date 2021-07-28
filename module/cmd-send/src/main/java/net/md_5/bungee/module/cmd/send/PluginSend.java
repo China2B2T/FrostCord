@@ -6,6 +6,6 @@ public class PluginSend extends Plugin {
 
     @Override
     public void onEnable() {
-        getProxy().getPluginManager().registerCommand(this, new CommandSend());
+        getProxy ( ).getPluginManager ( ).registerCommand ( this, new CommandSend ( ) );
     }
 }

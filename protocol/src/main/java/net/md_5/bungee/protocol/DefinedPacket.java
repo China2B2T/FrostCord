@@ -20,31 +20,31 @@ import java.util.UUID;
 public abstract class DefinedPacket {
 
     public static void writeString(String s, ByteBuf buf) {
-        if (s.length() > Short.MAX_VALUE) {
-            throw new OverflowPacketException(String.format("Cannot send string longer than Short.MAX_VALUE (got %s characters)", s.length()));
+        if (s.length ( ) > Short.MAX_VALUE) {
+            throw new OverflowPacketException ( String.format ( "Cannot send string longer than Short.MAX_VALUE (got %s characters)", s.length ( ) ) );
         }
 
-        byte[] b = s.getBytes(Charsets.UTF_8);
-        writeVarInt(b.length, buf);
-        buf.writeBytes(b);
+        byte[] b = s.getBytes ( Charsets.UTF_8 );
+        writeVarInt ( b.length, buf );
+        buf.writeBytes ( b );
     }
 
     public static String readString(ByteBuf buf) {
-        return readString(buf, Short.MAX_VALUE);
+        return readString ( buf, Short.MAX_VALUE );
     }
 
     public static String readString(ByteBuf buf, int maxLen) {
-        int len = readVarInt(buf);
+        int len = readVarInt ( buf );
         if (len > maxLen * 4) {
-            throw new OverflowPacketException(String.format("Cannot receive string longer than %d (got %d bytes)", maxLen * 4, len));
+            throw new OverflowPacketException ( String.format ( "Cannot receive string longer than %d (got %d bytes)", maxLen * 4, len ) );
         }
 
         byte[] b = new byte[len];
-        buf.readBytes(b);
+        buf.readBytes ( b );
 
-        String s = new String(b, Charsets.UTF_8);
-        if (s.length() > maxLen) {
-            throw new OverflowPacketException(String.format("Cannot receive string longer than %d (got %d characters)", maxLen, s.length()));
+        String s = new String ( b, Charsets.UTF_8 );
+        if (s.length ( ) > maxLen) {
+            throw new OverflowPacketException ( String.format ( "Cannot receive string longer than %d (got %d characters)", maxLen, s.length ( ) ) );
         }
 
         return s;
@@ -52,62 +52,62 @@ public abstract class DefinedPacket {
 
     public static void writeArray(byte[] b, ByteBuf buf) {
         if (b.length > Short.MAX_VALUE) {
-            throw new OverflowPacketException(String.format("Cannot send byte array longer than Short.MAX_VALUE (got %s bytes)", b.length));
+            throw new OverflowPacketException ( String.format ( "Cannot send byte array longer than Short.MAX_VALUE (got %s bytes)", b.length ) );
         }
-        writeVarInt(b.length, buf);
-        buf.writeBytes(b);
+        writeVarInt ( b.length, buf );
+        buf.writeBytes ( b );
     }
 
     public static byte[] toArray(ByteBuf buf) {
-        byte[] ret = new byte[buf.readableBytes()];
-        buf.readBytes(ret);
+        byte[] ret = new byte[buf.readableBytes ( )];
+        buf.readBytes ( ret );
 
         return ret;
     }
 
     public static byte[] readArray(ByteBuf buf) {
-        return readArray(buf, buf.readableBytes());
+        return readArray ( buf, buf.readableBytes ( ) );
     }
 
     public static byte[] readArray(ByteBuf buf, int limit) {
-        int len = readVarInt(buf);
+        int len = readVarInt ( buf );
         if (len > limit) {
-            throw new OverflowPacketException(String.format("Cannot receive byte array longer than %s (got %s bytes)", limit, len));
+            throw new OverflowPacketException ( String.format ( "Cannot receive byte array longer than %s (got %s bytes)", limit, len ) );
         }
         byte[] ret = new byte[len];
-        buf.readBytes(ret);
+        buf.readBytes ( ret );
         return ret;
     }
 
     public static int[] readVarIntArray(ByteBuf buf) {
-        int len = readVarInt(buf);
+        int len = readVarInt ( buf );
         int[] ret = new int[len];
 
         for (int i = 0; i < len; i++) {
-            ret[i] = readVarInt(buf);
+            ret[i] = readVarInt ( buf );
         }
 
         return ret;
     }
 
     public static void writeStringArray(List<String> s, ByteBuf buf) {
-        writeVarInt(s.size(), buf);
+        writeVarInt ( s.size ( ), buf );
         for (String str : s) {
-            writeString(str, buf);
+            writeString ( str, buf );
         }
     }
 
     public static List<String> readStringArray(ByteBuf buf) {
-        int len = readVarInt(buf);
-        List<String> ret = new ArrayList<>(len);
+        int len = readVarInt ( buf );
+        List<String> ret = new ArrayList<> ( len );
         for (int i = 0; i < len; i++) {
-            ret.add(readString(buf));
+            ret.add ( readString ( buf ) );
         }
         return ret;
     }
 
     public static int readVarInt(ByteBuf input) {
-        return readVarInt(input, 5);
+        return readVarInt ( input, 5 );
     }
 
     public static int readVarInt(ByteBuf input, int maxBytes) {
@@ -115,12 +115,12 @@ public abstract class DefinedPacket {
         int bytes = 0;
         byte in;
         while (true) {
-            in = input.readByte();
+            in = input.readByte ( );
 
             out |= (in & 0x7F) << (bytes++ * 7);
 
             if (bytes > maxBytes) {
-                throw new RuntimeException("VarInt too big");
+                throw new RuntimeException ( "VarInt too big" );
             }
 
             if ((in & 0x80) != 0x80) {
@@ -141,7 +141,7 @@ public abstract class DefinedPacket {
                 part |= 0x80;
             }
 
-            output.writeByte(part);
+            output.writeByte ( part );
 
             if (value == 0) {
                 break;
@@ -150,11 +150,11 @@ public abstract class DefinedPacket {
     }
 
     public static int readVarShort(ByteBuf buf) {
-        int low = buf.readUnsignedShort();
+        int low = buf.readUnsignedShort ( );
         int high = 0;
         if ((low & 0x8000) != 0) {
             low = low & 0x7FFF;
-            high = buf.readUnsignedByte();
+            high = buf.readUnsignedByte ( );
         }
         return ((high & 0xFF) << 15) | low;
     }
@@ -165,57 +165,57 @@ public abstract class DefinedPacket {
         if (high != 0) {
             low = low | 0x8000;
         }
-        buf.writeShort(low);
+        buf.writeShort ( low );
         if (high != 0) {
-            buf.writeByte(high);
+            buf.writeByte ( high );
         }
     }
 
     public static void writeUUID(UUID value, ByteBuf output) {
-        output.writeLong(value.getMostSignificantBits());
-        output.writeLong(value.getLeastSignificantBits());
+        output.writeLong ( value.getMostSignificantBits ( ) );
+        output.writeLong ( value.getLeastSignificantBits ( ) );
     }
 
     public static UUID readUUID(ByteBuf input) {
-        return new UUID(input.readLong(), input.readLong());
+        return new UUID ( input.readLong ( ), input.readLong ( ) );
     }
 
     public static Tag readTag(ByteBuf input) {
-        Tag tag = NamedTag.read(new DataInputStream(new ByteBufInputStream(input)));
-        Preconditions.checkArgument(!tag.isError(), "Error reading tag: %s", tag.error());
+        Tag tag = NamedTag.read ( new DataInputStream ( new ByteBufInputStream ( input ) ) );
+        Preconditions.checkArgument ( !tag.isError ( ), "Error reading tag: %s", tag.error ( ) );
         return tag;
     }
 
     public static void writeTag(Tag tag, ByteBuf output) {
         try {
-            tag.write(new DataOutputStream(new ByteBufOutputStream(output)));
+            tag.write ( new DataOutputStream ( new ByteBufOutputStream ( output ) ) );
         } catch (IOException ex) {
-            throw new RuntimeException("Exception writing tag", ex);
+            throw new RuntimeException ( "Exception writing tag", ex );
         }
     }
 
     public void read(ByteBuf buf) {
-        throw new UnsupportedOperationException("Packet must implement read method");
+        throw new UnsupportedOperationException ( "Packet must implement read method" );
     }
 
     public void read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        read(buf);
+        read ( buf );
     }
 
     public void read0(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        read(buf, direction, protocolVersion);
+        read ( buf, direction, protocolVersion );
     }
 
     public void write(ByteBuf buf) {
-        throw new UnsupportedOperationException("Packet must implement write method");
+        throw new UnsupportedOperationException ( "Packet must implement write method" );
     }
 
     public void write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        write(buf);
+        write ( buf );
     }
 
     public void write0(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        write(buf, direction, protocolVersion);
+        write ( buf, direction, protocolVersion );
     }
 
     public abstract void handle(AbstractPacketHandler handler) throws Exception;

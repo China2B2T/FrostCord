@@ -20,18 +20,18 @@ public class PlayerListHeaderFooter extends DefinedPacket {
 
     @Override
     public void read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        header = readString(buf);
-        footer = readString(buf);
+        header = readString ( buf );
+        footer = readString ( buf );
     }
 
     @Override
     public void write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        writeString(header, buf);
-        writeString(footer, buf);
+        writeString ( header, buf );
+        writeString ( footer, buf );
     }
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
-        handler.handle(this);
+        handler.handle ( this );
     }
 }

@@ -50,16 +50,16 @@ public class ServerPing {
         private String name;
         private UUID uniqueId;
 
-        private static final UUID md5UUID = Util.getUUID("af74a02d19cb445bb07f6866a861f783");
+        private static final UUID md5UUID = Util.getUUID ( "af74a02d19cb445bb07f6866a861f783" );
 
         public PlayerInfo(String name, String id) {
-            setName(name);
-            setId(id);
+            setName ( name );
+            setId ( id );
         }
 
         public void setId(String id) {
             try {
-                uniqueId = Util.getUUID(id);
+                uniqueId = Util.getUUID ( id );
             } catch (Exception e) {
                 // Fallback on a valid uuid otherwise Minecraft complains
                 uniqueId = md5UUID;
@@ -67,7 +67,7 @@ public class ServerPing {
         }
 
         public String getId() {
-            return uniqueId.toString().replace("-", "");
+            return uniqueId.toString ( ).replace ( "-", "" );
         }
     }
 
@@ -78,7 +78,7 @@ public class ServerPing {
     public static class ModInfo {
 
         private String type = "FML";
-        private List<ModItem> modList = new ArrayList<>();
+        private List<ModItem> modList = new ArrayList<> ( );
     }
 
     @Data
@@ -91,21 +91,21 @@ public class ServerPing {
 
     // Right now, we don't get the mods from the user, so we just use a stock ModInfo object to
     // create the server ping. Vanilla clients will ignore this.
-    private final ModInfo modinfo = new ModInfo();
+    private final ModInfo modinfo = new ModInfo ( );
 
     @Deprecated
     public ServerPing(Protocol version, Players players, String description, String favicon) {
-        this(version, players, new TextComponent(TextComponent.fromLegacyText(description)), favicon == null ? null : Favicon.create(favicon));
+        this ( version, players, new TextComponent ( TextComponent.fromLegacyText ( description ) ), favicon == null ? null : Favicon.create ( favicon ) );
     }
 
     @Deprecated
     public ServerPing(Protocol version, Players players, String description, Favicon favicon) {
-        this(version, players, new TextComponent(TextComponent.fromLegacyText(description)), favicon);
+        this ( version, players, new TextComponent ( TextComponent.fromLegacyText ( description ) ), favicon );
     }
 
     @Deprecated
     public String getFavicon() {
-        return getFaviconObject() == null ? null : getFaviconObject().getEncoded();
+        return getFaviconObject ( ) == null ? null : getFaviconObject ( ).getEncoded ( );
     }
 
     public Favicon getFaviconObject() {
@@ -114,7 +114,7 @@ public class ServerPing {
 
     @Deprecated
     public void setFavicon(String favicon) {
-        setFavicon(favicon == null ? null : Favicon.create(favicon));
+        setFavicon ( favicon == null ? null : Favicon.create ( favicon ) );
     }
 
     public void setFavicon(Favicon favicon) {
@@ -123,12 +123,12 @@ public class ServerPing {
 
     @Deprecated
     public void setDescription(String description) {
-        this.description = new TextComponent(TextComponent.fromLegacyText(description));
+        this.description = new TextComponent ( TextComponent.fromLegacyText ( description ) );
     }
 
     @Deprecated
     public String getDescription() {
-        return BaseComponent.toLegacyText(description);
+        return BaseComponent.toLegacyText ( description );
     }
 
     public void setDescriptionComponent(BaseComponent description) {

@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ProtocolConstants {
 
-    private static final boolean SNAPSHOT_SUPPORT = Boolean.getBoolean("net.md_5.bungee.protocol.snapshot");
+    private static final boolean SNAPSHOT_SUPPORT = Boolean.getBoolean ( "net.md_5.bungee.protocol.snapshot" );
     public static final int MINECRAFT_1_7_2 = 4;
     public static final int MINECRAFT_1_7_6 = 5;
     public static final int MINECRAFT_1_8 = 47;
@@ -42,7 +42,7 @@ public class ProtocolConstants {
     public static final List<Integer> SUPPORTED_VERSION_IDS;
 
     static {
-        ImmutableList.Builder<String> supportedVersions = ImmutableList.<String>builder().add(
+        ImmutableList.Builder<String> supportedVersions = ImmutableList.<String>builder ( ).add (
                 // FrostBin - Remove 1.7 for now
 //                "1.7.x",
                 "1.8.x",
@@ -56,7 +56,7 @@ public class ProtocolConstants {
                 "1.16.x",
                 "1.17.x"
         );
-        ImmutableList.Builder<Integer> supportedVersionIds = ImmutableList.<Integer>builder().add(
+        ImmutableList.Builder<Integer> supportedVersionIds = ImmutableList.<Integer>builder ( ).add (
                 ProtocolConstants.MINECRAFT_1_7_2,
                 ProtocolConstants.MINECRAFT_1_7_6,
                 ProtocolConstants.MINECRAFT_1_8,
@@ -95,8 +95,8 @@ public class ProtocolConstants {
             // supportedVersionIds.add( ProtocolConstants.MINECRAFT_1_17 );
         }
 
-        SUPPORTED_VERSIONS = supportedVersions.build();
-        SUPPORTED_VERSION_IDS = supportedVersionIds.build();
+        SUPPORTED_VERSIONS = supportedVersions.build ( );
+        SUPPORTED_VERSION_IDS = supportedVersionIds.build ( );
     }
 
     public static final boolean isBeforeOrEq(int before, int other) {
