@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import net.md_5.bungee.protocol.AbstractPacketHandler;
-import net.md_5.bungee.protocol.DefinedPacket;
+import net.md_5.bungee.protocol.PortablePacket;
 import net.md_5.bungee.protocol.ProtocolConstants;
 
 import java.util.LinkedList;
@@ -18,7 +18,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class TabCompleteResponse extends DefinedPacket {
+public class TabCompleteResponse extends PortablePacket {
 
     private int transactionId;
     private Suggestions suggestions;

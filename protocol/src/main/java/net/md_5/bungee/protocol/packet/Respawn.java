@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import net.md_5.bungee.protocol.AbstractPacketHandler;
-import net.md_5.bungee.protocol.DefinedPacket;
+import net.md_5.bungee.protocol.PortablePacket;
 import net.md_5.bungee.protocol.ProtocolConstants;
 import se.llbit.nbt.Tag;
 
@@ -14,7 +14,7 @@ import se.llbit.nbt.Tag;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Respawn extends DefinedPacket {
+public class Respawn extends PortablePacket {
 
     private Object dimension;
     private String worldName;

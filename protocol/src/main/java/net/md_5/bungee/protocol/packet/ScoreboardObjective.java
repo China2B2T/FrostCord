@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import net.md_5.bungee.protocol.AbstractPacketHandler;
-import net.md_5.bungee.protocol.MultiVersionPacketV17;
+import net.md_5.bungee.protocol.PortablePacket;
 import net.md_5.bungee.protocol.ProtocolConstants;
 
 import java.util.Locale;
@@ -15,7 +15,7 @@ import java.util.Locale;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class ScoreboardObjective extends MultiVersionPacketV17 {
+public class ScoreboardObjective extends PortablePacket {
 
     private String name;
     private String value;

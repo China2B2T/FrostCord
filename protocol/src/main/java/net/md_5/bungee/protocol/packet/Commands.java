@@ -22,7 +22,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import net.md_5.bungee.protocol.AbstractPacketHandler;
-import net.md_5.bungee.protocol.DefinedPacket;
+import net.md_5.bungee.protocol.PortablePacket;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -31,7 +31,7 @@ import java.util.concurrent.CompletableFuture;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Commands extends DefinedPacket {
+public class Commands extends PortablePacket {
 
     private static final int FLAG_TYPE = 0x3;
     private static final int FLAG_EXECUTABLE = 0x4;

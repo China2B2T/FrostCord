@@ -6,14 +6,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import net.md_5.bungee.protocol.AbstractPacketHandler;
-import net.md_5.bungee.protocol.MultiVersionPacketV17;
+import net.md_5.bungee.protocol.PortablePacket;
 import net.md_5.bungee.protocol.ProtocolConstants;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class EncryptionRequest extends MultiVersionPacketV17 {
+public class EncryptionRequest extends PortablePacket {
 
     private String serverId;
     private byte[] publicKey;

@@ -6,13 +6,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import net.md_5.bungee.protocol.AbstractPacketHandler;
-import net.md_5.bungee.protocol.DefinedPacket;
+import net.md_5.bungee.protocol.PortablePacket;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class EntityStatus extends DefinedPacket {
+public class EntityStatus extends PortablePacket {
 
     public static final byte DEBUG_INFO_REDUCED = 22;
     public static final byte DEBUG_INFO_NORMAL = 23;

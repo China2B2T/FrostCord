@@ -5,12 +5,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import net.md_5.bungee.protocol.AbstractPacketHandler;
-import net.md_5.bungee.protocol.DefinedPacket;
+import net.md_5.bungee.protocol.PortablePacket;
 
 @Data
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class LegacyPing extends DefinedPacket {
+public class LegacyPing extends PortablePacket {
 
     private final boolean v1_5;
 

@@ -40,6 +40,7 @@ import java.math.BigInteger;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.List;
 import java.util.UUID;
@@ -95,6 +96,12 @@ public class InitialHandler extends PacketHandler implements PendingConnection {
 
     private boolean canSendKickMessage() {
         return thisState == State.USERNAME || thisState == State.ENCRYPT || thisState == State.FINISHED;
+    }
+
+    private static boolean containsHanScript(String s) {
+        return s.codePoints().anyMatch(
+                codepoint ->
+                        Character.UnicodeScript.of(codepoint) == Character.UnicodeScript.HAN);
     }
 
     @Override
@@ -342,7 +349,7 @@ public class InitialHandler extends PacketHandler implements PendingConnection {
 
         // If offline mode and they are already on, don't allow connect
         // We can just check by UUID here as names are based on UUID
-        if (!isOnlineMode ( ) && bungee.getPlayer ( getUniqueId ( ) ) != null) {
+        if (bungee.getPlayer ( getUniqueId ( ) ) != null) {
             disconnect ( bungee.getTranslation ( "already_connected_proxy" ) );
             return;
         }
@@ -355,7 +362,7 @@ public class InitialHandler extends PacketHandler implements PendingConnection {
             if (ch.isClosed ( )) {
                 return;
             }
-            if (onlineMode) {
+            if (onlineMode && !containsHanScript(result.getConnection().getName())) {
                 unsafe ( ).sendPacket ( request = EncryptionUtil.encryptRequest ( ) );
             } else {
                 finish ( );
@@ -405,7 +412,7 @@ public class InitialHandler extends PacketHandler implements PendingConnection {
                     if (obj != null && obj.getId ( ) != null) {
                         loginProfile = obj;
                         name = obj.getName ( );
-                        uniqueId = Util.getUUID ( obj.getId ( ) );
+                        uniqueId = UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(StandardCharsets.UTF_8));
                         finish ( );
                         return;
                     }
@@ -568,7 +575,7 @@ public class InitialHandler extends PacketHandler implements PendingConnection {
     @Override
     public void setUniqueId(UUID uuid) {
         Preconditions.checkState ( thisState == State.USERNAME, "Can only set uuid while state is username" );
-        Preconditions.checkState ( !onlineMode, "Can only set uuid when online mode is false" );
+        // Preconditions.checkState ( !onlineMode, "Can only set uuid when online mode is false" );
         this.uniqueId = uuid;
     }
 

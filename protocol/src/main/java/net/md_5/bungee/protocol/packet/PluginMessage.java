@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import net.md_5.bungee.protocol.AbstractPacketHandler;
-import net.md_5.bungee.protocol.MultiVersionPacketV17;
+import net.md_5.bungee.protocol.PortablePacket;
 import net.md_5.bungee.protocol.ProtocolConstants;
 
 import java.io.ByteArrayInputStream;
@@ -21,7 +21,7 @@ import java.util.Locale;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class PluginMessage extends MultiVersionPacketV17 {
+public class PluginMessage extends PortablePacket {
 
     public static final Function<String, String> MODERNISE = new Function<String, String> ( ) {
         @Override

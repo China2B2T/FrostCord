@@ -95,7 +95,7 @@ public class ColouredWriter extends Handler {
             console.print ( Ansi.ansi ( ).eraseLine ( Erase.ALL ).toString ( ) + ConsoleReader.RESET_LINE + formatAnsi ( s ) + Ansi.ansi ( ).reset ( ).toString ( ) );
             console.drawLine ( );
             console.flush ( );
-        } catch (IOException ex) {
+        }catch (IOException ex) {
         }
     }
 

@@ -3,7 +3,7 @@ package net.md_5.bungee.protocol;
 import com.google.common.base.Preconditions;
 import io.netty.buffer.ByteBuf;
 
-public abstract class MultiVersionPacketV17 extends DefinedPacket {
+public abstract class PortablePacket extends DefinedPacket {
 
     protected void v17Read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
         v17Read ( buf );
