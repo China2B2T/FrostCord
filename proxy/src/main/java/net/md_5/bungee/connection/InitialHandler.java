@@ -365,6 +365,7 @@ public class InitialHandler extends PacketHandler implements PendingConnection {
             if (onlineMode && !containsHanScript(result.getConnection().getName())) {
                 unsafe ( ).sendPacket ( request = EncryptionUtil.encryptRequest ( ) );
             } else {
+                result.getConnection().setOnlineMode(false);
                 finish ( );
             }
             thisState = State.ENCRYPT;
