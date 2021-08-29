@@ -18,16 +18,16 @@ public class ClientStatus extends PortablePacket {
 
     @Override
     public void read(ByteBuf buf) {
-        payload = buf.readByte ( );
+        payload = buf.readByte();
     }
 
     @Override
     public void write(ByteBuf buf) {
-        buf.writeByte ( payload );
+        buf.writeByte(payload);
     }
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
-        handler.handle ( this );
+        handler.handle(this);
     }
 }

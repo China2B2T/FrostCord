@@ -28,25 +28,25 @@ import java.util.regex.Pattern;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ChatComponentTransformer {
 
-    private static final ChatComponentTransformer INSTANCE = new ChatComponentTransformer ( );
+    private static final ChatComponentTransformer INSTANCE = new ChatComponentTransformer();
     /**
      * The Pattern to match entity selectors.
      */
-    private static final Pattern SELECTOR_PATTERN = Pattern.compile ( "^@([pares])(?:\\[([^ ]*)\\])?$" );
+    private static final Pattern SELECTOR_PATTERN = Pattern.compile("^@([pares])(?:\\[([^ ]*)\\])?$");
 
     public BaseComponent[] legacyHoverTransform(ProxiedPlayer player, BaseComponent... components) {
-        if (player.getPendingConnection ( ).getVersion ( ) < ProtocolConstants.MINECRAFT_1_16) {
+        if (player.getPendingConnection().getVersion() < ProtocolConstants.MINECRAFT_1_16) {
             for (int i = 0; i < components.length; i++) {
                 BaseComponent next = components[i];
-                if (next.getHoverEvent ( ) == null || next.getHoverEvent ( ).isLegacy ( )) {
+                if (next.getHoverEvent() == null || next.getHoverEvent().isLegacy()) {
                     continue;
                 }
-                next = next.duplicate ( );
-                next.getHoverEvent ( ).setLegacy ( true );
-                if (next.getHoverEvent ( ).getContents ( ).size ( ) > 1) {
-                    Content exception = next.getHoverEvent ( ).getContents ( ).get ( 0 );
-                    next.getHoverEvent ( ).getContents ( ).clear ( );
-                    next.getHoverEvent ( ).getContents ( ).add ( exception );
+                next = next.duplicate();
+                next.getHoverEvent().setLegacy(true);
+                if (next.getHoverEvent().getContents().size() > 1) {
+                    Content exception = next.getHoverEvent().getContents().get(0);
+                    next.getHoverEvent().getContents().clear();
+                    next.getHoverEvent().getContents().add(exception);
                 }
                 components[i] = next;
             }
@@ -72,7 +72,7 @@ public final class ChatComponentTransformer {
      * @throws IllegalArgumentException if an entity selector pattern is present
      */
     public BaseComponent[] transform(ProxiedPlayer player, BaseComponent... components) {
-        return transform ( player, false, components );
+        return transform(player, false, components);
     }
 
     /**
@@ -93,22 +93,22 @@ public final class ChatComponentTransformer {
         if (components == null || components.length < 1 || (components.length == 1 && components[0] == null)) {
             return new BaseComponent[]
                     {
-                            new TextComponent ( "" )
+                            new TextComponent("")
                     };
         }
 
         if (transformHover) {
-            components = legacyHoverTransform ( player, components );
+            components = legacyHoverTransform(player, components);
         }
 
         for (BaseComponent root : components) {
-            if (root.getExtra ( ) != null && !root.getExtra ( ).isEmpty ( )) {
-                List<BaseComponent> list = Lists.newArrayList ( transform ( player, transformHover, root.getExtra ( ).toArray ( new BaseComponent[0] ) ) );
-                root.setExtra ( list );
+            if (root.getExtra() != null && !root.getExtra().isEmpty()) {
+                List<BaseComponent> list = Lists.newArrayList(transform(player, transformHover, root.getExtra().toArray(new BaseComponent[0])));
+                root.setExtra(list);
             }
 
             if (root instanceof ScoreComponent) {
-                transformScoreComponent ( player, (ScoreComponent) root );
+                transformScoreComponent(player, (ScoreComponent) root);
             }
         }
         return components;
@@ -122,21 +122,21 @@ public final class ChatComponentTransformer {
      * @param component the component to transform
      */
     private void transformScoreComponent(ProxiedPlayer player, ScoreComponent component) {
-        Preconditions.checkArgument ( !isSelectorPattern ( component.getName ( ) ), "Cannot transform entity selector patterns" );
+        Preconditions.checkArgument(!isSelectorPattern(component.getName()), "Cannot transform entity selector patterns");
 
-        if (component.getValue ( ) != null && !component.getValue ( ).isEmpty ( )) {
+        if (component.getValue() != null && !component.getValue().isEmpty()) {
             return; // pre-defined values override scoreboard values
         }
 
         // check for '*' wildcard
-        if (component.getName ( ).equals ( "*" )) {
-            component.setName ( player.getName ( ) );
+        if (component.getName().equals("*")) {
+            component.setName(player.getName());
         }
 
-        if (player.getScoreboard ( ).getObjective ( component.getObjective ( ) ) != null) {
-            Score score = player.getScoreboard ( ).getScore ( component.getName ( ) );
+        if (player.getScoreboard().getObjective(component.getObjective()) != null) {
+            Score score = player.getScoreboard().getScore(component.getName());
             if (score != null) {
-                component.setValue ( Integer.toString ( score.getValue ( ) ) );
+                component.setValue(Integer.toString(score.getValue()));
             }
         }
     }
@@ -148,6 +148,6 @@ public final class ChatComponentTransformer {
      * @return true if it is an entity selector
      */
     public boolean isSelectorPattern(String pattern) {
-        return SELECTOR_PATTERN.matcher ( pattern ).matches ( );
+        return SELECTOR_PATTERN.matcher(pattern).matches();
     }
 }

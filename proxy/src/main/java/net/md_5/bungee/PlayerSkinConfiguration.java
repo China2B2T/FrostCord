@@ -20,7 +20,7 @@ import net.md_5.bungee.api.SkinConfiguration;
 public class PlayerSkinConfiguration implements SkinConfiguration {
 
     // 127 = 01111111
-    static final SkinConfiguration SKIN_SHOW_ALL = new PlayerSkinConfiguration ( (byte) 127 );
+    static final SkinConfiguration SKIN_SHOW_ALL = new PlayerSkinConfiguration((byte) 127);
     //
     private final byte bitmask;
 

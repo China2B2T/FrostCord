@@ -14,30 +14,30 @@ public class BoundedArrayList<E> extends ArrayList<E> {
     }
 
     private void checkSize(int increment) {
-        Preconditions.checkState ( size ( ) + increment <= maxSize, "Adding %s elements would exceed capacity of %s", increment, maxSize );
+        Preconditions.checkState(size() + increment <= maxSize, "Adding %s elements would exceed capacity of %s", increment, maxSize);
     }
 
     @Override
     public boolean add(E e) {
-        checkSize ( 1 );
-        return super.add ( e );
+        checkSize(1);
+        return super.add(e);
     }
 
     @Override
     public void add(int index, E element) {
-        checkSize ( 1 );
-        super.add ( index, element );
+        checkSize(1);
+        super.add(index, element);
     }
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
-        checkSize ( c.size ( ) );
-        return super.addAll ( c );
+        checkSize(c.size());
+        return super.addAll(c);
     }
 
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
-        checkSize ( c.size ( ) );
-        return super.addAll ( index, c );
+        checkSize(c.size());
+        return super.addAll(index, c);
     }
 }

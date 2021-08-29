@@ -31,18 +31,18 @@ public class HandlerBoss extends ChannelInboundHandlerAdapter {
     private PacketHandler handler;
 
     public void setHandler(PacketHandler handler) {
-        Preconditions.checkArgument ( handler != null, "handler" );
+        Preconditions.checkArgument(handler != null, "handler");
         this.handler = handler;
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         if (handler != null) {
-            channel = new ChannelWrapper ( ctx );
-            handler.connected ( channel );
+            channel = new ChannelWrapper(ctx);
+            handler.connected(channel);
 
             if (!(handler instanceof InitialHandler || handler instanceof PingHandler)) {
-                ProxyServer.getInstance ( ).getLogger ( ).log ( Level.INFO, "{0} has connected", handler );
+                ProxyServer.getInstance().getLogger().log(Level.INFO, "{0} has connected", handler);
             }
         }
     }
@@ -50,11 +50,11 @@ public class HandlerBoss extends ChannelInboundHandlerAdapter {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         if (handler != null) {
-            channel.markClosed ( );
-            handler.disconnected ( channel );
+            channel.markClosed();
+            handler.disconnected(channel);
 
             if (!(handler instanceof InitialHandler || handler instanceof PingHandler)) {
-                ProxyServer.getInstance ( ).getLogger ( ).log ( Level.INFO, "{0} has disconnected", handler );
+                ProxyServer.getInstance().getLogger().log(Level.INFO, "{0} has disconnected", handler);
             }
         }
     }
@@ -62,7 +62,7 @@ public class HandlerBoss extends ChannelInboundHandlerAdapter {
     @Override
     public void channelWritabilityChanged(ChannelHandlerContext ctx) throws Exception {
         if (handler != null) {
-            handler.writabilityChanged ( channel );
+            handler.writabilityChanged(channel);
         }
     }
 
@@ -71,91 +71,91 @@ public class HandlerBoss extends ChannelInboundHandlerAdapter {
         if (msg instanceof HAProxyMessage) {
             HAProxyMessage proxy = (HAProxyMessage) msg;
             try {
-                if (proxy.sourceAddress ( ) != null) {
-                    InetSocketAddress newAddress = new InetSocketAddress ( proxy.sourceAddress ( ), proxy.sourcePort ( ) );
+                if (proxy.sourceAddress() != null) {
+                    InetSocketAddress newAddress = new InetSocketAddress(proxy.sourceAddress(), proxy.sourcePort());
 
-                    ProxyServer.getInstance ( ).getLogger ( ).log ( Level.FINE, "Set remote address via PROXY {0} -> {1}", new Object[]
+                    ProxyServer.getInstance().getLogger().log(Level.FINE, "Set remote address via PROXY {0} -> {1}", new Object[]
                             {
-                                    channel.getRemoteAddress ( ), newAddress
-                            } );
+                                    channel.getRemoteAddress(), newAddress
+                            });
 
-                    channel.setRemoteAddress ( newAddress );
+                    channel.setRemoteAddress(newAddress);
                 }
             } finally {
-                proxy.release ( );
+                proxy.release();
             }
             return;
         }
 
         if (handler != null) {
             PacketWrapper packet = (PacketWrapper) msg;
-            boolean sendPacket = handler.shouldHandle ( packet );
+            boolean sendPacket = handler.shouldHandle(packet);
             try {
                 if (sendPacket && packet.packet != null) {
                     try {
-                        packet.packet.handle ( handler );
+                        packet.packet.handle(handler);
                     } catch (CancelSendSignal ex) {
                         sendPacket = false;
                     }
                 }
                 if (sendPacket) {
-                    handler.handle ( packet );
+                    handler.handle(packet);
                 }
             } finally {
-                packet.trySingleRelease ( );
+                packet.trySingleRelease();
             }
         }
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        if (ctx.channel ( ).isActive ( )) {
+        if (ctx.channel().isActive()) {
             boolean logExceptions = !(handler instanceof PingHandler);
 
             if (logExceptions) {
                 if (cause instanceof ReadTimeoutException) {
-                    ProxyServer.getInstance ( ).getLogger ( ).log ( Level.WARNING, "{0} - read timed out", handler );
+                    ProxyServer.getInstance().getLogger().log(Level.WARNING, "{0} - read timed out", handler);
                 } else if (cause instanceof DecoderException) {
                     if (cause instanceof CorruptedFrameException) {
-                        ProxyServer.getInstance ( ).getLogger ( ).log ( Level.WARNING, "{0} - corrupted frame: {1}", new Object[]
+                        ProxyServer.getInstance().getLogger().log(Level.WARNING, "{0} - corrupted frame: {1}", new Object[]
                                 {
-                                        handler, cause.getMessage ( )
-                                } );
-                    } else if (cause.getCause ( ) instanceof BadPacketException) {
-                        ProxyServer.getInstance ( ).getLogger ( ).log ( Level.WARNING, "{0} - bad packet ID, are mods in use!? {1}", new Object[]
+                                        handler, cause.getMessage()
+                                });
+                    } else if (cause.getCause() instanceof BadPacketException) {
+                        ProxyServer.getInstance().getLogger().log(Level.WARNING, "{0} - bad packet ID, are mods in use!? {1}", new Object[]
                                 {
-                                        handler, cause.getCause ( ).getMessage ( )
-                                } );
-                    } else if (cause.getCause ( ) instanceof OverflowPacketException) {
-                        ProxyServer.getInstance ( ).getLogger ( ).log ( Level.WARNING, "{0} - overflow in packet detected! {1}", new Object[]
+                                        handler, cause.getCause().getMessage()
+                                });
+                    } else if (cause.getCause() instanceof OverflowPacketException) {
+                        ProxyServer.getInstance().getLogger().log(Level.WARNING, "{0} - overflow in packet detected! {1}", new Object[]
                                 {
-                                        handler, cause.getCause ( ).getMessage ( )
-                                } );
+                                        handler, cause.getCause().getMessage()
+                                });
                     }
                 } else if (cause instanceof IOException || (cause instanceof IllegalStateException && handler instanceof InitialHandler)) {
-                    ProxyServer.getInstance ( ).getLogger ( ).log ( Level.WARNING, "{0} - {1}: {2}", new Object[]
+                    ProxyServer.getInstance().getLogger().log(Level.WARNING, "{0} - {1}: {2}", new Object[]
                             {
-                                    handler, cause.getClass ( ).getSimpleName ( ), cause.getMessage ( )
-                            } );
+                                    handler, cause.getClass().getSimpleName(), cause.getMessage()
+                            });
                 } else if (cause instanceof QuietException) {
-                    ProxyServer.getInstance ( ).getLogger ( ).log ( Level.SEVERE, "{0} - encountered exception: {1}", new Object[]
+                    ProxyServer.getInstance().getLogger().log(Level.SEVERE, "{0} - encountered exception: {1}", new Object[]
                             {
                                     handler, cause
-                            } );
+                            });
                 } else {
-                    ProxyServer.getInstance ( ).getLogger ( ).log ( Level.SEVERE, handler + " - encountered exception", cause );
+                    ProxyServer.getInstance().getLogger().log(Level.SEVERE, handler + " - encountered exception", cause);
                 }
             }
 
             if (handler != null) {
                 try {
-                    handler.exception ( cause );
+                    handler.exception(cause);
                 } catch (Exception ex) {
-                    ProxyServer.getInstance ( ).getLogger ( ).log ( Level.SEVERE, handler + " - exception processing exception", ex );
+                    ProxyServer.getInstance().getLogger().log(Level.SEVERE, handler + " - exception processing exception", ex);
                 }
             }
 
-            ctx.close ( );
+            ctx.close();
         }
     }
 }

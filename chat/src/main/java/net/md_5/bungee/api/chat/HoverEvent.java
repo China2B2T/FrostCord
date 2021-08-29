@@ -39,12 +39,12 @@ public final class HoverEvent {
      * @param contents array of contents, provide at least one
      */
     public HoverEvent(Action action, Content... contents) {
-        Preconditions.checkArgument ( contents.length != 0,
-                "Must contain at least one content" );
+        Preconditions.checkArgument(contents.length != 0,
+                "Must contain at least one content");
         this.action = action;
-        this.contents = new ArrayList<> ( );
+        this.contents = new ArrayList<>();
         for (Content it : contents) {
-            addContent ( it );
+            addContent(it);
         }
     }
 
@@ -60,18 +60,18 @@ public final class HoverEvent {
         // Old plugins may have somehow hacked BaseComponent[] into
         // anything other than SHOW_TEXT action. Ideally continue support.
         this.action = action;
-        this.contents = new ArrayList<> ( Collections.singletonList ( new Text ( value ) ) );
+        this.contents = new ArrayList<>(Collections.singletonList(new Text(value)));
         this.legacy = true;
     }
 
     @Deprecated
     public BaseComponent[] getValue() {
-        Content content = contents.get ( 0 );
-        if (content instanceof Text && ((Text) content).getValue ( ) instanceof BaseComponent[]) {
-            return (BaseComponent[]) ((Text) content).getValue ( );
+        Content content = contents.get(0);
+        if (content instanceof Text && ((Text) content).getValue() instanceof BaseComponent[]) {
+            return (BaseComponent[]) ((Text) content).getValue();
         }
 
-        TextComponent component = new TextComponent ( ComponentSerializer.toString ( content ) );
+        TextComponent component = new TextComponent(ComponentSerializer.toString(content));
         return new BaseComponent[]
                 {
                         component
@@ -88,10 +88,10 @@ public final class HoverEvent {
      *                                       hover event action
      */
     public void addContent(Content content) throws UnsupportedOperationException {
-        Preconditions.checkArgument ( !legacy || contents.size ( ) == 0,
-                "Legacy HoverEvent may not have more than one content" );
-        content.assertAction ( action );
-        contents.add ( content );
+        Preconditions.checkArgument(!legacy || contents.size() == 0,
+                "Legacy HoverEvent may not have more than one content");
+        content.assertAction(action);
+        contents.add(content);
     }
 
     public enum Action {
@@ -117,7 +117,7 @@ public final class HoverEvent {
      * @return the class
      */
     public static Class<?> getClass(HoverEvent.Action action, boolean array) {
-        Preconditions.checkArgument ( action != null, "action" );
+        Preconditions.checkArgument(action != null, "action");
 
         switch (action) {
             case SHOW_TEXT:
@@ -127,7 +127,7 @@ public final class HoverEvent {
             case SHOW_ITEM:
                 return (array) ? Item[].class : Item.class;
             default:
-                throw new UnsupportedOperationException ( "Action '" + action.name ( ) + " not supported" );
+                throw new UnsupportedOperationException("Action '" + action.name() + " not supported");
         }
     }
 }

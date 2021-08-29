@@ -42,49 +42,49 @@ public class Team extends PortablePacket {
 
     @Override
     public void v17Read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        name = readString ( buf );
-        mode = buf.readByte ( );
+        name = readString(buf);
+        mode = buf.readByte();
         if (mode == 0 || mode == 2) {
-            displayName = readString ( buf );
-            prefix = readString ( buf );
-            suffix = readString ( buf );
-            friendlyFire = buf.readByte ( );
+            displayName = readString(buf);
+            prefix = readString(buf);
+            suffix = readString(buf);
+            friendlyFire = buf.readByte();
         }
         if (mode == 0 || mode == 3 || mode == 4) {
-            int len = buf.readShort ( );
+            int len = buf.readShort();
             players = new String[len];
             for (int i = 0; i < len; i++) {
-                players[i] = readString ( buf );
+                players[i] = readString(buf);
             }
         }
     }
 
     @Override
     public void read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        name = readString ( buf );
-        mode = buf.readByte ( );
+        name = readString(buf);
+        mode = buf.readByte();
         if (mode == 0 || mode == 2) {
-            displayName = readString ( buf );
+            displayName = readString(buf);
             if (protocolVersion < ProtocolConstants.MINECRAFT_1_13) {
-                prefix = readString ( buf );
-                suffix = readString ( buf );
+                prefix = readString(buf);
+                suffix = readString(buf);
             }
-            friendlyFire = buf.readByte ( );
-            nameTagVisibility = readString ( buf );
+            friendlyFire = buf.readByte();
+            nameTagVisibility = readString(buf);
             if (protocolVersion >= ProtocolConstants.MINECRAFT_1_9) {
-                collisionRule = readString ( buf );
+                collisionRule = readString(buf);
             }
-            color = (protocolVersion >= ProtocolConstants.MINECRAFT_1_13) ? readVarInt ( buf ) : buf.readByte ( );
+            color = (protocolVersion >= ProtocolConstants.MINECRAFT_1_13) ? readVarInt(buf) : buf.readByte();
             if (protocolVersion >= ProtocolConstants.MINECRAFT_1_13) {
-                prefix = readString ( buf );
-                suffix = readString ( buf );
+                prefix = readString(buf);
+                suffix = readString(buf);
             }
         }
         if (mode == 0 || mode == 3 || mode == 4) {
-            int len = readVarInt ( buf );
+            int len = readVarInt(buf);
             players = new String[len];
             for (int i = 0; i < len; i++) {
-                players[i] = readString ( buf );
+                players[i] = readString(buf);
             }
         }
     }
@@ -92,56 +92,56 @@ public class Team extends PortablePacket {
 
     @Override
     public void v17Write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        writeString ( name, buf );
-        buf.writeByte ( mode );
+        writeString(name, buf);
+        buf.writeByte(mode);
         if (mode == 0 || mode == 2) {
-            writeString ( displayName, buf );
-            writeString ( prefix, buf );
-            writeString ( suffix, buf );
-            buf.writeByte ( friendlyFire );
+            writeString(displayName, buf);
+            writeString(prefix, buf);
+            writeString(suffix, buf);
+            buf.writeByte(friendlyFire);
         }
         if (mode == 0 || mode == 3 || mode == 4) {
-            buf.writeShort ( players.length );
+            buf.writeShort(players.length);
             for (String player : players) {
-                writeString ( player, buf );
+                writeString(player, buf);
             }
         }
     }
 
     @Override
     public void write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        writeString ( name, buf );
-        buf.writeByte ( mode );
+        writeString(name, buf);
+        buf.writeByte(mode);
         if (mode == 0 || mode == 2) {
-            writeString ( displayName, buf );
+            writeString(displayName, buf);
             if (protocolVersion < ProtocolConstants.MINECRAFT_1_13) {
-                writeString ( prefix, buf );
-                writeString ( suffix, buf );
+                writeString(prefix, buf);
+                writeString(suffix, buf);
             }
-            buf.writeByte ( friendlyFire );
-            writeString ( nameTagVisibility, buf );
+            buf.writeByte(friendlyFire);
+            writeString(nameTagVisibility, buf);
             if (protocolVersion >= ProtocolConstants.MINECRAFT_1_9) {
-                writeString ( collisionRule, buf );
+                writeString(collisionRule, buf);
             }
 
             if (protocolVersion >= ProtocolConstants.MINECRAFT_1_13) {
-                writeVarInt ( color, buf );
-                writeString ( prefix, buf );
-                writeString ( suffix, buf );
+                writeVarInt(color, buf);
+                writeString(prefix, buf);
+                writeString(suffix, buf);
             } else {
-                buf.writeByte ( color );
+                buf.writeByte(color);
             }
         }
         if (mode == 0 || mode == 3 || mode == 4) {
-            writeVarInt ( players.length, buf );
+            writeVarInt(players.length, buf);
             for (String player : players) {
-                writeString ( player, buf );
+                writeString(player, buf);
             }
         }
     }
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
-        handler.handle ( this );
+        handler.handle(this);
     }
 }

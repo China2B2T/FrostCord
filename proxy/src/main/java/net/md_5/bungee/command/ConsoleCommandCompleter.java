@@ -14,11 +14,11 @@ public class ConsoleCommandCompleter implements Completer {
 
     @Override
     public int complete(String buffer, int cursor, List<CharSequence> candidates) {
-        List<String> suggestions = new ArrayList<> ( );
-        proxy.getPluginManager ( ).dispatchCommand ( proxy.getConsole ( ), buffer, suggestions );
-        candidates.addAll ( suggestions );
+        List<String> suggestions = new ArrayList<>();
+        proxy.getPluginManager().dispatchCommand(proxy.getConsole(), buffer, suggestions);
+        candidates.addAll(suggestions);
 
-        int lastSpace = buffer.lastIndexOf ( ' ' );
-        return (lastSpace == -1) ? cursor - buffer.length ( ) : cursor - (buffer.length ( ) - lastSpace - 1);
+        int lastSpace = buffer.lastIndexOf(' ');
+        return (lastSpace == -1) ? cursor - buffer.length() : cursor - (buffer.length() - lastSpace - 1);
     }
 }

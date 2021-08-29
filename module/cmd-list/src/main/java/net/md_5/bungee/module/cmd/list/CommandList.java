@@ -18,25 +18,25 @@ import java.util.List;
 public class CommandList extends Command {
 
     public CommandList() {
-        super ( "glist", "bungeecord.command.list" );
+        super("glist", "bungeecord.command.list");
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        for (ServerInfo server : ProxyServer.getInstance ( ).getServers ( ).values ( )) {
-            if (!server.canAccess ( sender )) {
+        for (ServerInfo server : ProxyServer.getInstance().getServers().values()) {
+            if (!server.canAccess(sender)) {
                 continue;
             }
 
-            List<String> players = new ArrayList<> ( );
-            for (ProxiedPlayer player : server.getPlayers ( )) {
-                players.add ( player.getDisplayName ( ) );
+            List<String> players = new ArrayList<>();
+            for (ProxiedPlayer player : server.getPlayers()) {
+                players.add(player.getDisplayName());
             }
-            Collections.sort ( players, String.CASE_INSENSITIVE_ORDER );
+            Collections.sort(players, String.CASE_INSENSITIVE_ORDER);
 
-            sender.sendMessage ( ProxyServer.getInstance ( ).getTranslation ( "command_list", server.getName ( ), server.getPlayers ( ).size ( ), Util.format ( players, ChatColor.RESET + ", " ) ) );
+            sender.sendMessage(ProxyServer.getInstance().getTranslation("command_list", server.getName(), server.getPlayers().size(), Util.format(players, ChatColor.RESET + ", ")));
         }
 
-        sender.sendMessage ( ProxyServer.getInstance ( ).getTranslation ( "total_players", ProxyServer.getInstance ( ).getOnlineCount ( ) ) );
+        sender.sendMessage(ProxyServer.getInstance().getTranslation("total_players", ProxyServer.getInstance().getOnlineCount()));
     }
 }

@@ -9,20 +9,20 @@ public class Firewall {
     private static LinkedHashMap<String, Integer> blocked;
 
     public static void tickViolation(String address, int point) {
-        ProxyServer.getInstance ( ).getLogger ( ).log ( Level.WARNING, "Ticked " + address );
+        ProxyServer.getInstance().getLogger().log(Level.WARNING, "Ticked " + address);
 
         // TODO: Add a timer
-        if (blocked.containsKey ( address )) {
-            int vl = blocked.get ( address ) + point;
-            blocked.put ( address, vl );
+        if (blocked.containsKey(address)) {
+            int vl = blocked.get(address) + point;
+            blocked.put(address, vl);
         } else {
-            blocked.put ( address, point );
+            blocked.put(address, point);
         }
     }
 
     public static boolean isBlocked(String address) {
         // TODO: Add specified violation
-        if (blocked.get ( address ) >= 60) {
+        if (blocked.get(address) >= 60) {
             return true;
         }
 

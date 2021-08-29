@@ -19,23 +19,23 @@ public class BungeeTask implements Runnable, ScheduledTask {
     //
     private final long delay;
     private final long period;
-    private final AtomicBoolean running = new AtomicBoolean ( true );
+    private final AtomicBoolean running = new AtomicBoolean(true);
 
     public BungeeTask(BungeeScheduler sched, int id, Plugin owner, Runnable task, long delay, long period, TimeUnit unit) {
         this.sched = sched;
         this.id = id;
         this.owner = owner;
         this.task = task;
-        this.delay = unit.toMillis ( delay );
-        this.period = unit.toMillis ( period );
+        this.delay = unit.toMillis(delay);
+        this.period = unit.toMillis(period);
     }
 
     @Override
     public void cancel() {
-        boolean wasRunning = running.getAndSet ( false );
+        boolean wasRunning = running.getAndSet(false);
 
         if (wasRunning) {
-            sched.cancel0 ( this );
+            sched.cancel0(this);
         }
     }
 
@@ -43,17 +43,17 @@ public class BungeeTask implements Runnable, ScheduledTask {
     public void run() {
         if (delay > 0) {
             try {
-                Thread.sleep ( delay );
+                Thread.sleep(delay);
             } catch (InterruptedException ex) {
-                Thread.currentThread ( ).interrupt ( );
+                Thread.currentThread().interrupt();
             }
         }
 
-        while (running.get ( )) {
+        while (running.get()) {
             try {
-                task.run ( );
+                task.run();
             } catch (Throwable t) {
-                ProxyServer.getInstance ( ).getLogger ( ).log ( Level.SEVERE, String.format ( "Task %s encountered an exception", this ), t );
+                ProxyServer.getInstance().getLogger().log(Level.SEVERE, String.format("Task %s encountered an exception", this), t);
             }
 
             // If we have a period of 0 or less, only run once
@@ -62,12 +62,12 @@ public class BungeeTask implements Runnable, ScheduledTask {
             }
 
             try {
-                Thread.sleep ( period );
+                Thread.sleep(period);
             } catch (InterruptedException ex) {
-                Thread.currentThread ( ).interrupt ( );
+                Thread.currentThread().interrupt();
             }
         }
 
-        cancel ( );
+        cancel();
     }
 }

@@ -19,75 +19,75 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class BungeeScheduler implements TaskScheduler {
 
-    private final Object lock = new Object ( );
-    private final AtomicInteger taskCounter = new AtomicInteger ( );
-    private final TIntObjectMap<BungeeTask> tasks = TCollections.synchronizedMap ( new TIntObjectHashMap<BungeeTask> ( ) );
-    private final Multimap<Plugin, BungeeTask> tasksByPlugin = Multimaps.synchronizedMultimap ( HashMultimap.<Plugin, BungeeTask>create ( ) );
+    private final Object lock = new Object();
+    private final AtomicInteger taskCounter = new AtomicInteger();
+    private final TIntObjectMap<BungeeTask> tasks = TCollections.synchronizedMap(new TIntObjectHashMap<BungeeTask>());
+    private final Multimap<Plugin, BungeeTask> tasksByPlugin = Multimaps.synchronizedMultimap(HashMultimap.<Plugin, BungeeTask>create());
     //
-    private final Unsafe unsafe = new Unsafe ( ) {
+    private final Unsafe unsafe = new Unsafe() {
 
         @Override
         public ExecutorService getExecutorService(Plugin plugin) {
-            return plugin.getExecutorService ( );
+            return plugin.getExecutorService();
         }
     };
 
     @Override
     public void cancel(int id) {
-        BungeeTask task = tasks.get ( id );
-        Preconditions.checkArgument ( task != null, "No task with id %s", id );
+        BungeeTask task = tasks.get(id);
+        Preconditions.checkArgument(task != null, "No task with id %s", id);
 
-        task.cancel ( );
+        task.cancel();
     }
 
     void cancel0(BungeeTask task) {
         synchronized (lock) {
-            tasks.remove ( task.getId ( ) );
-            tasksByPlugin.values ( ).remove ( task );
+            tasks.remove(task.getId());
+            tasksByPlugin.values().remove(task);
         }
     }
 
     @Override
     public void cancel(ScheduledTask task) {
-        task.cancel ( );
+        task.cancel();
     }
 
     @Override
     public int cancel(Plugin plugin) {
-        Set<ScheduledTask> toRemove = new HashSet<> ( );
+        Set<ScheduledTask> toRemove = new HashSet<>();
         synchronized (lock) {
-            for (ScheduledTask task : tasksByPlugin.get ( plugin )) {
-                toRemove.add ( task );
+            for (ScheduledTask task : tasksByPlugin.get(plugin)) {
+                toRemove.add(task);
             }
         }
         for (ScheduledTask task : toRemove) {
-            cancel ( task );
+            cancel(task);
         }
-        return toRemove.size ( );
+        return toRemove.size();
     }
 
     @Override
     public ScheduledTask runAsync(Plugin owner, Runnable task) {
-        return schedule ( owner, task, 0, TimeUnit.MILLISECONDS );
+        return schedule(owner, task, 0, TimeUnit.MILLISECONDS);
     }
 
     @Override
     public ScheduledTask schedule(Plugin owner, Runnable task, long delay, TimeUnit unit) {
-        return schedule ( owner, task, delay, 0, unit );
+        return schedule(owner, task, delay, 0, unit);
     }
 
     @Override
     public ScheduledTask schedule(Plugin owner, Runnable task, long delay, long period, TimeUnit unit) {
-        Preconditions.checkNotNull ( owner, "owner" );
-        Preconditions.checkNotNull ( task, "task" );
-        BungeeTask prepared = new BungeeTask ( this, taskCounter.getAndIncrement ( ), owner, task, delay, period, unit );
+        Preconditions.checkNotNull(owner, "owner");
+        Preconditions.checkNotNull(task, "task");
+        BungeeTask prepared = new BungeeTask(this, taskCounter.getAndIncrement(), owner, task, delay, period, unit);
 
         synchronized (lock) {
-            tasks.put ( prepared.getId ( ), prepared );
-            tasksByPlugin.put ( owner, prepared );
+            tasks.put(prepared.getId(), prepared);
+            tasksByPlugin.put(owner, prepared);
         }
 
-        owner.getExecutorService ( ).execute ( prepared );
+        owner.getExecutorService().execute(prepared);
         return prepared;
     }
 

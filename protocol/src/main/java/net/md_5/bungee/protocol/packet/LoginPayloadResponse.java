@@ -6,8 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import net.md_5.bungee.protocol.AbstractPacketHandler;
-import net.md_5.bungee.protocol.PortablePacket;
 import net.md_5.bungee.protocol.OverflowPacketException;
+import net.md_5.bungee.protocol.PortablePacket;
 
 @Data
 @NoArgsConstructor
@@ -20,31 +20,31 @@ public class LoginPayloadResponse extends PortablePacket {
 
     @Override
     public void read(ByteBuf buf) {
-        id = readVarInt ( buf );
+        id = readVarInt(buf);
 
-        if (buf.readBoolean ( )) {
-            int len = buf.readableBytes ( );
+        if (buf.readBoolean()) {
+            int len = buf.readableBytes();
             if (len > 1048576) {
-                throw new OverflowPacketException ( "Payload may not be larger than 1048576 bytes" );
+                throw new OverflowPacketException("Payload may not be larger than 1048576 bytes");
             }
             data = new byte[len];
-            buf.readBytes ( data );
+            buf.readBytes(data);
         }
     }
 
     @Override
     public void write(ByteBuf buf) {
-        writeVarInt ( id, buf );
+        writeVarInt(id, buf);
         if (data != null) {
-            buf.writeBoolean ( true );
-            buf.writeBytes ( data );
+            buf.writeBoolean(true);
+            buf.writeBytes(data);
         } else {
-            buf.writeBoolean ( false );
+            buf.writeBoolean(false);
         }
     }
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
-        handler.handle ( this );
+        handler.handle(this);
     }
 }

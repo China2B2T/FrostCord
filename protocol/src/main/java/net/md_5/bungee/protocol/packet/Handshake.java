@@ -21,22 +21,22 @@ public class Handshake extends DefinedPacket {
 
     @Override
     public void read(ByteBuf buf) {
-        protocolVersion = readVarInt ( buf );
-        host = readString ( buf, 255 );
-        port = buf.readUnsignedShort ( );
-        requestedProtocol = readVarInt ( buf );
+        protocolVersion = readVarInt(buf);
+        host = readString(buf, 255);
+        port = buf.readUnsignedShort();
+        requestedProtocol = readVarInt(buf);
     }
 
     @Override
     public void write(ByteBuf buf) {
-        writeVarInt ( protocolVersion, buf );
-        writeString ( host, buf );
-        buf.writeShort ( port );
-        writeVarInt ( requestedProtocol, buf );
+        writeVarInt(protocolVersion, buf);
+        writeString(host, buf);
+        buf.writeShort(port);
+        writeVarInt(requestedProtocol, buf);
     }
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
-        handler.handle ( this );
+        handler.handle(this);
     }
 }

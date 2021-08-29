@@ -26,7 +26,7 @@ public abstract class Command {
      * @param name the name of this command
      */
     public Command(String name) {
-        this ( name, null );
+        this(name, null);
     }
 
     /**
@@ -38,7 +38,7 @@ public abstract class Command {
      * @param aliases    aliases which map back to this command
      */
     public Command(String name, String permission, String... aliases) {
-        Preconditions.checkArgument ( name != null, "name" );
+        Preconditions.checkArgument(name != null, "name");
         this.name = name;
         this.permission = permission;
         this.aliases = aliases;
@@ -60,6 +60,6 @@ public abstract class Command {
      * @return whether the sender can execute this
      */
     public boolean hasPermission(CommandSender sender) {
-        return permission == null || permission.isEmpty ( ) || sender.hasPermission ( permission );
+        return permission == null || permission.isEmpty() || sender.hasPermission(permission);
     }
 }

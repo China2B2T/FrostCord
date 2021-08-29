@@ -20,16 +20,16 @@ public class SetCompression extends PortablePacket {
 
     @Override
     public void read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        threshold = DefinedPacket.readVarInt ( buf );
+        threshold = DefinedPacket.readVarInt(buf);
     }
 
     @Override
     public void write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        DefinedPacket.writeVarInt ( threshold, buf );
+        DefinedPacket.writeVarInt(threshold, buf);
     }
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
-        handler.handle ( this );
+        handler.handle(this);
     }
 }

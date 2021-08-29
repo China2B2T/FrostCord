@@ -37,14 +37,14 @@ public final class ComponentBuilder {
     @Getter
     private int cursor = -1;
     @Getter
-    private final List<BaseComponent> parts = new ArrayList<BaseComponent> ( );
+    private final List<BaseComponent> parts = new ArrayList<BaseComponent>();
     private BaseComponent dummy;
 
     private ComponentBuilder(BaseComponent[] parts) {
         for (BaseComponent baseComponent : parts) {
-            this.parts.add ( baseComponent.duplicate ( ) );
+            this.parts.add(baseComponent.duplicate());
         }
-        resetCursor ( );
+        resetCursor();
     }
 
     /**
@@ -54,7 +54,7 @@ public final class ComponentBuilder {
      * @param original the original for the new ComponentBuilder.
      */
     public ComponentBuilder(ComponentBuilder original) {
-        this ( original.parts.toArray ( new BaseComponent[0] ) );
+        this(original.parts.toArray(new BaseComponent[0]));
     }
 
     /**
@@ -63,7 +63,7 @@ public final class ComponentBuilder {
      * @param text the first text element
      */
     public ComponentBuilder(String text) {
-        this ( new TextComponent ( text ) );
+        this(new TextComponent(text));
     }
 
     /**
@@ -73,15 +73,15 @@ public final class ComponentBuilder {
      */
     public ComponentBuilder(BaseComponent component) {
 
-        this ( new BaseComponent[]
+        this(new BaseComponent[]
                 {
                         component
-                } );
+                });
     }
 
     private BaseComponent getDummy() {
         if (dummy == null) {
-            dummy = new BaseComponent ( ) {
+            dummy = new BaseComponent() {
                 @Override
                 public BaseComponent duplicate() {
                     return this;
@@ -97,7 +97,7 @@ public final class ComponentBuilder {
      * @return this ComponentBuilder for chaining
      */
     public ComponentBuilder resetCursor() {
-        cursor = parts.size ( ) - 1;
+        cursor = parts.size() - 1;
         return this;
     }
 
@@ -111,8 +111,8 @@ public final class ComponentBuilder {
      *                                   ({@code index < 0 || index >= size()})
      */
     public ComponentBuilder setCursor(int pos) throws IndexOutOfBoundsException {
-        if ((this.cursor != pos) && (pos < 0 || pos >= parts.size ( ))) {
-            throw new IndexOutOfBoundsException ( "Cursor out of bounds (expected between 0 + " + (parts.size ( ) - 1) + ")" );
+        if ((this.cursor != pos) && (pos < 0 || pos >= parts.size())) {
+            throw new IndexOutOfBoundsException("Cursor out of bounds (expected between 0 + " + (parts.size() - 1) + ")");
         }
 
         this.cursor = pos;
@@ -128,7 +128,7 @@ public final class ComponentBuilder {
      * @return this ComponentBuilder for chaining
      */
     public ComponentBuilder append(BaseComponent component) {
-        return append ( component, FormatRetention.ALL );
+        return append(component, FormatRetention.ALL);
     }
 
     /**
@@ -141,16 +141,16 @@ public final class ComponentBuilder {
      * @return this ComponentBuilder for chaining
      */
     public ComponentBuilder append(BaseComponent component, FormatRetention retention) {
-        BaseComponent previous = (parts.isEmpty ( )) ? null : parts.get ( parts.size ( ) - 1 );
+        BaseComponent previous = (parts.isEmpty()) ? null : parts.get(parts.size() - 1);
         if (previous == null) {
             previous = dummy;
             dummy = null;
         }
         if (previous != null) {
-            component.copyFormatting ( previous, retention, false );
+            component.copyFormatting(previous, retention, false);
         }
-        parts.add ( component );
-        resetCursor ( );
+        parts.add(component);
+        resetCursor();
         return this;
     }
 
@@ -163,7 +163,7 @@ public final class ComponentBuilder {
      * @return this ComponentBuilder for chaining
      */
     public ComponentBuilder append(BaseComponent[] components) {
-        return append ( components, FormatRetention.ALL );
+        return append(components, FormatRetention.ALL);
     }
 
     /**
@@ -176,10 +176,10 @@ public final class ComponentBuilder {
      * @return this ComponentBuilder for chaining
      */
     public ComponentBuilder append(BaseComponent[] components, FormatRetention retention) {
-        Preconditions.checkArgument ( components.length != 0, "No components to append" );
+        Preconditions.checkArgument(components.length != 0, "No components to append");
 
         for (BaseComponent component : components) {
-            append ( component, retention );
+            append(component, retention);
         }
 
         return this;
@@ -193,7 +193,7 @@ public final class ComponentBuilder {
      * @return this ComponentBuilder for chaining
      */
     public ComponentBuilder append(String text) {
-        return append ( text, FormatRetention.ALL );
+        return append(text, FormatRetention.ALL);
     }
 
     /**
@@ -205,7 +205,7 @@ public final class ComponentBuilder {
      * @return this ComponentBuilder for chaining
      */
     public ComponentBuilder appendLegacy(String text) {
-        return append ( TextComponent.fromLegacyText ( text ) );
+        return append(TextComponent.fromLegacyText(text));
     }
 
     /**
@@ -218,7 +218,7 @@ public final class ComponentBuilder {
      * @return this ComponentBuilder for chaining
      */
     public ComponentBuilder append(String text, FormatRetention retention) {
-        return append ( new TextComponent ( text ), retention );
+        return append(new TextComponent(text), retention);
     }
 
     /**
@@ -232,7 +232,7 @@ public final class ComponentBuilder {
      * @return this ComponentBuilder for chaining
      */
     public ComponentBuilder append(Joiner joiner) {
-        return joiner.join ( this, FormatRetention.ALL );
+        return joiner.join(this, FormatRetention.ALL);
     }
 
     /**
@@ -247,7 +247,7 @@ public final class ComponentBuilder {
      * @return this ComponentBuilder for chaining
      */
     public ComponentBuilder append(Joiner joiner, FormatRetention retention) {
-        return joiner.join ( this, retention );
+        return joiner.join(this, retention);
     }
 
     /**
@@ -258,8 +258,8 @@ public final class ComponentBuilder {
      *                                   ({@code index < 0 || index >= size()})
      */
     public void removeComponent(int pos) throws IndexOutOfBoundsException {
-        if (parts.remove ( pos ) != null) {
-            resetCursor ( );
+        if (parts.remove(pos) != null) {
+            resetCursor();
         }
     }
 
@@ -272,7 +272,7 @@ public final class ComponentBuilder {
      *                                   ({@code index < 0 || index >= size()})
      */
     public BaseComponent getComponent(int pos) throws IndexOutOfBoundsException {
-        return parts.get ( pos );
+        return parts.get(pos);
     }
 
     /**
@@ -281,7 +281,7 @@ public final class ComponentBuilder {
      * @return the active component or null if builder is empty
      */
     public BaseComponent getCurrentComponent() {
-        return (cursor == -1) ? getDummy ( ) : parts.get ( cursor );
+        return (cursor == -1) ? getDummy() : parts.get(cursor);
     }
 
     /**
@@ -291,7 +291,7 @@ public final class ComponentBuilder {
      * @return this ComponentBuilder for chaining
      */
     public ComponentBuilder color(ChatColor color) {
-        getCurrentComponent ( ).setColor ( color );
+        getCurrentComponent().setColor(color);
         return this;
     }
 
@@ -302,7 +302,7 @@ public final class ComponentBuilder {
      * @return this ComponentBuilder for chaining
      */
     public ComponentBuilder font(String font) {
-        getCurrentComponent ( ).setFont ( font );
+        getCurrentComponent().setFont(font);
         return this;
     }
 
@@ -313,7 +313,7 @@ public final class ComponentBuilder {
      * @return this ComponentBuilder for chaining
      */
     public ComponentBuilder bold(boolean bold) {
-        getCurrentComponent ( ).setBold ( bold );
+        getCurrentComponent().setBold(bold);
         return this;
     }
 
@@ -324,7 +324,7 @@ public final class ComponentBuilder {
      * @return this ComponentBuilder for chaining
      */
     public ComponentBuilder italic(boolean italic) {
-        getCurrentComponent ( ).setItalic ( italic );
+        getCurrentComponent().setItalic(italic);
         return this;
     }
 
@@ -335,7 +335,7 @@ public final class ComponentBuilder {
      * @return this ComponentBuilder for chaining
      */
     public ComponentBuilder underlined(boolean underlined) {
-        getCurrentComponent ( ).setUnderlined ( underlined );
+        getCurrentComponent().setUnderlined(underlined);
         return this;
     }
 
@@ -346,7 +346,7 @@ public final class ComponentBuilder {
      * @return this ComponentBuilder for chaining
      */
     public ComponentBuilder strikethrough(boolean strikethrough) {
-        getCurrentComponent ( ).setStrikethrough ( strikethrough );
+        getCurrentComponent().setStrikethrough(strikethrough);
         return this;
     }
 
@@ -357,7 +357,7 @@ public final class ComponentBuilder {
      * @return this ComponentBuilder for chaining
      */
     public ComponentBuilder obfuscated(boolean obfuscated) {
-        getCurrentComponent ( ).setObfuscated ( obfuscated );
+        getCurrentComponent().setObfuscated(obfuscated);
         return this;
     }
 
@@ -368,7 +368,7 @@ public final class ComponentBuilder {
      * @return this ComponentBuilder for chaining
      */
     public ComponentBuilder insertion(String insertion) {
-        getCurrentComponent ( ).setInsertion ( insertion );
+        getCurrentComponent().setInsertion(insertion);
         return this;
     }
 
@@ -379,7 +379,7 @@ public final class ComponentBuilder {
      * @return this ComponentBuilder for chaining
      */
     public ComponentBuilder event(ClickEvent clickEvent) {
-        getCurrentComponent ( ).setClickEvent ( clickEvent );
+        getCurrentComponent().setClickEvent(clickEvent);
         return this;
     }
 
@@ -390,7 +390,7 @@ public final class ComponentBuilder {
      * @return this ComponentBuilder for chaining
      */
     public ComponentBuilder event(HoverEvent hoverEvent) {
-        getCurrentComponent ( ).setHoverEvent ( hoverEvent );
+        getCurrentComponent().setHoverEvent(hoverEvent);
         return this;
     }
 
@@ -400,7 +400,7 @@ public final class ComponentBuilder {
      * @return this ComponentBuilder for chaining
      */
     public ComponentBuilder reset() {
-        return retain ( FormatRetention.NONE );
+        return retain(FormatRetention.NONE);
     }
 
     /**
@@ -410,7 +410,7 @@ public final class ComponentBuilder {
      * @return this ComponentBuilder for chaining
      */
     public ComponentBuilder retain(FormatRetention retention) {
-        getCurrentComponent ( ).retain ( retention );
+        getCurrentComponent().retain(retention);
         return this;
     }
 
@@ -421,10 +421,10 @@ public final class ComponentBuilder {
      * @return the created components
      */
     public BaseComponent[] create() {
-        BaseComponent[] cloned = new BaseComponent[parts.size ( )];
+        BaseComponent[] cloned = new BaseComponent[parts.size()];
         int i = 0;
         for (BaseComponent part : parts) {
-            cloned[i++] = part.duplicate ( );
+            cloned[i++] = part.duplicate();
         }
         return cloned;
     }

@@ -10,12 +10,12 @@ import java.net.InetSocketAddress;
 public class AddressUtil {
 
     public static String sanitizeAddress(InetSocketAddress addr) {
-        String string = addr.getHostString ( );
+        String string = addr.getHostString();
 
         // Remove IPv6 scope if present
-        if (addr.getAddress ( ) instanceof Inet6Address) {
-            int strip = string.indexOf ( '%' );
-            return (strip == -1) ? string : string.substring ( 0, strip );
+        if (addr.getAddress() instanceof Inet6Address) {
+            int strip = string.indexOf('%');
+            return (strip == -1) ? string : string.substring(0, strip);
         } else {
             return string;
         }

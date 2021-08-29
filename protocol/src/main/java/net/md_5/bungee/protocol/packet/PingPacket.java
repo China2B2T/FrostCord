@@ -19,17 +19,17 @@ public class PingPacket extends PortablePacket {
 
     @Override
     public void read(ByteBuf buf) {
-        time = buf.readLong ( );
+        time = buf.readLong();
     }
 
     @Override
     public void write(ByteBuf buf) {
-        buf.writeLong ( time );
+        buf.writeLong(time);
     }
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
-        handler.handle ( this );
+        handler.handle(this);
     }
 
     // Waterfall start: Additional DoS mitigations, courtesy of Velocity

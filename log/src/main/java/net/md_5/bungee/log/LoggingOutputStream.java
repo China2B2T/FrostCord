@@ -11,17 +11,17 @@ import java.util.logging.Logger;
 @RequiredArgsConstructor
 public class LoggingOutputStream extends ByteArrayOutputStream {
 
-    private static final String separator = System.getProperty ( "line.separator" );
+    private static final String separator = System.getProperty("line.separator");
     /*========================================================================*/
     private final Logger logger;
     private final Level level;
 
     @Override
     public void flush() throws IOException {
-        String contents = toString ( Charsets.UTF_8.name ( ) );
-        super.reset ( );
-        if (!contents.isEmpty ( ) && !contents.equals ( separator )) {
-            logger.logp ( level, "", "", contents );
+        String contents = toString(Charsets.UTF_8.name());
+        super.reset();
+        if (!contents.isEmpty() && !contents.equals(separator)) {
+            logger.logp(level, "", "", contents);
         }
     }
 }

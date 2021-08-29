@@ -28,61 +28,61 @@ public class ClientSettings extends PortablePacket {
 
     @Override
     public void v17Read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        locale = readString ( buf );
-        viewDistance = buf.readByte ( );
-        chatFlags = buf.readUnsignedByte ( );
-        chatColours = buf.readBoolean ( );
-        skinParts = buf.readByte ( );
-        difficulty = buf.readByte ( );
+        locale = readString(buf);
+        viewDistance = buf.readByte();
+        chatFlags = buf.readUnsignedByte();
+        chatColours = buf.readBoolean();
+        skinParts = buf.readByte();
+        difficulty = buf.readByte();
     }
 
     @Override
     public void read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        locale = readString ( buf, 16 );
-        viewDistance = buf.readByte ( );
-        chatFlags = protocolVersion >= ProtocolConstants.MINECRAFT_1_9 ? DefinedPacket.readVarInt ( buf ) : buf.readUnsignedByte ( );
-        chatColours = buf.readBoolean ( );
-        skinParts = buf.readByte ( );
+        locale = readString(buf, 16);
+        viewDistance = buf.readByte();
+        chatFlags = protocolVersion >= ProtocolConstants.MINECRAFT_1_9 ? DefinedPacket.readVarInt(buf) : buf.readUnsignedByte();
+        chatColours = buf.readBoolean();
+        skinParts = buf.readByte();
         if (protocolVersion >= ProtocolConstants.MINECRAFT_1_9) {
-            mainHand = DefinedPacket.readVarInt ( buf );
+            mainHand = DefinedPacket.readVarInt(buf);
         }
         if (protocolVersion >= ProtocolConstants.MINECRAFT_1_17) {
-            disableTextFiltering = buf.readBoolean ( );
+            disableTextFiltering = buf.readBoolean();
         }
     }
 
     @Override
     public void write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        writeString ( locale, buf );
-        buf.writeByte ( viewDistance );
+        writeString(locale, buf);
+        buf.writeByte(viewDistance);
         if (protocolVersion >= ProtocolConstants.MINECRAFT_1_9) {
-            DefinedPacket.writeVarInt ( chatFlags, buf );
+            DefinedPacket.writeVarInt(chatFlags, buf);
         } else {
-            buf.writeByte ( chatFlags );
+            buf.writeByte(chatFlags);
         }
-        buf.writeBoolean ( chatColours );
-        buf.writeByte ( skinParts );
+        buf.writeBoolean(chatColours);
+        buf.writeByte(skinParts);
         if (protocolVersion >= ProtocolConstants.MINECRAFT_1_9) {
-            DefinedPacket.writeVarInt ( mainHand, buf );
+            DefinedPacket.writeVarInt(mainHand, buf);
         }
         if (protocolVersion >= ProtocolConstants.MINECRAFT_1_17) {
-            buf.writeBoolean ( disableTextFiltering );
+            buf.writeBoolean(disableTextFiltering);
         }
     }
 
 
     @Override
     public void v17Write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        writeString ( locale, buf );
-        buf.writeByte ( viewDistance );
-        buf.writeByte ( chatFlags );
-        buf.writeBoolean ( chatColours );
-        buf.writeByte ( skinParts );
-        buf.writeByte ( difficulty );
+        writeString(locale, buf);
+        buf.writeByte(viewDistance);
+        buf.writeByte(chatFlags);
+        buf.writeBoolean(chatColours);
+        buf.writeByte(skinParts);
+        buf.writeByte(difficulty);
     }
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
-        handler.handle ( this );
+        handler.handle(this);
     }
 }

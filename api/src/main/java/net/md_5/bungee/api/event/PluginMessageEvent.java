@@ -28,7 +28,7 @@ public class PluginMessageEvent extends TargetedEvent implements Cancellable {
     private final byte[] data;
 
     public PluginMessageEvent(Connection sender, Connection receiver, String tag, byte[] data) {
-        super ( sender, receiver );
+        super(sender, receiver);
         this.tag = tag;
         this.data = data;
     }

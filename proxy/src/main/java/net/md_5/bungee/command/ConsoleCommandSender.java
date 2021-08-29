@@ -17,28 +17,28 @@ import java.util.Collections;
 public final class ConsoleCommandSender implements CommandSender {
 
     @Getter
-    private static final ConsoleCommandSender instance = new ConsoleCommandSender ( );
+    private static final ConsoleCommandSender instance = new ConsoleCommandSender();
 
     @Override
     public void sendMessage(String message) {
-        ProxyServer.getInstance ( ).getLogger ( ).info ( message );
+        ProxyServer.getInstance().getLogger().info(message);
     }
 
     @Override
     public void sendMessages(String... messages) {
         for (String message : messages) {
-            sendMessage ( message );
+            sendMessage(message);
         }
     }
 
     @Override
     public void sendMessage(BaseComponent... message) {
-        sendMessage ( BaseComponent.toLegacyText ( message ) );
+        sendMessage(BaseComponent.toLegacyText(message));
     }
 
     @Override
     public void sendMessage(BaseComponent message) {
-        sendMessage ( message.toLegacyText ( ) );
+        sendMessage(message.toLegacyText());
     }
 
     @Override
@@ -48,17 +48,17 @@ public final class ConsoleCommandSender implements CommandSender {
 
     @Override
     public Collection<String> getGroups() {
-        return Collections.emptySet ( );
+        return Collections.emptySet();
     }
 
     @Override
     public void addGroups(String... groups) {
-        throw new UnsupportedOperationException ( "Console may not have groups" );
+        throw new UnsupportedOperationException("Console may not have groups");
     }
 
     @Override
     public void removeGroups(String... groups) {
-        throw new UnsupportedOperationException ( "Console may not have groups" );
+        throw new UnsupportedOperationException("Console may not have groups");
     }
 
     @Override
@@ -68,11 +68,11 @@ public final class ConsoleCommandSender implements CommandSender {
 
     @Override
     public void setPermission(String permission, boolean value) {
-        throw new UnsupportedOperationException ( "Console has all permissions" );
+        throw new UnsupportedOperationException("Console has all permissions");
     }
 
     @Override
     public Collection<String> getPermissions() {
-        return Collections.emptySet ( );
+        return Collections.emptySet();
     }
 }

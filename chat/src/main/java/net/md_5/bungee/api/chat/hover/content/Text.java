@@ -36,14 +36,14 @@ public class Text extends Content {
         if (value instanceof BaseComponent[]) {
             return o instanceof Text
                     && ((Text) o).value instanceof BaseComponent[]
-                    && Arrays.equals ( (BaseComponent[]) value, (BaseComponent[]) ((Text) o).value );
+                    && Arrays.equals((BaseComponent[]) value, (BaseComponent[]) ((Text) o).value);
         } else {
-            return value.equals ( o );
+            return value.equals(o);
         }
     }
 
     @Override
     public int hashCode() {
-        return (value instanceof BaseComponent[]) ? Arrays.hashCode ( (BaseComponent[]) value ) : value.hashCode ( );
+        return (value instanceof BaseComponent[]) ? Arrays.hashCode((BaseComponent[]) value) : value.hashCode();
     }
 }

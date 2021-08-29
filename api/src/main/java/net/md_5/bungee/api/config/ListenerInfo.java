@@ -75,7 +75,7 @@ public class ListenerInfo {
 
     @Deprecated
     public ListenerInfo(InetSocketAddress host, String motd, int maxPlayers, int tabListSize, List<String> serverPriority, boolean forceDefault, Map<String, String> forcedHosts, String tabListType, boolean setLocalAddress, boolean pingPassthrough, int queryPort, boolean queryEnabled) {
-        this ( host, motd, maxPlayers, tabListSize, serverPriority, forceDefault, forcedHosts, tabListType, setLocalAddress, pingPassthrough, queryPort, queryEnabled, false );
+        this(host, motd, maxPlayers, tabListSize, serverPriority, forceDefault, forcedHosts, tabListType, setLocalAddress, pingPassthrough, queryPort, queryEnabled, false);
     }
 
     /**
@@ -86,7 +86,7 @@ public class ListenerInfo {
      */
     @Deprecated
     public String getDefaultServer() {
-        return serverPriority.get ( 0 );
+        return serverPriority.get(0);
     }
 
     /**
@@ -98,7 +98,7 @@ public class ListenerInfo {
      */
     @Deprecated
     public String getFallbackServer() {
-        return (serverPriority.size ( ) > 1) ? serverPriority.get ( 1 ) : getDefaultServer ( );
+        return (serverPriority.size() > 1) ? serverPriority.get(1) : getDefaultServer();
     }
 
     /**

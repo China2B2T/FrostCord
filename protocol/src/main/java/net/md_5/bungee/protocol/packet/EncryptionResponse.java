@@ -21,32 +21,32 @@ public class EncryptionResponse extends PortablePacket {
 
     @Override
     public void v17Read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        sharedSecret = v17readArray ( buf );
-        verifyToken = v17readArray ( buf );
+        sharedSecret = v17readArray(buf);
+        verifyToken = v17readArray(buf);
     }
 
     @Override
     public void read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        sharedSecret = readArray ( buf, 128 );
-        verifyToken = readArray ( buf, 128 );
+        sharedSecret = readArray(buf, 128);
+        verifyToken = readArray(buf, 128);
     }
 
 
     @Override
     public void v17Write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        v17writeArray ( sharedSecret, buf, false );
-        v17writeArray ( verifyToken, buf, false );
+        v17writeArray(sharedSecret, buf, false);
+        v17writeArray(verifyToken, buf, false);
     }
 
     @Override
     public void write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        writeArray ( sharedSecret, buf );
-        writeArray ( verifyToken, buf );
+        writeArray(sharedSecret, buf);
+        writeArray(verifyToken, buf);
     }
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
-        handler.handle ( this );
+        handler.handle(this);
     }
 
     // Waterfall start: Additional DoS mitigations, courtesy of Velocity
@@ -57,7 +57,7 @@ public class EncryptionResponse extends PortablePacket {
     }
 
     public int expectedMinLength(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        return expectedMaxLength ( buf, direction, protocolVersion );
+        return expectedMaxLength(buf, direction, protocolVersion);
     }
     // Waterfall end
 }

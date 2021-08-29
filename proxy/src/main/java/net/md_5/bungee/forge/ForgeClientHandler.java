@@ -32,7 +32,7 @@ public class ForgeClientHandler {
     @Setter(AccessLevel.PACKAGE)
     private Map<String, String> clientModList = null;
 
-    private final ArrayDeque<PluginMessage> packetQueue = new ArrayDeque<PluginMessage> ( );
+    private final ArrayDeque<PluginMessage> packetQueue = new ArrayDeque<PluginMessage>();
 
     @NonNull
     @Setter(AccessLevel.PACKAGE)
@@ -56,21 +56,21 @@ public class ForgeClientHandler {
      * @throws IllegalArgumentException if invalid packet received
      */
     public void handle(PluginMessage message) throws IllegalArgumentException {
-        if (!message.getTag ( ).equalsIgnoreCase ( ForgeConstants.FML_HANDSHAKE_TAG )) {
-            throw new IllegalArgumentException ( "Expecting a Forge Handshake packet." );
+        if (!message.getTag().equalsIgnoreCase(ForgeConstants.FML_HANDSHAKE_TAG)) {
+            throw new IllegalArgumentException("Expecting a Forge Handshake packet.");
         }
 
-        message.setAllowExtendedPacket ( true ); // FML allows extended packets so this must be enabled
+        message.setAllowExtendedPacket(true); // FML allows extended packets so this must be enabled
         ForgeClientHandshakeState prevState = state;
-        Preconditions.checkState ( packetQueue.size ( ) < 128, "Forge packet queue too big!" );
-        packetQueue.add ( message );
-        state = state.send ( message, con );
+        Preconditions.checkState(packetQueue.size() < 128, "Forge packet queue too big!");
+        packetQueue.add(message);
+        state = state.send(message, con);
         if (state != prevState) // state finished, send packets
         {
             synchronized (packetQueue) {
-                while (!packetQueue.isEmpty ( )) {
-                    ForgeLogger.logClient ( ForgeLogger.LogDirection.SENDING, prevState.name ( ), packetQueue.getFirst ( ) );
-                    con.getForgeServerHandler ( ).receive ( packetQueue.removeFirst ( ) );
+                while (!packetQueue.isEmpty()) {
+                    ForgeLogger.logClient(ForgeLogger.LogDirection.SENDING, prevState.name(), packetQueue.getFirst());
+                    con.getForgeServerHandler().receive(packetQueue.removeFirst());
                 }
             }
         }
@@ -83,7 +83,7 @@ public class ForgeClientHandler {
      * @throws IllegalArgumentException if invalid packet received
      */
     public void receive(PluginMessage message) throws IllegalArgumentException {
-        state = state.handle ( message, con );
+        state = state.handle(message, con);
     }
 
     /**
@@ -94,19 +94,19 @@ public class ForgeClientHandler {
         state = ForgeClientHandshakeState.HELLO;
 
         // This issue only exists in Forge 1.8.9
-        if (this.con.getPendingConnection ( ).getVersion ( ) == ProtocolConstants.MINECRAFT_1_8) {
-            this.resetAllThePotions ( con );
+        if (this.con.getPendingConnection().getVersion() == ProtocolConstants.MINECRAFT_1_8) {
+            this.resetAllThePotions(con);
         }
 
-        con.unsafe ( ).sendPacket ( ForgeConstants.FML_RESET_HANDSHAKE );
+        con.unsafe().sendPacket(ForgeConstants.FML_RESET_HANDSHAKE);
     }
 
     private void resetAllThePotions(UserConnection con) {
         // Just to be sure
-        for (Map.Entry<Integer, Integer> entry : con.getPotions ( ).entries ( )) {
-            con.unsafe ( ).sendPacket ( new EntityRemoveEffect ( entry.getKey ( ), entry.getValue ( ) ) );
+        for (Map.Entry<Integer, Integer> entry : con.getPotions().entries()) {
+            con.unsafe().sendPacket(new EntityRemoveEffect(entry.getKey(), entry.getValue()));
         }
-        con.getPotions ( ).clear ( );
+        con.getPotions().clear();
     }
 
     /**
@@ -118,8 +118,8 @@ public class ForgeClientHandler {
      *                                  not as expected.
      */
     public void setServerModList(PluginMessage modList) throws IllegalArgumentException {
-        if (!modList.getTag ( ).equalsIgnoreCase ( ForgeConstants.FML_HANDSHAKE_TAG ) || modList.getData ( )[0] != 2) {
-            throw new IllegalArgumentException ( "modList" );
+        if (!modList.getTag().equalsIgnoreCase(ForgeConstants.FML_HANDSHAKE_TAG) || modList.getData()[0] != 2) {
+            throw new IllegalArgumentException("modList");
         }
 
         this.serverModList = modList;
@@ -134,8 +134,8 @@ public class ForgeClientHandler {
      *                                  not as expected.
      */
     public void setServerIdList(PluginMessage idList) throws IllegalArgumentException {
-        if (!idList.getTag ( ).equalsIgnoreCase ( ForgeConstants.FML_HANDSHAKE_TAG ) || idList.getData ( )[0] != 3) {
-            throw new IllegalArgumentException ( "idList" );
+        if (!idList.getTag().equalsIgnoreCase(ForgeConstants.FML_HANDSHAKE_TAG) || idList.getData()[0] != 3) {
+            throw new IllegalArgumentException("idList");
         }
 
         this.serverIdList = idList;
@@ -176,7 +176,7 @@ public class ForgeClientHandler {
      */
     public boolean checkUserOutdated() {
         if (forgeOutdated) {
-            con.disconnect ( BungeeCord.getInstance ( ).getTranslation ( "connect_kick_outdated_forge" ) );
+            con.disconnect(BungeeCord.getInstance().getTranslation("connect_kick_outdated_forge"));
         }
         return forgeOutdated;
     }

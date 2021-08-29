@@ -22,8 +22,8 @@ public final class KeybindComponent extends BaseComponent {
      * @param original the original for the new keybind component.
      */
     public KeybindComponent(KeybindComponent original) {
-        super ( original );
-        setKeybind ( original.getKeybind ( ) );
+        super(original);
+        setKeybind(original.getKeybind());
     }
 
     /**
@@ -33,24 +33,24 @@ public final class KeybindComponent extends BaseComponent {
      * @see Keybinds
      */
     public KeybindComponent(String keybind) {
-        setKeybind ( keybind );
+        setKeybind(keybind);
     }
 
     @Override
     public KeybindComponent duplicate() {
-        return new KeybindComponent ( this );
+        return new KeybindComponent(this);
     }
 
     @Override
     protected void toPlainText(StringBuilder builder) {
-        builder.append ( getKeybind ( ) );
-        super.toPlainText ( builder );
+        builder.append(getKeybind());
+        super.toPlainText(builder);
     }
 
     @Override
     protected void toLegacyText(StringBuilder builder) {
-        addFormat ( builder );
-        builder.append ( getKeybind ( ) );
-        super.toLegacyText ( builder );
+        addFormat(builder);
+        builder.append(getKeybind());
+        super.toLegacyText(builder);
     }
 }

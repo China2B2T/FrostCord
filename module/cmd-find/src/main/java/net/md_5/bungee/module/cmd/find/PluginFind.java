@@ -6,6 +6,6 @@ public class PluginFind extends Plugin {
 
     @Override
     public void onEnable() {
-        getProxy ( ).getPluginManager ( ).registerCommand ( this, new CommandFind ( ) );
+        getProxy().getPluginManager().registerCommand(this, new CommandFind());
     }
 }

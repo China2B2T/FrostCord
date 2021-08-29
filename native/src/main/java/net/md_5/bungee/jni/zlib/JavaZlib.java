@@ -17,49 +17,49 @@ public class JavaZlib implements BungeeZlib {
     @Override
     public void init(boolean compress, int level) {
         this.compress = compress;
-        free ( );
+        free();
 
         if (compress) {
-            deflater = new Deflater ( level );
+            deflater = new Deflater(level);
         } else {
-            inflater = new Inflater ( );
+            inflater = new Inflater();
         }
     }
 
     @Override
     public void free() {
         if (deflater != null) {
-            deflater.end ( );
+            deflater.end();
         }
         if (inflater != null) {
-            inflater.end ( );
+            inflater.end();
         }
     }
 
     @Override
     public void process(ByteBuf in, ByteBuf out) throws DataFormatException {
-        byte[] inData = new byte[in.readableBytes ( )];
-        in.readBytes ( inData );
+        byte[] inData = new byte[in.readableBytes()];
+        in.readBytes(inData);
 
         if (compress) {
-            deflater.setInput ( inData );
-            deflater.finish ( );
+            deflater.setInput(inData);
+            deflater.finish();
 
-            while (!deflater.finished ( )) {
-                int count = deflater.deflate ( buffer );
-                out.writeBytes ( buffer, 0, count );
+            while (!deflater.finished()) {
+                int count = deflater.deflate(buffer);
+                out.writeBytes(buffer, 0, count);
             }
 
-            deflater.reset ( );
+            deflater.reset();
         } else {
-            inflater.setInput ( inData );
+            inflater.setInput(inData);
 
-            while (!inflater.finished ( ) && inflater.getTotalIn ( ) < inData.length) {
-                int count = inflater.inflate ( buffer );
-                out.writeBytes ( buffer, 0, count );
+            while (!inflater.finished() && inflater.getTotalIn() < inData.length) {
+                int count = inflater.inflate(buffer);
+                out.writeBytes(buffer, 0, count);
             }
 
-            inflater.reset ( );
+            inflater.reset();
         }
     }
 }

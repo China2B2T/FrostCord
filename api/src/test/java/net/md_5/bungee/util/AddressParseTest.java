@@ -20,7 +20,7 @@ public class AddressParseTest {
 
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList ( new Object[][]
+        return Arrays.asList(new Object[][]
                 {
                         {
                                 "127.0.0.1", "127.0.0.1", Util.DEFAULT_PORT
@@ -49,7 +49,7 @@ public class AddressParseTest {
                         {
                                 "unix:///var/run/bungee.sock", "/var/run/bungee.sock", -1
                         }
-                } );
+                });
     }
 
     private final String line;
@@ -58,20 +58,20 @@ public class AddressParseTest {
 
     @Test
     public void test() {
-        SocketAddress parsed = Util.getAddr ( line );
+        SocketAddress parsed = Util.getAddr(line);
 
         if (parsed instanceof InetSocketAddress) {
             InetSocketAddress tcp = (InetSocketAddress) parsed;
 
-            Assert.assertEquals ( host, tcp.getHostString ( ) );
-            Assert.assertEquals ( port, tcp.getPort ( ) );
+            Assert.assertEquals(host, tcp.getHostString());
+            Assert.assertEquals(port, tcp.getPort());
         } else if (parsed instanceof DomainSocketAddress) {
             DomainSocketAddress unix = (DomainSocketAddress) parsed;
 
-            Assert.assertEquals ( host, unix.path ( ) );
-            Assert.assertEquals ( -1, port );
+            Assert.assertEquals(host, unix.path());
+            Assert.assertEquals(-1, port);
         } else {
-            throw new AssertionError ( "Unknown socket " + parsed );
+            throw new AssertionError("Unknown socket " + parsed);
         }
     }
 }

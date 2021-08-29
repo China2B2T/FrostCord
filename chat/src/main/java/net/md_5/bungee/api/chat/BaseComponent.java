@@ -84,11 +84,11 @@ public abstract class BaseComponent {
     }
 
     BaseComponent(BaseComponent old) {
-        copyFormatting ( old, FormatRetention.ALL, true );
+        copyFormatting(old, FormatRetention.ALL, true);
 
-        if (old.getExtra ( ) != null) {
-            for (BaseComponent extra : old.getExtra ( )) {
-                addExtra ( extra.duplicate ( ) );
+        if (old.getExtra() != null) {
+            for (BaseComponent extra : old.getExtra()) {
+                addExtra(extra.duplicate());
             }
         }
     }
@@ -100,7 +100,7 @@ public abstract class BaseComponent {
      * @param component the component to copy from
      */
     public void copyFormatting(BaseComponent component) {
-        copyFormatting ( component, FormatRetention.ALL, true );
+        copyFormatting(component, FormatRetention.ALL, true);
     }
 
     /**
@@ -111,7 +111,7 @@ public abstract class BaseComponent {
      *                  component
      */
     public void copyFormatting(BaseComponent component, boolean replace) {
-        copyFormatting ( component, FormatRetention.ALL, replace );
+        copyFormatting(component, FormatRetention.ALL, replace);
     }
 
     /**
@@ -125,36 +125,36 @@ public abstract class BaseComponent {
     public void copyFormatting(BaseComponent component, FormatRetention retention, boolean replace) {
         if (retention == FormatRetention.EVENTS || retention == FormatRetention.ALL) {
             if (replace || clickEvent == null) {
-                setClickEvent ( component.getClickEvent ( ) );
+                setClickEvent(component.getClickEvent());
             }
             if (replace || hoverEvent == null) {
-                setHoverEvent ( component.getHoverEvent ( ) );
+                setHoverEvent(component.getHoverEvent());
             }
         }
         if (retention == FormatRetention.FORMATTING || retention == FormatRetention.ALL) {
             if (replace || color == null) {
-                setColor ( component.getColorRaw ( ) );
+                setColor(component.getColorRaw());
             }
             if (replace || font == null) {
-                setFont ( component.getFontRaw ( ) );
+                setFont(component.getFontRaw());
             }
             if (replace || bold == null) {
-                setBold ( component.isBoldRaw ( ) );
+                setBold(component.isBoldRaw());
             }
             if (replace || italic == null) {
-                setItalic ( component.isItalicRaw ( ) );
+                setItalic(component.isItalicRaw());
             }
             if (replace || underlined == null) {
-                setUnderlined ( component.isUnderlinedRaw ( ) );
+                setUnderlined(component.isUnderlinedRaw());
             }
             if (replace || strikethrough == null) {
-                setStrikethrough ( component.isStrikethroughRaw ( ) );
+                setStrikethrough(component.isStrikethroughRaw());
             }
             if (replace || obfuscated == null) {
-                setObfuscated ( component.isObfuscatedRaw ( ) );
+                setObfuscated(component.isObfuscatedRaw());
             }
             if (replace || insertion == null) {
-                setInsertion ( component.getInsertion ( ) );
+                setInsertion(component.getInsertion());
             }
         }
     }
@@ -166,17 +166,17 @@ public abstract class BaseComponent {
      */
     public void retain(FormatRetention retention) {
         if (retention == FormatRetention.FORMATTING || retention == FormatRetention.NONE) {
-            setClickEvent ( null );
-            setHoverEvent ( null );
+            setClickEvent(null);
+            setHoverEvent(null);
         }
         if (retention == FormatRetention.EVENTS || retention == FormatRetention.NONE) {
-            setColor ( null );
-            setBold ( null );
-            setItalic ( null );
-            setUnderlined ( null );
-            setStrikethrough ( null );
-            setObfuscated ( null );
-            setInsertion ( null );
+            setColor(null);
+            setBold(null);
+            setItalic(null);
+            setUnderlined(null);
+            setStrikethrough(null);
+            setObfuscated(null);
+            setInsertion(null);
         }
     }
 
@@ -195,8 +195,8 @@ public abstract class BaseComponent {
      */
     @Deprecated
     public BaseComponent duplicateWithoutFormatting() {
-        BaseComponent component = duplicate ( );
-        component.retain ( FormatRetention.NONE );
+        BaseComponent component = duplicate();
+        component.retain(FormatRetention.NONE);
         return component;
     }
 
@@ -208,11 +208,11 @@ public abstract class BaseComponent {
      * @return the string in the old format
      */
     public static String toLegacyText(BaseComponent... components) {
-        StringBuilder builder = new StringBuilder ( );
+        StringBuilder builder = new StringBuilder();
         for (BaseComponent msg : components) {
-            builder.append ( msg.toLegacyText ( ) );
+            builder.append(msg.toLegacyText());
         }
-        return builder.toString ( );
+        return builder.toString();
     }
 
     /**
@@ -222,11 +222,11 @@ public abstract class BaseComponent {
      * @return the string as plain text
      */
     public static String toPlainText(BaseComponent... components) {
-        StringBuilder builder = new StringBuilder ( );
+        StringBuilder builder = new StringBuilder();
         for (BaseComponent msg : components) {
-            builder.append ( msg.toPlainText ( ) );
+            builder.append(msg.toPlainText());
         }
-        return builder.toString ( );
+        return builder.toString();
     }
 
     /**
@@ -241,7 +241,7 @@ public abstract class BaseComponent {
             if (parent == null) {
                 return ChatColor.WHITE;
             }
-            return parent.getColor ( );
+            return parent.getColor();
         }
         return color;
     }
@@ -267,7 +267,7 @@ public abstract class BaseComponent {
             if (parent == null) {
                 return null;
             }
-            return parent.getFont ( );
+            return parent.getFont();
         }
         return font;
     }
@@ -291,7 +291,7 @@ public abstract class BaseComponent {
      */
     public boolean isBold() {
         if (bold == null) {
-            return parent != null && parent.isBold ( );
+            return parent != null && parent.isBold();
         }
         return bold;
     }
@@ -315,7 +315,7 @@ public abstract class BaseComponent {
      */
     public boolean isItalic() {
         if (italic == null) {
-            return parent != null && parent.isItalic ( );
+            return parent != null && parent.isItalic();
         }
         return italic;
     }
@@ -339,7 +339,7 @@ public abstract class BaseComponent {
      */
     public boolean isUnderlined() {
         if (underlined == null) {
-            return parent != null && parent.isUnderlined ( );
+            return parent != null && parent.isUnderlined();
         }
         return underlined;
     }
@@ -363,7 +363,7 @@ public abstract class BaseComponent {
      */
     public boolean isStrikethrough() {
         if (strikethrough == null) {
-            return parent != null && parent.isStrikethrough ( );
+            return parent != null && parent.isStrikethrough();
         }
         return strikethrough;
     }
@@ -387,7 +387,7 @@ public abstract class BaseComponent {
      */
     public boolean isObfuscated() {
         if (obfuscated == null) {
-            return parent != null && parent.isObfuscated ( );
+            return parent != null && parent.isObfuscated();
         }
         return obfuscated;
     }
@@ -416,7 +416,7 @@ public abstract class BaseComponent {
      * @param text the text to append
      */
     public void addExtra(String text) {
-        addExtra ( new TextComponent ( text ) );
+        addExtra(new TextComponent(text));
     }
 
     /**
@@ -427,10 +427,10 @@ public abstract class BaseComponent {
      */
     public void addExtra(BaseComponent component) {
         if (extra == null) {
-            extra = new ArrayList<BaseComponent> ( );
+            extra = new ArrayList<BaseComponent>();
         }
         component.parent = this;
-        extra.add ( component );
+        extra.add(component);
     }
 
     /**
@@ -451,15 +451,15 @@ public abstract class BaseComponent {
      * @return the string as plain text
      */
     public String toPlainText() {
-        StringBuilder builder = new StringBuilder ( );
-        toPlainText ( builder );
-        return builder.toString ( );
+        StringBuilder builder = new StringBuilder();
+        toPlainText(builder);
+        return builder.toString();
     }
 
     void toPlainText(StringBuilder builder) {
         if (extra != null) {
             for (BaseComponent e : extra) {
-                e.toPlainText ( builder );
+                e.toPlainText(builder);
             }
         }
     }
@@ -471,35 +471,35 @@ public abstract class BaseComponent {
      * @return the string in the old format
      */
     public String toLegacyText() {
-        StringBuilder builder = new StringBuilder ( );
-        toLegacyText ( builder );
-        return builder.toString ( );
+        StringBuilder builder = new StringBuilder();
+        toLegacyText(builder);
+        return builder.toString();
     }
 
     void toLegacyText(StringBuilder builder) {
         if (extra != null) {
             for (BaseComponent e : extra) {
-                e.toLegacyText ( builder );
+                e.toLegacyText(builder);
             }
         }
     }
 
     void addFormat(StringBuilder builder) {
-        builder.append ( getColor ( ) );
-        if (isBold ( )) {
-            builder.append ( ChatColor.BOLD );
+        builder.append(getColor());
+        if (isBold()) {
+            builder.append(ChatColor.BOLD);
         }
-        if (isItalic ( )) {
-            builder.append ( ChatColor.ITALIC );
+        if (isItalic()) {
+            builder.append(ChatColor.ITALIC);
         }
-        if (isUnderlined ( )) {
-            builder.append ( ChatColor.UNDERLINE );
+        if (isUnderlined()) {
+            builder.append(ChatColor.UNDERLINE);
         }
-        if (isStrikethrough ( )) {
-            builder.append ( ChatColor.STRIKETHROUGH );
+        if (isStrikethrough()) {
+            builder.append(ChatColor.STRIKETHROUGH);
         }
-        if (isObfuscated ( )) {
-            builder.append ( ChatColor.MAGIC );
+        if (isObfuscated()) {
+            builder.append(ChatColor.MAGIC);
         }
     }
 }

@@ -12,14 +12,14 @@ import java.nio.charset.Charset;
 public class HttpHandler extends SimpleChannelInboundHandler<HttpObject> {
 
     private final Callback<String> callback;
-    private final StringBuilder buffer = new StringBuilder ( );
+    private final StringBuilder buffer = new StringBuilder();
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         try {
-            callback.done ( null, cause );
+            callback.done(null, cause);
         } finally {
-            ctx.channel ( ).close ( );
+            ctx.channel().close();
         }
     }
 
@@ -27,32 +27,32 @@ public class HttpHandler extends SimpleChannelInboundHandler<HttpObject> {
     protected void channelRead0(ChannelHandlerContext ctx, HttpObject msg) throws Exception {
         if (msg instanceof HttpResponse) {
             HttpResponse response = (HttpResponse) msg;
-            int responseCode = response.status ( ).code ( );
+            int responseCode = response.status().code();
 
-            if (responseCode == HttpResponseStatus.NO_CONTENT.code ( )) {
-                done ( ctx );
+            if (responseCode == HttpResponseStatus.NO_CONTENT.code()) {
+                done(ctx);
                 return;
             }
 
-            if (responseCode != HttpResponseStatus.OK.code ( )) {
-                throw new IllegalStateException ( "Expected HTTP response 200 OK, got " + response.status ( ) );
+            if (responseCode != HttpResponseStatus.OK.code()) {
+                throw new IllegalStateException("Expected HTTP response 200 OK, got " + response.status());
             }
         }
         if (msg instanceof HttpContent) {
             HttpContent content = (HttpContent) msg;
-            buffer.append ( content.content ( ).toString ( Charset.forName ( "UTF-8" ) ) );
+            buffer.append(content.content().toString(Charset.forName("UTF-8")));
 
             if (msg instanceof LastHttpContent) {
-                done ( ctx );
+                done(ctx);
             }
         }
     }
 
     private void done(ChannelHandlerContext ctx) {
         try {
-            callback.done ( buffer.toString ( ), null );
+            callback.done(buffer.toString(), null);
         } finally {
-            ctx.channel ( ).close ( );
+            ctx.channel().close();
         }
     }
 }

@@ -31,28 +31,28 @@ public class Respawn extends PortablePacket {
     public void read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
         if (protocolVersion >= ProtocolConstants.MINECRAFT_1_16) {
             if (protocolVersion >= ProtocolConstants.MINECRAFT_1_16_2) {
-                dimension = readTag ( buf );
+                dimension = readTag(buf);
             } else {
-                dimension = readString ( buf );
+                dimension = readString(buf);
             }
-            worldName = readString ( buf );
+            worldName = readString(buf);
         } else {
-            dimension = buf.readInt ( );
+            dimension = buf.readInt();
         }
         if (protocolVersion >= ProtocolConstants.MINECRAFT_1_15) {
-            seed = buf.readLong ( );
+            seed = buf.readLong();
         }
         if (protocolVersion < ProtocolConstants.MINECRAFT_1_14) {
-            difficulty = buf.readUnsignedByte ( );
+            difficulty = buf.readUnsignedByte();
         }
-        gameMode = buf.readUnsignedByte ( );
+        gameMode = buf.readUnsignedByte();
         if (protocolVersion >= ProtocolConstants.MINECRAFT_1_16) {
-            previousGameMode = buf.readUnsignedByte ( );
-            debug = buf.readBoolean ( );
-            flat = buf.readBoolean ( );
-            copyMeta = buf.readBoolean ( );
+            previousGameMode = buf.readUnsignedByte();
+            debug = buf.readBoolean();
+            flat = buf.readBoolean();
+            copyMeta = buf.readBoolean();
         } else {
-            levelType = readString ( buf );
+            levelType = readString(buf);
         }
     }
 
@@ -60,33 +60,33 @@ public class Respawn extends PortablePacket {
     public void write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
         if (protocolVersion >= ProtocolConstants.MINECRAFT_1_16) {
             if (protocolVersion >= ProtocolConstants.MINECRAFT_1_16_2) {
-                writeTag ( (Tag) dimension, buf );
+                writeTag((Tag) dimension, buf);
             } else {
-                writeString ( (String) dimension, buf );
+                writeString((String) dimension, buf);
             }
-            writeString ( worldName, buf );
+            writeString(worldName, buf);
         } else {
-            buf.writeInt ( ((Integer) dimension) );
+            buf.writeInt(((Integer) dimension));
         }
         if (protocolVersion >= ProtocolConstants.MINECRAFT_1_15) {
-            buf.writeLong ( seed );
+            buf.writeLong(seed);
         }
         if (protocolVersion < ProtocolConstants.MINECRAFT_1_14) {
-            buf.writeByte ( difficulty );
+            buf.writeByte(difficulty);
         }
-        buf.writeByte ( gameMode );
+        buf.writeByte(gameMode);
         if (protocolVersion >= ProtocolConstants.MINECRAFT_1_16) {
-            buf.writeByte ( previousGameMode );
-            buf.writeBoolean ( debug );
-            buf.writeBoolean ( flat );
-            buf.writeBoolean ( copyMeta );
+            buf.writeByte(previousGameMode);
+            buf.writeBoolean(debug);
+            buf.writeBoolean(flat);
+            buf.writeBoolean(copyMeta);
         } else {
-            writeString ( levelType, buf );
+            writeString(levelType, buf);
         }
     }
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
-        handler.handle ( this );
+        handler.handle(this);
     }
 }

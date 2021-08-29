@@ -29,50 +29,50 @@ public class ServerConnection implements Server {
     @Getter
     private final boolean forgeServer = false;
     @Getter
-    private final Queue<KeepAliveData> keepAlives = new ArrayDeque<> ( );
+    private final Queue<KeepAliveData> keepAlives = new ArrayDeque<>();
 
-    private final Unsafe unsafe = new Unsafe ( ) {
+    private final Unsafe unsafe = new Unsafe() {
         @Override
         public void sendPacket(DefinedPacket packet) {
-            ch.write ( packet );
+            ch.write(packet);
         }
     };
 
     @Override
     public void sendData(String channel, byte[] data) {
-        unsafe ( ).sendPacket ( new PluginMessage ( channel, data, forgeServer ) );
+        unsafe().sendPacket(new PluginMessage(channel, data, forgeServer));
     }
 
     @Override
     public void disconnect(String reason) {
-        disconnect ( );
+        disconnect();
     }
 
     @Override
     public void disconnect(BaseComponent... reason) {
-        Preconditions.checkArgument ( reason.length == 0, "Server cannot have disconnect reason" );
+        Preconditions.checkArgument(reason.length == 0, "Server cannot have disconnect reason");
 
-        ch.close ( );
+        ch.close();
     }
 
     @Override
     public void disconnect(BaseComponent reason) {
-        disconnect ( );
+        disconnect();
     }
 
     @Override
     public InetSocketAddress getAddress() {
-        return (InetSocketAddress) getSocketAddress ( );
+        return (InetSocketAddress) getSocketAddress();
     }
 
     @Override
     public SocketAddress getSocketAddress() {
-        return getInfo ( ).getAddress ( );
+        return getInfo().getAddress();
     }
 
     @Override
     public boolean isConnected() {
-        return !ch.isClosed ( );
+        return !ch.isClosed();
     }
 
     @Override

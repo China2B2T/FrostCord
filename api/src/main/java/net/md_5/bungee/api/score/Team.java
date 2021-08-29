@@ -20,17 +20,17 @@ public class Team {
     private String nameTagVisibility;
     private String collisionRule;
     private int color;
-    private Set<String> players = new HashSet<> ( );
+    private Set<String> players = new HashSet<>();
 
     public Collection<String> getPlayers() {
-        return Collections.unmodifiableSet ( players );
+        return Collections.unmodifiableSet(players);
     }
 
     public void addPlayer(String name) {
-        players.add ( name );
+        players.add(name);
     }
 
     public void removePlayer(String name) {
-        players.remove ( name );
+        players.remove(name);
     }
 }

@@ -9,30 +9,30 @@ public abstract class AbstractReconnectHandler implements ReconnectHandler {
 
     @Override
     public ServerInfo getServer(ProxiedPlayer player) {
-        ServerInfo server = getForcedHost ( player.getPendingConnection ( ) );
+        ServerInfo server = getForcedHost(player.getPendingConnection());
         if (server == null) {
-            server = getStoredServer ( player );
+            server = getStoredServer(player);
             if (server == null) {
-                server = ProxyServer.getInstance ( ).getServerInfo ( player.getPendingConnection ( ).getListener ( ).getDefaultServer ( ) );
+                server = ProxyServer.getInstance().getServerInfo(player.getPendingConnection().getListener().getDefaultServer());
             }
 
-            Preconditions.checkState ( server != null, "Default server not defined" );
+            Preconditions.checkState(server != null, "Default server not defined");
         }
 
         return server;
     }
 
     public static ServerInfo getForcedHost(PendingConnection con) {
-        if (con.getVirtualHost ( ) == null) {
+        if (con.getVirtualHost() == null) {
             return null;
         }
 
-        String forced = con.getListener ( ).getForcedHosts ( ).get ( con.getVirtualHost ( ).getHostString ( ) );
+        String forced = con.getListener().getForcedHosts().get(con.getVirtualHost().getHostString());
 
-        if (forced == null && con.getListener ( ).isForceDefault ( )) {
-            forced = con.getListener ( ).getDefaultServer ( );
+        if (forced == null && con.getListener().isForceDefault()) {
+            forced = con.getListener().getDefaultServer();
         }
-        return ProxyServer.getInstance ( ).getServerInfo ( forced );
+        return ProxyServer.getInstance().getServerInfo(forced);
     }
 
     protected abstract ServerInfo getStoredServer(ProxiedPlayer player);

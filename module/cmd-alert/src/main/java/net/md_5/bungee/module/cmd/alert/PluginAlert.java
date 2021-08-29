@@ -6,7 +6,7 @@ public class PluginAlert extends Plugin {
 
     @Override
     public void onEnable() {
-        getProxy ( ).getPluginManager ( ).registerCommand ( this, new CommandAlert ( ) );
-        getProxy ( ).getPluginManager ( ).registerCommand ( this, new CommandAlertRaw ( ) );
+        getProxy().getPluginManager().registerCommand(this, new CommandAlert());
+        getProxy().getPluginManager().registerCommand(this, new CommandAlertRaw());
     }
 }

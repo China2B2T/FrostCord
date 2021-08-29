@@ -64,18 +64,18 @@ public class ServerKickEvent extends Event implements Cancellable {
 
     @Deprecated
     public ServerKickEvent(ProxiedPlayer player, BaseComponent[] kickReasonComponent, ServerInfo cancelServer) {
-        this ( player, kickReasonComponent, cancelServer, State.UNKNOWN );
+        this(player, kickReasonComponent, cancelServer, State.UNKNOWN);
     }
 
     @Deprecated
     public ServerKickEvent(ProxiedPlayer player, BaseComponent[] kickReasonComponent, ServerInfo cancelServer, State state) {
-        this ( player, player.getServer ( ).getInfo ( ), kickReasonComponent, cancelServer, state );
+        this(player, player.getServer().getInfo(), kickReasonComponent, cancelServer, state);
     }
 
     // Waterfall start
     @Deprecated
     public ServerKickEvent(ProxiedPlayer player, ServerInfo kickedFrom, BaseComponent[] kickReasonComponent, ServerInfo cancelServer, State state) {
-        this ( player, kickedFrom, kickReasonComponent, cancelServer, state, Cause.UNKNOWN );
+        this(player, kickedFrom, kickReasonComponent, cancelServer, state, Cause.UNKNOWN);
     }
 
     public ServerKickEvent(ProxiedPlayer player, ServerInfo kickedFrom, BaseComponent[] kickReasonComponent, ServerInfo cancelServer, State state, Cause cause) {
@@ -90,11 +90,11 @@ public class ServerKickEvent extends Event implements Cancellable {
 
     @Deprecated
     public String getKickReason() {
-        return BaseComponent.toLegacyText ( kickReasonComponent );
+        return BaseComponent.toLegacyText(kickReasonComponent);
     }
 
     @Deprecated
     public void setKickReason(String reason) {
-        kickReasonComponent = TextComponent.fromLegacyText ( reason );
+        kickReasonComponent = TextComponent.fromLegacyText(reason);
     }
 }

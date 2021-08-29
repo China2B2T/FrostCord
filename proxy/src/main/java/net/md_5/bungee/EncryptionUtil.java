@@ -21,57 +21,57 @@ import java.util.Random;
  */
 public class EncryptionUtil {
 
-    private static final Random random = new Random ( );
+    private static final Random random = new Random();
     public static final KeyPair keys;
     @Getter
-    private static final SecretKey secret = new SecretKeySpec ( new byte[16], "AES" );
-    public static final NativeCode<BungeeCipher> nativeFactory = new NativeCode<> ( "native-cipher", JavaCipher::new, NativeCipher::new );
+    private static final SecretKey secret = new SecretKeySpec(new byte[16], "AES");
+    public static final NativeCode<BungeeCipher> nativeFactory = new NativeCode<>("native-cipher", JavaCipher::new, NativeCipher::new);
 
     static {
         try {
-            KeyPairGenerator generator = KeyPairGenerator.getInstance ( "RSA" );
-            generator.initialize ( 1024 );
-            keys = generator.generateKeyPair ( );
+            KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
+            generator.initialize(1024);
+            keys = generator.generateKeyPair();
         } catch (NoSuchAlgorithmException ex) {
-            throw new ExceptionInInitializerError ( ex );
+            throw new ExceptionInInitializerError(ex);
         }
     }
 
     public static EncryptionRequest encryptRequest() {
-        String hash = Long.toString ( random.nextLong ( ), 16 );
-        byte[] pubKey = keys.getPublic ( ).getEncoded ( );
+        String hash = Long.toString(random.nextLong(), 16);
+        byte[] pubKey = keys.getPublic().getEncoded();
         byte[] verify = new byte[4];
-        random.nextBytes ( verify );
-        return new EncryptionRequest ( hash, pubKey, verify );
+        random.nextBytes(verify);
+        return new EncryptionRequest(hash, pubKey, verify);
     }
 
     public static SecretKey getSecret(EncryptionResponse resp, EncryptionRequest request) throws GeneralSecurityException {
-        Cipher cipher = Cipher.getInstance ( "RSA" );
-        cipher.init ( Cipher.DECRYPT_MODE, keys.getPrivate ( ) );
-        byte[] decrypted = cipher.doFinal ( resp.getVerifyToken ( ) );
+        Cipher cipher = Cipher.getInstance("RSA");
+        cipher.init(Cipher.DECRYPT_MODE, keys.getPrivate());
+        byte[] decrypted = cipher.doFinal(resp.getVerifyToken());
 
-        if (!Arrays.equals ( request.getVerifyToken ( ), decrypted )) {
-            throw new IllegalStateException ( "Key pairs do not match!" );
+        if (!Arrays.equals(request.getVerifyToken(), decrypted)) {
+            throw new IllegalStateException("Key pairs do not match!");
         }
 
-        cipher.init ( Cipher.DECRYPT_MODE, keys.getPrivate ( ) );
-        return new SecretKeySpec ( cipher.doFinal ( resp.getSharedSecret ( ) ), "AES" );
+        cipher.init(Cipher.DECRYPT_MODE, keys.getPrivate());
+        return new SecretKeySpec(cipher.doFinal(resp.getSharedSecret()), "AES");
     }
 
     public static BungeeCipher getCipher(boolean forEncryption, SecretKey shared) throws GeneralSecurityException {
-        BungeeCipher cipher = nativeFactory.newInstance ( );
+        BungeeCipher cipher = nativeFactory.newInstance();
 
-        cipher.init ( forEncryption, shared );
+        cipher.init(forEncryption, shared);
         return cipher;
     }
 
     public static PublicKey getPubkey(EncryptionRequest request) throws GeneralSecurityException {
-        return KeyFactory.getInstance ( "RSA" ).generatePublic ( new X509EncodedKeySpec ( request.getPublicKey ( ) ) );
+        return KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(request.getPublicKey()));
     }
 
     public static byte[] encrypt(Key key, byte[] b) throws GeneralSecurityException {
-        Cipher hasher = Cipher.getInstance ( "RSA" );
-        hasher.init ( Cipher.ENCRYPT_MODE, key );
-        return hasher.doFinal ( b );
+        Cipher hasher = Cipher.getInstance("RSA");
+        hasher.init(Cipher.ENCRYPT_MODE, key);
+        return hasher.doFinal(b);
     }
 }

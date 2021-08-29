@@ -19,30 +19,30 @@ public class EntityRemoveEffect extends PortablePacket {
 
     @Override
     public void read(ByteBuf buf) {
-        this.entityId = readVarInt ( buf );
-        this.effectId = buf.readUnsignedByte ( );
+        this.entityId = readVarInt(buf);
+        this.effectId = buf.readUnsignedByte();
     }
 
     @Override
     protected void v17Read(ByteBuf buf) {
-        this.entityId = buf.readInt ( );
-        this.effectId = buf.readUnsignedByte ( );
+        this.entityId = buf.readInt();
+        this.effectId = buf.readUnsignedByte();
     }
 
     @Override
     public void write(ByteBuf buf) {
-        writeVarInt ( entityId, buf );
-        buf.writeByte ( effectId );
+        writeVarInt(entityId, buf);
+        buf.writeByte(effectId);
     }
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
-        handler.handle ( this );
+        handler.handle(this);
     }
 
     @Override
     protected void v17Write(ByteBuf buf) {
-        buf.writeInt ( entityId );
-        buf.writeByte ( effectId );
+        buf.writeInt(entityId);
+        buf.writeByte(effectId);
     }
 }

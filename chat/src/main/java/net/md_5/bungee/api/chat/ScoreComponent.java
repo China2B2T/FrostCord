@@ -55,8 +55,8 @@ public final class ScoreComponent extends BaseComponent {
      *                  attached to
      */
     public ScoreComponent(String name, String objective) {
-        setName ( name );
-        setObjective ( objective );
+        setName(name);
+        setObjective(objective);
     }
 
     /**
@@ -65,27 +65,27 @@ public final class ScoreComponent extends BaseComponent {
      * @param original the original for the new score component
      */
     public ScoreComponent(ScoreComponent original) {
-        super ( original );
-        setName ( original.getName ( ) );
-        setObjective ( original.getObjective ( ) );
-        setValue ( original.getValue ( ) );
+        super(original);
+        setName(original.getName());
+        setObjective(original.getObjective());
+        setValue(original.getValue());
     }
 
     @Override
     public ScoreComponent duplicate() {
-        return new ScoreComponent ( this );
+        return new ScoreComponent(this);
     }
 
     @Override
     protected void toPlainText(StringBuilder builder) {
-        builder.append ( this.value );
-        super.toPlainText ( builder );
+        builder.append(this.value);
+        super.toPlainText(builder);
     }
 
     @Override
     protected void toLegacyText(StringBuilder builder) {
-        addFormat ( builder );
-        builder.append ( this.value );
-        super.toLegacyText ( builder );
+        addFormat(builder);
+        builder.append(this.value);
+        super.toLegacyText(builder);
     }
 }

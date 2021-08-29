@@ -31,7 +31,7 @@ public class TabCompleteEvent extends TargetedEvent implements Cancellable {
     private final List<String> suggestions;
 
     public TabCompleteEvent(Connection sender, Connection receiver, String cursor, List<String> suggestions) {
-        super ( sender, receiver );
+        super(sender, receiver);
         this.cursor = cursor;
         this.suggestions = suggestions;
     }

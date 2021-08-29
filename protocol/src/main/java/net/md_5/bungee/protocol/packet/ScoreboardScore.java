@@ -26,47 +26,47 @@ public class ScoreboardScore extends PortablePacket {
 
     @Override
     public void v17Read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        itemName = readString ( buf );
-        action = buf.readByte ( );
+        itemName = readString(buf);
+        action = buf.readByte();
         if (action != 1) {
-            scoreName = readString ( buf );
-            value = buf.readInt ( );
+            scoreName = readString(buf);
+            value = buf.readInt();
         }
     }
 
     @Override
     public void read(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        itemName = readString ( buf );
-        action = buf.readByte ( );
-        scoreName = readString ( buf );
+        itemName = readString(buf);
+        action = buf.readByte();
+        scoreName = readString(buf);
         if (action != 1) {
-            value = readVarInt ( buf );
+            value = readVarInt(buf);
         }
     }
 
 
     @Override
     public void v17Write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        writeString ( itemName, buf );
-        buf.writeByte ( action );
+        writeString(itemName, buf);
+        buf.writeByte(action);
         if (action != 1) {
-            writeString ( scoreName, buf );
-            buf.writeInt ( value );
+            writeString(scoreName, buf);
+            buf.writeInt(value);
         }
     }
 
     @Override
     public void write(ByteBuf buf, ProtocolConstants.Direction direction, int protocolVersion) {
-        writeString ( itemName, buf );
-        buf.writeByte ( action );
-        writeString ( scoreName, buf );
+        writeString(itemName, buf);
+        buf.writeByte(action);
+        writeString(scoreName, buf);
         if (action != 1) {
-            writeVarInt ( value, buf );
+            writeVarInt(value, buf);
         }
     }
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
-        handler.handle ( this );
+        handler.handle(this);
     }
 }

@@ -19,17 +19,17 @@ public class LoginRequest extends PortablePacket {
 
     @Override
     public void read(ByteBuf buf) {
-        data = readString ( buf, 16 );
+        data = readString(buf, 16);
     }
 
     @Override
     public void write(ByteBuf buf) {
-        writeString ( data, buf );
+        writeString(data, buf);
     }
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
-        handler.handle ( this );
+        handler.handle(this);
     }
 
     // Waterfall start: Additional DoS mitigations, courtesy of Velocity

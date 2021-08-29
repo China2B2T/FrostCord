@@ -22,8 +22,8 @@ public abstract class Content {
      * @throws UnsupportedOperationException if action incompatible
      */
     public void assertAction(HoverEvent.Action input) throws UnsupportedOperationException {
-        if (input != requiredAction ( )) {
-            throw new UnsupportedOperationException ( "Action " + input + " not compatible! Expected " + requiredAction ( ) );
+        if (input != requiredAction()) {
+            throw new UnsupportedOperationException("Action " + input + " not compatible! Expected " + requiredAction());
         }
     }
 }

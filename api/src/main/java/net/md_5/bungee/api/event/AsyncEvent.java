@@ -23,17 +23,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class AsyncEvent<T> extends Event {
 
     private final Callback<T> done;
-    private final Map<Plugin, AtomicInteger> intents = new ConcurrentHashMap<> ( );
-    private final AtomicBoolean fired = new AtomicBoolean ( );
-    private final AtomicInteger latch = new AtomicInteger ( );
+    private final Map<Plugin, AtomicInteger> intents = new ConcurrentHashMap<>();
+    private final AtomicBoolean fired = new AtomicBoolean();
+    private final AtomicInteger latch = new AtomicInteger();
 
     @Override
     @SuppressWarnings("unchecked")
     public void postCall() {
-        if (latch.get ( ) == 0) {
-            done.done ( (T) this, null );
+        if (latch.get() == 0) {
+            done.done((T) this, null);
         }
-        fired.set ( true );
+        fired.set(true);
     }
 
     /**
@@ -46,15 +46,15 @@ public class AsyncEvent<T> extends Event {
      * @param plugin the plugin registering this intent
      */
     public void registerIntent(Plugin plugin) {
-        Preconditions.checkState ( !fired.get ( ), "Event %s has already been fired", this );
+        Preconditions.checkState(!fired.get(), "Event %s has already been fired", this);
 
-        AtomicInteger intentCount = intents.get ( plugin );
+        AtomicInteger intentCount = intents.get(plugin);
         if (intentCount == null) {
-            intents.put ( plugin, new AtomicInteger ( 1 ) );
+            intents.put(plugin, new AtomicInteger(1));
         } else {
-            intentCount.incrementAndGet ( );
+            intentCount.incrementAndGet();
         }
-        latch.incrementAndGet ( );
+        latch.incrementAndGet();
     }
 
     /**
@@ -65,16 +65,16 @@ public class AsyncEvent<T> extends Event {
      */
     @SuppressWarnings("unchecked")
     public void completeIntent(Plugin plugin) {
-        AtomicInteger intentCount = intents.get ( plugin );
-        Preconditions.checkState ( intentCount != null && intentCount.get ( ) > 0, "Plugin %s has not registered intents for event %s", plugin, this );
+        AtomicInteger intentCount = intents.get(plugin);
+        Preconditions.checkState(intentCount != null && intentCount.get() > 0, "Plugin %s has not registered intents for event %s", plugin, this);
 
-        intentCount.decrementAndGet ( );
-        if (fired.get ( )) {
-            if (latch.decrementAndGet ( ) == 0) {
-                done.done ( (T) this, null );
+        intentCount.decrementAndGet();
+        if (fired.get()) {
+            if (latch.decrementAndGet() == 0) {
+                done.done((T) this, null);
             }
         } else {
-            latch.decrementAndGet ( );
+            latch.decrementAndGet();
         }
     }
 }

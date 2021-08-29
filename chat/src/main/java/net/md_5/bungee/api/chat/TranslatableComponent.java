@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 @EqualsAndHashCode(callSuper = true)
 public final class TranslatableComponent extends BaseComponent {
 
-    private final Pattern format = Pattern.compile ( "%(?:(\\d+)\\$)?([A-Za-z%]|$)" );
+    private final Pattern format = Pattern.compile("%(?:(\\d+)\\$)?([A-Za-z%]|$)");
 
     /**
      * The key into the Minecraft locale files to use for the translation. The
@@ -33,15 +33,15 @@ public final class TranslatableComponent extends BaseComponent {
      * @param original the original for the new translatable component.
      */
     public TranslatableComponent(TranslatableComponent original) {
-        super ( original );
-        setTranslate ( original.getTranslate ( ) );
+        super(original);
+        setTranslate(original.getTranslate());
 
-        if (original.getWith ( ) != null) {
-            List<BaseComponent> temp = new ArrayList<BaseComponent> ( );
-            for (BaseComponent baseComponent : original.getWith ( )) {
-                temp.add ( baseComponent.duplicate ( ) );
+        if (original.getWith() != null) {
+            List<BaseComponent> temp = new ArrayList<BaseComponent>();
+            for (BaseComponent baseComponent : original.getWith()) {
+                temp.add(baseComponent.duplicate());
             }
-            setWith ( temp );
+            setWith(temp);
         }
     }
 
@@ -56,17 +56,17 @@ public final class TranslatableComponent extends BaseComponent {
      * @see #setWith(java.util.List)
      */
     public TranslatableComponent(String translate, Object... with) {
-        setTranslate ( translate );
+        setTranslate(translate);
         if (with != null && with.length != 0) {
-            List<BaseComponent> temp = new ArrayList<BaseComponent> ( );
+            List<BaseComponent> temp = new ArrayList<BaseComponent>();
             for (Object w : with) {
                 if (w instanceof BaseComponent) {
-                    temp.add ( (BaseComponent) w );
+                    temp.add((BaseComponent) w);
                 } else {
-                    temp.add ( new TextComponent ( String.valueOf ( w ) ) );
+                    temp.add(new TextComponent(String.valueOf(w)));
                 }
             }
-            setWith ( temp );
+            setWith(temp);
         }
     }
 
@@ -77,7 +77,7 @@ public final class TranslatableComponent extends BaseComponent {
      */
     @Override
     public TranslatableComponent duplicate() {
-        return new TranslatableComponent ( this );
+        return new TranslatableComponent(this);
     }
 
     /**
@@ -100,7 +100,7 @@ public final class TranslatableComponent extends BaseComponent {
      * @param text the text to substitute
      */
     public void addWith(String text) {
-        addWith ( new TextComponent ( text ) );
+        addWith(new TextComponent(text));
     }
 
     /**
@@ -111,66 +111,66 @@ public final class TranslatableComponent extends BaseComponent {
      */
     public void addWith(BaseComponent component) {
         if (with == null) {
-            with = new ArrayList<BaseComponent> ( );
+            with = new ArrayList<BaseComponent>();
         }
         component.parent = this;
-        with.add ( component );
+        with.add(component);
     }
 
     @Override
     protected void toPlainText(StringBuilder builder) {
-        convert ( builder, false );
-        super.toPlainText ( builder );
+        convert(builder, false);
+        super.toPlainText(builder);
     }
 
     @Override
     protected void toLegacyText(StringBuilder builder) {
-        convert ( builder, true );
-        super.toLegacyText ( builder );
+        convert(builder, true);
+        super.toLegacyText(builder);
     }
 
     private void convert(StringBuilder builder, boolean applyFormat) {
-        String trans = TranslationRegistry.INSTANCE.translate ( translate );
+        String trans = TranslationRegistry.INSTANCE.translate(translate);
 
-        Matcher matcher = format.matcher ( trans );
+        Matcher matcher = format.matcher(trans);
         int position = 0;
         int i = 0;
-        while (matcher.find ( position )) {
-            int pos = matcher.start ( );
+        while (matcher.find(position)) {
+            int pos = matcher.start();
             if (pos != position) {
                 if (applyFormat) {
-                    addFormat ( builder );
+                    addFormat(builder);
                 }
-                builder.append ( trans.substring ( position, pos ) );
+                builder.append(trans.substring(position, pos));
             }
-            position = matcher.end ( );
+            position = matcher.end();
 
-            String formatCode = matcher.group ( 2 );
-            switch (formatCode.charAt ( 0 )) {
+            String formatCode = matcher.group(2);
+            switch (formatCode.charAt(0)) {
                 case 's':
                 case 'd':
-                    String withIndex = matcher.group ( 1 );
+                    String withIndex = matcher.group(1);
 
-                    BaseComponent withComponent = with.get ( withIndex != null ? Integer.parseInt ( withIndex ) - 1 : i++ );
+                    BaseComponent withComponent = with.get(withIndex != null ? Integer.parseInt(withIndex) - 1 : i++);
                     if (applyFormat) {
-                        withComponent.toLegacyText ( builder );
+                        withComponent.toLegacyText(builder);
                     } else {
-                        withComponent.toPlainText ( builder );
+                        withComponent.toPlainText(builder);
                     }
                     break;
                 case '%':
                     if (applyFormat) {
-                        addFormat ( builder );
+                        addFormat(builder);
                     }
-                    builder.append ( '%' );
+                    builder.append('%');
                     break;
             }
         }
-        if (trans.length ( ) != position) {
+        if (trans.length() != position) {
             if (applyFormat) {
-                addFormat ( builder );
+                addFormat(builder);
             }
-            builder.append ( trans.substring ( position, trans.length ( ) ) );
+            builder.append(trans.substring(position, trans.length()));
         }
     }
 }

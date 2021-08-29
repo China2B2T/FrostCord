@@ -18,16 +18,16 @@ public class StatusResponse extends PortablePacket {
 
     @Override
     public void read(ByteBuf buf) {
-        response = readString ( buf );
+        response = readString(buf);
     }
 
     @Override
     public void write(ByteBuf buf) {
-        writeString ( response, buf );
+        writeString(response, buf);
     }
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
-        handler.handle ( this );
+        handler.handle(this);
     }
 }

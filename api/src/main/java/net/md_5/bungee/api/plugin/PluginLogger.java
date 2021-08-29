@@ -8,14 +8,14 @@ public class PluginLogger extends Logger {
     private final String pluginName;
 
     protected PluginLogger(Plugin plugin) {
-        super ( plugin.getClass ( ).getCanonicalName ( ), null );
-        pluginName = "[" + plugin.getDescription ( ).getName ( ) + "] ";
-        setParent ( plugin.getProxy ( ).getLogger ( ) );
+        super(plugin.getClass().getCanonicalName(), null);
+        pluginName = "[" + plugin.getDescription().getName() + "] ";
+        setParent(plugin.getProxy().getLogger());
     }
 
     @Override
     public void log(LogRecord logRecord) {
-        logRecord.setMessage ( pluginName + logRecord.getMessage ( ) );
-        super.log ( logRecord );
+        logRecord.setMessage(pluginName + logRecord.getMessage());
+        super.log(logRecord);
     }
 }

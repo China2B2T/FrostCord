@@ -19,26 +19,26 @@ public class ForgeConstants {
      */
     public static final String FML_HANDSHAKE_TOKEN = "\0FML\0";
 
-    public static final PluginMessage FML_RESET_HANDSHAKE = new PluginMessage ( FML_HANDSHAKE_TAG, new byte[]
+    public static final PluginMessage FML_RESET_HANDSHAKE = new PluginMessage(FML_HANDSHAKE_TAG, new byte[]
             {
                     -2, 0
-            }, false );
-    public static final PluginMessage FML_ACK = new PluginMessage ( FML_HANDSHAKE_TAG, new byte[]
+            }, false);
+    public static final PluginMessage FML_ACK = new PluginMessage(FML_HANDSHAKE_TAG, new byte[]
             {
                     -1, 0
-            }, false );
-    public static final PluginMessage FML_START_CLIENT_HANDSHAKE = new PluginMessage ( FML_HANDSHAKE_TAG, new byte[]
+            }, false);
+    public static final PluginMessage FML_START_CLIENT_HANDSHAKE = new PluginMessage(FML_HANDSHAKE_TAG, new byte[]
             {
                     0, 1
-            }, false );
-    public static final PluginMessage FML_START_SERVER_HANDSHAKE = new PluginMessage ( FML_HANDSHAKE_TAG, new byte[]
+            }, false);
+    public static final PluginMessage FML_START_SERVER_HANDSHAKE = new PluginMessage(FML_HANDSHAKE_TAG, new byte[]
             {
                     1, 1
-            }, false );
-    public static final PluginMessage FML_EMPTY_MOD_LIST = new PluginMessage ( FML_HANDSHAKE_TAG, new byte[]
+            }, false);
+    public static final PluginMessage FML_EMPTY_MOD_LIST = new PluginMessage(FML_HANDSHAKE_TAG, new byte[]
             {
                     2, 0
-            }, false );
+            }, false);
 
     /**
      * The minimum Forge version required to use Forge features. TODO: When the
@@ -50,5 +50,5 @@ public class ForgeConstants {
     /**
      * Regex to use to scrape the version information from a FML handshake.
      */
-    public static final Pattern FML_HANDSHAKE_VERSION_REGEX = Pattern.compile ( "(\\d+)\\.(\\d+)\\.(\\d+)\\.(\\d+)" );
+    public static final Pattern FML_HANDSHAKE_VERSION_REGEX = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)\\.(\\d+)");
 }

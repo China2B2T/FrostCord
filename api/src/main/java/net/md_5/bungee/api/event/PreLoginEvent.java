@@ -35,7 +35,7 @@ public class PreLoginEvent extends AsyncEvent<PreLoginEvent> implements Cancella
     private final PendingConnection connection;
 
     public PreLoginEvent(PendingConnection connection, Callback<PreLoginEvent> done) {
-        super ( done );
+        super(done);
         this.connection = connection;
     }
 
@@ -45,7 +45,7 @@ public class PreLoginEvent extends AsyncEvent<PreLoginEvent> implements Cancella
      */
     @Deprecated
     public String getCancelReason() {
-        return BaseComponent.toLegacyText ( getCancelReasonComponents ( ) );
+        return BaseComponent.toLegacyText(getCancelReasonComponents());
     }
 
     /**
@@ -56,7 +56,7 @@ public class PreLoginEvent extends AsyncEvent<PreLoginEvent> implements Cancella
      */
     @Deprecated
     public void setCancelReason(String cancelReason) {
-        setCancelReason ( TextComponent.fromLegacyText ( cancelReason ) );
+        setCancelReason(TextComponent.fromLegacyText(cancelReason));
     }
 
     public void setCancelReason(BaseComponent... cancelReason) {

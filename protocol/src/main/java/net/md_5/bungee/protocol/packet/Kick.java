@@ -18,16 +18,16 @@ public class Kick extends PortablePacket {
 
     @Override
     public void read(ByteBuf buf) {
-        message = readString ( buf );
+        message = readString(buf);
     }
 
     @Override
     public void write(ByteBuf buf) {
-        writeString ( message, buf );
+        writeString(message, buf);
     }
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
-        handler.handle ( this );
+        handler.handle(this);
     }
 }

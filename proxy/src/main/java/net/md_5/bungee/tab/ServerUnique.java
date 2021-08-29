@@ -10,35 +10,35 @@ import java.util.UUID;
 
 public class ServerUnique extends TabList {
 
-    private final Collection<UUID> uuids = new HashSet<> ( );
-    private final Collection<String> usernames = new HashSet<> ( ); // Travertine - Support for <=1.7.9
+    private final Collection<UUID> uuids = new HashSet<>();
+    private final Collection<String> usernames = new HashSet<>(); // Travertine - Support for <=1.7.9
 
     public ServerUnique(ProxiedPlayer player) {
-        super ( player );
+        super(player);
     }
 
     @Override
     public void onUpdate(PlayerListItem playerListItem) {
-        for (PlayerListItem.Item item : playerListItem.getItems ( )) {
-            if (playerListItem.getAction ( ) == PlayerListItem.Action.ADD_PLAYER) {
+        for (PlayerListItem.Item item : playerListItem.getItems()) {
+            if (playerListItem.getAction() == PlayerListItem.Action.ADD_PLAYER) {
 
-                if (item.getUuid ( ) != null) {
-                    uuids.add ( item.getUuid ( ) );
+                if (item.getUuid() != null) {
+                    uuids.add(item.getUuid());
                 } else {
-                    usernames.add ( item.getUsername ( ) );
+                    usernames.add(item.getUsername());
                 }
                 // Travertine end
-            } else if (playerListItem.getAction ( ) == PlayerListItem.Action.REMOVE_PLAYER) {
+            } else if (playerListItem.getAction() == PlayerListItem.Action.REMOVE_PLAYER) {
 
-                if (item.getUuid ( ) != null) {
-                    uuids.remove ( item.getUuid ( ) );
+                if (item.getUuid() != null) {
+                    uuids.remove(item.getUuid());
                 } else {
-                    usernames.remove ( item.getUsername ( ) );
+                    usernames.remove(item.getUsername());
                 }
                 // Travertine end
             }
         }
-        player.unsafe ( ).sendPacket ( playerListItem );
+        player.unsafe().sendPacket(playerListItem);
     }
 
     @Override
@@ -48,41 +48,41 @@ public class ServerUnique extends TabList {
 
     @Override
     public void onServerChange() {
-        PlayerListItem packet = new PlayerListItem ( );
-        packet.setAction ( PlayerListItem.Action.REMOVE_PLAYER );
-        PlayerListItem.Item[] items = new PlayerListItem.Item[uuids.size ( ) + usernames.size ( )]; // Travertine
+        PlayerListItem packet = new PlayerListItem();
+        packet.setAction(PlayerListItem.Action.REMOVE_PLAYER);
+        PlayerListItem.Item[] items = new PlayerListItem.Item[uuids.size() + usernames.size()]; // Travertine
         int i = 0;
         for (UUID uuid : uuids) {
-            PlayerListItem.Item item = items[i++] = new PlayerListItem.Item ( );
-            item.setUuid ( uuid );
+            PlayerListItem.Item item = items[i++] = new PlayerListItem.Item();
+            item.setUuid(uuid);
         }
 
         for (String username : usernames) {
-            PlayerListItem.Item item = items[i++] = new PlayerListItem.Item ( );
-            item.setUsername ( username );
-            item.setDisplayName ( username );
+            PlayerListItem.Item item = items[i++] = new PlayerListItem.Item();
+            item.setUsername(username);
+            item.setDisplayName(username);
         }
         // Travertine end
-        packet.setItems ( items );
+        packet.setItems(items);
 
-        if (ProtocolConstants.isAfterOrEq ( player.getPendingConnection ( ).getVersion ( ), ProtocolConstants.MINECRAFT_1_8 )) {
-            player.unsafe ( ).sendPacket ( packet );
+        if (ProtocolConstants.isAfterOrEq(player.getPendingConnection().getVersion(), ProtocolConstants.MINECRAFT_1_8)) {
+            player.unsafe().sendPacket(packet);
         } else {
             // Split up the packet
-            for (PlayerListItem.Item item : packet.getItems ( )) {
-                PlayerListItem p2 = new PlayerListItem ( );
-                p2.setAction ( packet.getAction ( ) );
+            for (PlayerListItem.Item item : packet.getItems()) {
+                PlayerListItem p2 = new PlayerListItem();
+                p2.setAction(packet.getAction());
 
-                p2.setItems ( new PlayerListItem.Item[]
+                p2.setItems(new PlayerListItem.Item[]
                         {
                                 item
-                        } );
-                player.unsafe ( ).sendPacket ( p2 );
+                        });
+                player.unsafe().sendPacket(p2);
             }
         }
         // Travertine end
-        uuids.clear ( );
-        usernames.clear ( ); // Travertine
+        uuids.clear();
+        usernames.clear(); // Travertine
     }
 
     @Override

@@ -15,43 +15,43 @@ public final class NativeCode<T> {
     private boolean loaded;
 
     public NativeCode(String name, Supplier<? extends T> javaImpl, Supplier<? extends T> nativeImpl) {
-        if ("Mac OS X".equals ( System.getProperty ( "os.name" ) )) name = "osx-" + name; // Waterfall
+        if ("Mac OS X".equals(System.getProperty("os.name"))) name = "osx-" + name; // Waterfall
         this.name = name;
         this.javaImpl = javaImpl;
         this.nativeImpl = nativeImpl;
     }
 
     public T newInstance() {
-        return (loaded ? nativeImpl.get ( ) : javaImpl.get ( ));
+        return (loaded ? nativeImpl.get() : javaImpl.get());
     }
 
     public boolean load() {
-        if (!loaded && isSupported ( )) {
+        if (!loaded && isSupported()) {
             String fullName = "bungeecord-" + name;
 
             try {
-                System.loadLibrary ( fullName );
+                System.loadLibrary(fullName);
                 loaded = true;
             } catch (Throwable t) {
             }
 
             if (!loaded) {
-                try (InputStream soFile = BungeeCipher.class.getClassLoader ( ).getResourceAsStream ( name + ".so" )) {
+                try (InputStream soFile = BungeeCipher.class.getClassLoader().getResourceAsStream(name + ".so")) {
                     // Else we will create and copy it to a temp file
-                    File temp = File.createTempFile ( fullName, ".so" );
+                    File temp = File.createTempFile(fullName, ".so");
                     // Don't leave cruft on filesystem
-                    temp.deleteOnExit ( );
+                    temp.deleteOnExit();
 
-                    try (OutputStream outputStream = new FileOutputStream ( temp )) {
-                        ByteStreams.copy ( soFile, outputStream );
+                    try (OutputStream outputStream = new FileOutputStream(temp)) {
+                        ByteStreams.copy(soFile, outputStream);
                     }
 
-                    System.load ( temp.getPath ( ) );
+                    System.load(temp.getPath());
                     loaded = true;
                 } catch (IOException ex) {
                     // Can't write to tmp?
                 } catch (UnsatisfiedLinkError ex) {
-                    System.out.println ( "Could not load native library: " + ex.getMessage ( ) );
+                    System.out.println("Could not load native library: " + ex.getMessage());
                 }
             }
         }
@@ -60,6 +60,6 @@ public final class NativeCode<T> {
     }
 
     public static boolean isSupported() {
-        return ("Linux".equals ( System.getProperty ( "os.name" ) ) || "Mac OS X".equals ( System.getProperty ( "os.name" ) )) && ("amd64".equals ( System.getProperty ( "os.arch" ) ) || "x86_64".equals ( System.getProperty ( "os.arch" ) )); // Waterfall
+        return ("Linux".equals(System.getProperty("os.name")) || "Mac OS X".equals(System.getProperty("os.name"))) && ("amd64".equals(System.getProperty("os.arch")) || "x86_64".equals(System.getProperty("os.arch"))); // Waterfall
     }
 }

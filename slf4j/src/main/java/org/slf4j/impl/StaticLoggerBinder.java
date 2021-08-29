@@ -38,7 +38,7 @@ public class StaticLoggerBinder implements LoggerFactoryBinder {
     /**
      * The unique instance of this class.
      */
-    private static final StaticLoggerBinder SINGLETON = new StaticLoggerBinder ( );
+    private static final StaticLoggerBinder SINGLETON = new StaticLoggerBinder();
 
     /**
      * Return the singleton of this class.
@@ -56,7 +56,7 @@ public class StaticLoggerBinder implements LoggerFactoryBinder {
     // to avoid constant folding by the compiler, this field must *not* be final
     public static String REQUESTED_API_VERSION = "1.6.99"; // !final
 
-    private static final String loggerFactoryClassStr = org.slf4j.impl.JDK14LoggerFactory.class.getName ( );
+    private static final String loggerFactoryClassStr = org.slf4j.impl.JDK14LoggerFactory.class.getName();
 
     /**
      * The ILoggerFactory instance returned by the {@link #getLoggerFactory} method
@@ -66,7 +66,7 @@ public class StaticLoggerBinder implements LoggerFactoryBinder {
 
     private StaticLoggerBinder() {
         // Note: JCL gets substituted at build time by an appropriate Ant task
-        loggerFactory = new org.slf4j.impl.JDK14LoggerFactory ( );
+        loggerFactory = new org.slf4j.impl.JDK14LoggerFactory();
     }
 
     public ILoggerFactory getLoggerFactory() {

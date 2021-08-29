@@ -21,18 +21,18 @@ public class GameState extends PortablePacket {
 
     @Override
     public void read(ByteBuf buf) {
-        state = buf.readUnsignedByte ( );
-        value = buf.readFloat ( );
+        state = buf.readUnsignedByte();
+        value = buf.readFloat();
     }
 
     @Override
     public void write(ByteBuf buf) {
-        buf.writeByte ( state );
-        buf.writeFloat ( value );
+        buf.writeByte(state);
+        buf.writeFloat(value);
     }
 
     @Override
     public void handle(AbstractPacketHandler handler) throws Exception {
-        handler.handle ( this );
+        handler.handle(this);
     }
 }

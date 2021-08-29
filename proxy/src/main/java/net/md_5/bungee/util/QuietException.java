@@ -6,7 +6,7 @@ package net.md_5.bungee.util;
 public class QuietException extends RuntimeException {
 
     public QuietException(String message) {
-        super ( message );
+        super(message);
     }
 
     @Override
