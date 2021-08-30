@@ -27,25 +27,25 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="bungeecord-api" target="1.8" />
+      <module name="bungeecord-api" target="10" />
       <module name="bungeecord-bootstrap" target="1.6" />
-      <module name="bungeecord-chat" target="1.8" />
-      <module name="bungeecord-config" target="1.8" />
-      <module name="bungeecord-event" target="1.8" />
-      <module name="bungeecord-log" target="1.8" />
-      <module name="bungeecord-module" target="1.8" />
-      <module name="bungeecord-module-cmd-alert" target="1.8" />
-      <module name="bungeecord-module-cmd-find" target="1.8" />
-      <module name="bungeecord-module-cmd-list" target="1.8" />
-      <module name="bungeecord-module-cmd-send" target="1.8" />
-      <module name="bungeecord-module-cmd-server" target="1.8" />
-      <module name="bungeecord-module-reconnect-yaml" target="1.8" />
-      <module name="bungeecord-native" target="1.8" />
-      <module name="bungeecord-parent" target="1.8" />
-      <module name="bungeecord-protocol" target="1.8" />
-      <module name="bungeecord-proxy" target="1.8" />
-      <module name="bungeecord-query" target="1.8" />
-      <module name="bungeecord-slf4j" target="1.8" />
+      <module name="bungeecord-chat" target="10" />
+      <module name="bungeecord-config" target="10" />
+      <module name="bungeecord-event" target="10" />
+      <module name="bungeecord-log" target="10" />
+      <module name="bungeecord-module" target="10" />
+      <module name="bungeecord-module-cmd-alert" target="10" />
+      <module name="bungeecord-module-cmd-find" target="10" />
+      <module name="bungeecord-module-cmd-list" target="10" />
+      <module name="bungeecord-module-cmd-send" target="10" />
+      <module name="bungeecord-module-cmd-server" target="10" />
+      <module name="bungeecord-module-reconnect-yaml" target="10" />
+      <module name="bungeecord-native" target="10" />
+      <module name="bungeecord-parent" target="10" />
+      <module name="bungeecord-protocol" target="10" />
+      <module name="bungeecord-proxy" target="10" />
+      <module name="bungeecord-query" target="10" />
+      <module name="bungeecord-slf4j" target="10" />
     </bytecodeTargetLevel>
   </component>
 </project>

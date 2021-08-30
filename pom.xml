@@ -60,8 +60,8 @@
         <build.number>unknown</build.number>
         <lombok.version>1.18.20</lombok.version>
         <netty.version>4.1.65.Final</netty.version>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>10</maven.compiler.source>
+        <maven.compiler.target>10</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -89,6 +89,16 @@
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20210307</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.13</version>
         </dependency>
     </dependencies>
 
@@ -140,18 +150,18 @@
 
     <profiles>
         <profile>
-            <id>jdk-9-release</id>
+            <id>jdk-10-release</id>
             <activation>
-                <jdk>[9,)</jdk>
+                <jdk>[10,)</jdk>
             </activation>
             <properties>
                 <maven.compiler.release>8</maven.compiler.release>
             </properties>
         </profile>
         <profile>
-            <id>jdk-9-javadoc</id>
+            <id>jdk-10-javadoc</id>
             <activation>
-                <jdk>[9,)</jdk>
+                <jdk>[10,)</jdk>
             </activation>
             <build>
                 <pluginManagement>

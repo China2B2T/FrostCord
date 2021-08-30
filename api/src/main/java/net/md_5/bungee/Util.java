@@ -88,6 +88,6 @@ public class Util {
      * @return The result
      */
     public static UUID getUUID(String uuid) {
-        return new UUID(UnsignedLongs.parseUnsignedLong(uuid.substring(0, 16), 16), UnsignedLongs.parseUnsignedLong(uuid.substring(16), 16));
+        return uuid.contains("-") ? UUID.fromString(uuid) : new UUID(UnsignedLongs.parseUnsignedLong(uuid.substring(0, 16), 16), UnsignedLongs.parseUnsignedLong(uuid.substring(16), 16));
     }
 }

@@ -26,7 +26,6 @@ public class YamlConfig implements ConfigurationAdapter {
      */
     @RequiredArgsConstructor
     private enum DefaultTabList {
-
         GLOBAL(), GLOBAL_PING(), SERVER();
     }
 
@@ -47,7 +46,7 @@ public class YamlConfig implements ConfigurationAdapter {
 
             try (InputStream is = new FileInputStream(file)) {
                 try {
-                    config = (Map) yaml.load(is);
+                    config = yaml.load(is);
                 } catch (YAMLException ex) {
                     throw new RuntimeException("Invalid configuration encountered - this is a configuration error and NOT a bug! Please attempt to fix the error or see https://www.spigotmc.org/ for help.", ex);
                 }
@@ -64,14 +63,8 @@ public class YamlConfig implements ConfigurationAdapter {
 
         Map<String, Object> permissions = get("permissions", null);
         if (permissions == null) {
-            set("permissions.default", Arrays.asList(new String[]
-                    {
-                            "bungeecord.command.server", "bungeecord.command.list"
-                    }));
-            set("permissions.admin", Arrays.asList(new String[]
-                    {
-                            "bungeecord.command.alert", "bungeecord.command.end", "bungeecord.command.ip", "bungeecord.command.reload"
-                    }));
+            set("permissions.default", Arrays.asList("bungeecord.command.server", "bungeecord.command.list"));
+            set("permissions.admin", Arrays.asList("bungeecord.command.alert", "bungeecord.command.end", "bungeecord.command.ip", "bungeecord.command.reload"));
         }
 
         Map<String, Object> groups = get("groups", null);
@@ -203,9 +196,6 @@ public class YamlConfig implements ConfigurationAdapter {
             Map<String, String> forced = new CaseInsensitiveMap<>(get("forced_hosts", forcedDef, val));
             String tabListName = get("tab_list", "GLOBAL_PING", val);
             DefaultTabList value = DefaultTabList.valueOf(tabListName.toUpperCase(Locale.ROOT));
-            if (value == null) {
-                value = DefaultTabList.GLOBAL_PING;
-            }
             boolean setLocalAddress = get("bind_local_address", true, val);
             boolean pingPassthrough = get("ping_passthrough", false, val);
 
@@ -242,7 +232,6 @@ public class YamlConfig implements ConfigurationAdapter {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public Collection<String> getGroups(String player) {
         // #1270: Do this to support player names with .
         Map<String, Collection<String>> raw = get("groups", Collections.emptyMap());

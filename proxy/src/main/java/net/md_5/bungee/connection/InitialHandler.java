@@ -36,6 +36,7 @@ import net.md_5.bungee.util.BufUtil;
 import net.md_5.bungee.util.QuietException;
 
 import javax.crypto.SecretKey;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -45,6 +46,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
+
+import static net.md_5.bungee.FrostLandUtils.fetchUUID;
 
 @RequiredArgsConstructor
 public class InitialHandler extends PacketHandler implements PendingConnection {
@@ -77,7 +80,7 @@ public class InitialHandler extends PacketHandler implements PendingConnection {
     @Getter
     private UUID offlineId;
     @Getter
-    private UUID onlineID;
+    private UUID onlineId;
     @Getter
     private LoginResult loginProfile;
     @Getter
@@ -414,7 +417,7 @@ public class InitialHandler extends PacketHandler implements PendingConnection {
                     if (obj != null && obj.getId() != null) {
                         loginProfile = obj;
                         name = obj.getName();
-                        onlineID = Util.getUUID(obj.getId());
+                        onlineId = Util.getUUID(obj.getId());
                         finish();
                         return;
                     }
@@ -423,6 +426,7 @@ public class InitialHandler extends PacketHandler implements PendingConnection {
                     state.set(false);
                     // disconnect(bungee.getTranslation("mojang_fail"));
                     bungee.getLogger().log(Level.WARNING, "Error authenticating " + getName() + " with " + i + ": " + error.getMessage());
+                    error.printStackTrace();
                 }
             };
 
@@ -458,7 +462,31 @@ public class InitialHandler extends PacketHandler implements PendingConnection {
 
         // TODO FrostCord - Should synchronize UUID with upstream service here.
         offlineId = UUID.nameUUIDFromBytes(("OfflinePlayer:" + getName()).getBytes(Charsets.UTF_8));
-        uniqueId = offlineId;
+
+        String internalId = null;
+
+        if (onlineId != null) {
+            try {
+                internalId = fetchUUID(onlineId.toString());
+            } catch (UnsupportedEncodingException ignored) {
+            }
+
+            if (internalId == null) {
+                disconnect(new TextComponent(ChatColor.RED + "Cannot fetch your profile! Please contact the administrators."));
+                return;
+            }
+        } else {
+            try {
+                internalId = fetchUUID(getName());
+            } catch (UnsupportedEncodingException ignored) {
+            }
+
+            if (internalId == null) {
+                disconnect(new TextComponent(ChatColor.RED + "Cannot fetch your profile! Please contact the administrators."));
+                return;
+            }
+        }
+        uniqueId = Util.getUUID(internalId);
 
         Callback<LoginEvent> complete = (result, error) -> {
             if (result.isCancelled()) {
